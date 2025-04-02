@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const zoomFactor = 0.2; // Facteur de zoom
     const mooveFactorY = (gridSize * 8);
     const mooveFactorX = (gridSize * 2);
+    const mooveFactorY = (gridSize * 9);
+    const mooveFactorX = (gridSize * 8);
 
 
     let StartX = 0;
@@ -99,13 +101,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         BetweenX = CurrentX + (e.clientX - StartX)*(1/zoomLevel);
         BetweenY = CurrentY + (e.clientY - StartY)*(1/zoomLevel);
+        BetweenX = CurrentX + (e.clientX - StartX)/zoomLevel;
+        BetweenY = CurrentY + (e.clientY - StartY)/zoomLevel;
 
         if(Drag && BetweenY > mooveFactorY && BetweenY <- mooveFactorY){
+        if(Drag && Math.abs(BetweenY) < mooveFactorY-window.innerHeight/(zoomLevel*2)+20 ){
             // See if can moove without leaving the screen
             TransY = BetweenY
         }
 
         if (Drag && BetweenX < mooveFactorX*zoomLevel*2 ){//&& BetweenX > -mooveFactorX*(zoomLevel)) {
+        if (Drag && Math.abs(BetweenX) < mooveFactorX-window.innerWidth/(zoomLevel*2)+50 ){
             // See if can moove without leaving the screen
             
             TransX = BetweenX           
