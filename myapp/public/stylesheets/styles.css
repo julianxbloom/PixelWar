@@ -62,6 +62,10 @@ h1 {
     cursor: pointer;
 }
 
+.color-border{
+    border : 2px solid black;
+}
+
 .controls {
     margin-top: 2wh;
 }

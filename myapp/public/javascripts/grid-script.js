@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
     }
 
-    // Fonction pour créer la grille de pixels
+    // Fonction pour créer la grille de couleur
     function createColorGrid() {
         colorGrid.innerHTML = '';
         for (let i = 0; i < 8 * 2; i++) {
@@ -47,7 +47,17 @@ document.addEventListener('DOMContentLoaded', () => {
             //pixel.innerHTML += 
             color.classList.add('color');
             color.style.background = LColors[i]
+
+            if (i == 0){
+                ChooseColor = color;
+                ChooseColor.style.border = "0.7vh solid black";
+            }
+            
             color.addEventListener('click', () => {
+                // Set the border style
+                ChooseColor.style.border = "0vh solid black";
+                ChooseColor = color;
+                ChooseColor.style.border = "0.7vh solid black";
                 Color = color.style.backgroundColor;
             });
             colorGrid.appendChild(color);
