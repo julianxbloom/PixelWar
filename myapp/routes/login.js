@@ -9,7 +9,10 @@ router.get('/', (req, res) => {
 
 /* POST request */
 router.post('/', (req, res) => {
+
+  //Verif a faire pour savoir si bon compte
   res.redirect('/grid')
+  
 });
 
 module.exports = router;
