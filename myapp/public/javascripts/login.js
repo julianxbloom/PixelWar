@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const Pseudo = document.getElementById('pseudo');
     const NextPage = document.getElementById('NextPage');
 
-
-
     NextPage.addEventListener('click', () => {
         CurrentClass = Class.options[Class.selectedIndex].text;
         CurrentPseudo = Pseudo.value + CurrentClass;
