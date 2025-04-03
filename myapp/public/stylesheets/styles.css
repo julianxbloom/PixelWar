@@ -24,6 +24,10 @@ h1 {
     overflow: hidden; /* Empêche la grille de dépasser */
 }
 
+.classcontainer {
+    height : "20px";
+}
+
 .colorcontainer {
     display: flex;
     justify-content: center;
