@@ -6,15 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // Fonction de zoom avant
     NextPage.addEventListener('click', () => {
         CurrentClass = Class.options[Class.selectedIndex].text;
         CurrentPseudo = Pseudo.value + CurrentClass;
         localStorage.setItem('name', CurrentPseudo);
-        window.location.href='grid.html';
+        window.location.href='grid.ejs';
         
     });
-
-
-
 });
