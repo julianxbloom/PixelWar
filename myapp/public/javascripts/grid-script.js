@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const pixelGrid = document.getElementById('pixel-grid');
-    //const colorPicker = document.getElementById('color-picker');
     const zoomInBtn = document.getElementById('zoom-in');
     const zoomOutBtn = document.getElementById('zoom-out');
-
     const colorGrid = document.getElementById('color-grid');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
@@ -12,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mooveFactorY = (gridSize * 9);
     const mooveFactorX = (gridSize * 8);
 
+    let CurrentPseudo = localStorage.getItem("name");
+    alert("Pseudo : " + CurrentPseudo);
 
     let StartX = 0;
     let StartY = 0;
