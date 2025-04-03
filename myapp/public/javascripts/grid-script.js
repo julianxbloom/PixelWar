@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mooveFactorY = (gridSize * 9);
     const mooveFactorX = (gridSize * 8);
 
-    let CurrentPseudo = localStorage.getItem("name");
-    alert("Pseudo : " + CurrentPseudo);
+    //let CurrentPseudo = localStorage.getItem("name");
+    //alert("Pseudo : " + CurrentPseudo);
 
     let StartX = 0;
     let StartY = 0;
