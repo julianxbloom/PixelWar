@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pixel.classList.add('pixel');
             pixel.addEventListener('click', () => {
                 pixel.style.backgroundColor = Color;
+                
             });
             pixelGrid.appendChild(pixel);
         }
