@@ -10,7 +10,8 @@
     <h1>Login</h1>
     
     <label for="classe-select"> Ton pseudo : </label>
-    <form method="post">
+
+    <form method="post" action = "/login">
         <input id="pseudo" name="pseudo" rows="1" cols="15" style="resize: none" maxlength="15" required/>
 
         <select name="CurrentClass" id="class-select">
@@ -41,6 +42,7 @@
             <option value ="TG01">2GT07</option>
             <option value ="TG02">2GT08</option>
             <option value ="TG03">2GT09</option>
+            <option value ="Autres">Autres</option>
         </select>
 
         <div class="controls">
