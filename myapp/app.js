@@ -9,7 +9,7 @@ var usersRouter = require('./routes/users');
 var gridRouter = require('./routes/grid');
 var loginRouter = require('./routes/login');
 
-const { connection } = require("./db")
+//const { connection } = require("./db")
 
 var app = express();
 
@@ -29,16 +29,16 @@ app.use('/grid', gridRouter);
 app.use('/login', loginRouter)
 
 
-app.get("/test", (req, res) => {
-  connection.query("SELECT * FROM Users", (err, data) => {
-    if (err) return callback(err, null);
-    res.status(200).json({
-      status: "success",
-      length: data.length,
-      data,
-    });
-  });
-});
+// app.get("/test", (req, res) => {
+//   connection.query("SELECT * FROM Users", (err, data) => {
+//     if (err) return callback(err, null);
+//     res.status(200).json({
+//       status: "success",
+//       length: data.length,
+//       data,
+//     });
+//   });
+// });
 
 
 
