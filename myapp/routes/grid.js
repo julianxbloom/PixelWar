@@ -6,4 +6,10 @@ router.get('/', function(req, res, next) {
   res.render('grid')
 });
 
+//requete colori pixel :
+
+// Modifie bdd 
+// Réimporte la grid pou rtt le monde
+// Lancer fct dessiner grid pour tt users
+
 module.exports = router;
