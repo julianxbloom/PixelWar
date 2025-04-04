@@ -10,8 +10,8 @@ router.get('/', (req, res) => {
 /* POST request */
 router.post('/', (req, res) => {
 
-  Classe = document.getElementById('class-select').options[Class.selectedIndex].text;
-  alert(Classe);
+  //Classe = document.getElementById('class-select').options[Class.selectedIndex].text;
+  //alert(Classe);
 
   //Verif a faire pour savoir si bon compte
   res.redirect('/grid')
