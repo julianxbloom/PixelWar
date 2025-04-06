@@ -12,6 +12,8 @@ router.get('/', (req, res) => {
 /* POST request */
 router.post('/', (req, res) => {
 
+  
+//Verif a faire pour savoir si bon compte
   const pseudo = req.body.pseudo+req.body.CurrentClass
   if (pseudo == "JulianTG01"){
     res.redirect('/grid');
@@ -21,7 +23,7 @@ router.post('/', (req, res) => {
     res.render('login',{Btn : "Wrong pseudo,Retry"});
   }
 
-  //Verif a faire pour savoir si bon compte
+  
   
   
 });

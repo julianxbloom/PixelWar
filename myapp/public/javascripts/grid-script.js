@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const zoomInBtn = document.getElementById('zoom-in');
     const zoomOutBtn = document.getElementById('zoom-out');
     const colorGrid = document.getElementById('color-grid');
+    const fileimage = document.getElementById('fileimage');
+    const imagePreview = document.getElementById('imagePreview');
+    const btnimage = document.getElementById('moovefile');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
     let zoomLevel = 1; // Niveau de zoom initial (1 = taille normale)
@@ -19,7 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let TransY = 0;
     let CurrentX = 0;
     let CurrentY = 0;
-    let Drag = false;
+    let drag = false;
+    
+    let imgOffsetX = 0;
+    let imfOffsetY = 0;
+    let dragImg = false;
 
     let Color = "#fff"
     let LColors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
@@ -65,6 +72,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    fileimage.addEventListener('change', function(event){
+
+        console.log('nice');
+
+        const ImageEle = event.target.files[0];
+        if (ImageEle && ImageEle.type.startsWith('image/')){
+
+            const imgUrl = URL.createObjectURL(ImageEle);// crée l'url
+            console.log('nice');
+            imagePreview.src = imgUrl;
+            imagePreview.alt = "Image chargée avec succès";// sert a r
+            
+        }
+        else{
+            imagePreview.alt = "Fail to load image";
+        }
+
+
+    });
+
+    btnimage.addEventListener('click',()=>{
+        dragImg = true;
+    });
+
     // Fonction de zoom avant
     zoomInBtn.addEventListener('click', () => {
         if (zoomLevel < 2) { // Limite de zoom à 2x
@@ -95,35 +126,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     pixelGrid.addEventListener('mousedown', (e) => {
-        Drag = true;
+        drag = true;
+        dragImg = true;
         StartX = e.clientX;
         StartY = e.clientY;
+
+        imgOffsetX = e.clientX - imagePreview.offsetLeft;
+        imgOffsetX = e.clientY - imagePreview.offsetTop;
     });
 
     pixelGrid.addEventListener('mouseup', (e) => {
-        Drag = false;
+        drag = false;
+        dragImg = false;
         CurrentX = TransX;
         CurrentY = TransY;
     });
 
     document.addEventListener('mousemove',(e) =>{   
 
-        BetweenX = CurrentX + (e.clientX - StartX)/zoomLevel;
-        BetweenY = CurrentY + (e.clientY - StartY)/zoomLevel;
+        if(drag){
 
-        if(Drag && Math.abs(BetweenY) < mooveFactorY-window.innerHeight/(zoomLevel*2)+20 ){
-            // See if can moove without leaving the screen
-            TransY = BetweenY
+            if(Math.abs(BetweenY) < mooveFactorY-window.innerHeight/(zoomLevel*2)+20 ){
+                // See if can moove without leaving the screen
+                TransY = CurrentX + (e.clientX - StartX)/zoomLevel;
+            }
+
+            if (Math.abs(BetweenX) < mooveFactorX-window.innerWidth/(zoomLevel*2)+50 ){
+                // See if can moove without leaving the screen
+                
+                TransX = CurrentY + (e.clientY - StartY)/zoomLevel;         
+            }
+
+            updatePos(TransX,TransY); // Appliquer la translation 
         }
 
-        if (Drag && Math.abs(BetweenX) < mooveFactorX-window.innerWidth/(zoomLevel*2)+50 ){
-            // See if can moove without leaving the screen
-            
-            TransX = BetweenX           
+        if(dragImg){
+            imagePreview.style.left = (e.clientX - offsetX) + 'px';
+            imagePreview.style.top = (e.clientY - offsetY) + 'px';
         }
 
 
-        updatePos(TransX,TransY); // Appliquer la translation
 
 
     });

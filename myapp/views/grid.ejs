@@ -9,7 +9,12 @@
 <body>
     <h1>Pixel War</h1>
 
-    <div class="container">
+    <input type="file" id="fileimage" accept="image/*" style="position: absolute; top: 2vh; left:1vw;">
+    <button id ="moovefile" style="position: absolute; top: 5vh; left:1vw;">Moove</button>
+    
+
+    <div class="container" id = 'container'>
+        <img id="imagePreview" src="" alt="" style ="position: absolute; opacity: 0.5;"/>
         <div class="pixel-grid" id="pixel-grid"></div>
     </div>
 

@@ -16,7 +16,7 @@ h1 {
 
 .container {
     display: flex;
-
+    position : relative;
     height:80vh;
     align-items: center;
     justify-content: center;
@@ -75,8 +75,8 @@ h1 {
 }
 
 button {
-    margin-top: 1vh;
-    padding: 1vh 2vw;
+    margin-top: 0vh;
+    padding: 0vh 0vw;
     cursor: pointer;
 }
 
