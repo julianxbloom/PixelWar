@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let drag = false;
     
     let imgOffsetX = 0;
-    let imfOffsetY = 0;
-    let dragImg = false;
+    let imgOffsetY = 0;
+    let dragImg = true;
 
     let Color = "#fff"
     let LColors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ChooseColor = color;
                 ChooseColor.style.border = "0.7vh solid black";
             }
-            
             color.addEventListener('click', () => {
                 // Set the border style
                 ChooseColor.style.border = "0vh solid black";
@@ -88,12 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
         else{
             imagePreview.alt = "Fail to load image";
         }
-
-
     });
 
-    btnimage.addEventListener('click',()=>{
+    btnimage.addEventListener('mousedown',(e)=>{
         dragImg = true;
+        imgOffsetX = e.clientX - imagePreview.offsetLeft;
+        imgOffsetY = e.clientY - imagePreview.offsetTop;
     });
 
     // Fonction de zoom avant
@@ -127,15 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     pixelGrid.addEventListener('mousedown', (e) => {
         drag = true;
-        dragImg = true;
         StartX = e.clientX;
         StartY = e.clientY;
-
-        imgOffsetX = e.clientX - imagePreview.offsetLeft;
-        imgOffsetX = e.clientY - imagePreview.offsetTop;
     });
 
-    pixelGrid.addEventListener('mouseup', (e) => {
+    document.addEventListener('mouseup', (e) => {
         drag = false;
         dragImg = false;
         CurrentX = TransX;
@@ -146,23 +141,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(drag){
 
+            BetweenY = CurrentY + (e.clientY - StartY)/zoomLevel
+            BetweenX = CurrentX + (e.clientX - StartX)/zoomLevel;
+
             if(Math.abs(BetweenY) < mooveFactorY-window.innerHeight/(zoomLevel*2)+20 ){
                 // See if can moove without leaving the screen
-                TransY = CurrentX + (e.clientX - StartX)/zoomLevel;
+                TransY = BetweenY;
             }
 
             if (Math.abs(BetweenX) < mooveFactorX-window.innerWidth/(zoomLevel*2)+50 ){
                 // See if can moove without leaving the screen
                 
-                TransX = CurrentY + (e.clientY - StartY)/zoomLevel;         
+                TransX = BetweenX;         
             }
 
             updatePos(TransX,TransY); // Appliquer la translation 
         }
 
         if(dragImg){
-            imagePreview.style.left = (e.clientX - offsetX) + 'px';
-            imagePreview.style.top = (e.clientY - offsetY) + 'px';
+            imagePreview.style.left = (e.clientX - imgOffsetX) + 'px';
+            imagePreview.style.top = (e.clientY - imgOffsetY) + 'px';
         }
 
 
