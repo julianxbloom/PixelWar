@@ -1,3 +1,17 @@
+var link = document.createElement("link");
+link.type = 'text/css';
+link.rel = 'stylesheet';
+
+if (screen.width > 600)
+{
+    document.head.appendChild(link);
+    link.href = 'stylesheets/styles.css';
+}
+else {
+    document.head.appendChild(link);
+    link.href = 'stylesheets/stylestel.css';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const pixelGrid = document.getElementById('pixel-grid');
     const zoomInBtn = document.getElementById('zoom-in');
@@ -58,13 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (i == 0){
                 ChooseColor = color;
-                ChooseColor.style.border = "0.7vh solid black";
+                ChooseColor.style.border = "1vmin solid black";
             }
             color.addEventListener('click', () => {
                 // Set the border style
                 ChooseColor.style.border = "0vh solid black";
                 ChooseColor = color;
-                ChooseColor.style.border = "0.7vh solid black";
+                ChooseColor.style.border = "1vmin solid black";
                 Color = color.style.backgroundColor;
             });
             colorGrid.appendChild(color);

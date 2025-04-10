@@ -1,0 +1,96 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 1vw;
+}
+
+.container {
+    display: flex;
+    position : relative;
+    height:80vw;
+    align-items: center;
+    justify-content: center;
+    /*margin-bottom: 5vw;*/
+    overflow: hidden; /* Empêche la grille de dépasser */
+}
+
+.classcontainer {
+    height : "2vw";
+}
+
+.colorcontainer {
+    display: flex;
+    justify-content: center;
+    overflow: hidden; /* Empêche la grille de dépasser */
+}
+
+.pixel-grid {
+    display: grid;
+    grid-template-columns: repeat(100, 1.5vw);
+    grid-template-rows: repeat(100, 1.5vw);
+    gap: 0.1vw;
+    border: 0.1vw solid #ddd;
+    transition: transform 0s ease; /* Animation de zoom fluide */
+}
+
+.pixel {
+    width: 1.5vw;
+    height: 1.5vw;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 6vw);
+    grid-template-rows: repeat(2, 6vw);
+    gap: 1vw;
+    border: 0px solid #000000;
+
+}
+
+.color {
+    width: 6vw;
+    height: 6vw;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+
+.color-border{
+    border : 1.5vw solid black;
+}
+
+.controls {
+    margin-top: 1vw;
+}
+
+button {
+    margin-top: 0vw;
+    padding: 0vw 0vw;
+    cursor: pointer;
+}
+
+input[type="color"] {
+    padding: 5px;
+}
+
+.zoom-controls {
+    margin-top: 1.5vw;
+}
+
+.zoom-controls button {
+    margin: 0 1vw;
+    padding: 1vw;
+    font-size: 1.6vw;
+    cursor: pointer;
+}
