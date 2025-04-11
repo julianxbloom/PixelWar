@@ -33,11 +33,19 @@ h1 {
 }
 
 .containerBottom{
+    position: absolute;
+    top: 80vh;
+    right: 50vw;
+    transform: translate(50%, 50%);
+    border-radius: 20px;
     display: flex;
-    position : relative;
-    height:10vh;
-    align-items: center;
-    justify-content: center;
+    background-color: #000000;
+    border: 1vh solid #000000;
+    margin-left: auto;
+    margin-right: auto;
+    height:24vw;
+    width:100vw;
+
     overflow: hidden; /* Empêche la grille de dépasser */
 }
 
@@ -62,38 +70,35 @@ h1 {
 }
 
 .color-grid {
+    overflow: hidden;
     display: grid;
-    grid-template-columns: repeat(8, 6vw);
-    grid-template-rows: repeat(2, 6vw);
-    gap: 1vw;
+    grid-template-columns: repeat(8, 12.5%);
+    grid-template-rows: repeat(2, 50%);
     border: 0px solid #000000;
-
 }
 
 .color {
-    width: 6vw;
-    height: 6vw;
+    width: 10vw;
+    height: 10vw;
     background-color: #ffffff;
     cursor: pointer;
 }
 
 .color-border{
-    border : 1.5vw solid black;
+    border : 1.5vh solid black;
 }
 
 button {
-    margin-top: 0vw;
-    padding: 0vw 0vw;
     cursor: pointer;
 }
 
 .zoom-controls {
-    margin-top: 1.5vw;
+    display:flex;
+    flex-direction: column;
 }
 
 .zoom-controls button {
-    margin: 0 1vw;
-    padding: 1vw;
-    font-size: 1.6vw;
+    width:5vh;
+    height:5vh;
     cursor: pointer;
 }

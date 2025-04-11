@@ -72,13 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (i == 0){
                 ChooseColor = color;
-                ChooseColor.style.border = "0.7vmin solid black";
+                ChooseColor.style.border = "0.7vh solid black";
             }
             color.addEventListener('click', () => {
                 // Set the border style
                 ChooseColor.style.border = "0vh solid black";
                 ChooseColor = color;
-                ChooseColor.style.border = "0.7vmin solid black";
+                ChooseColor.style.border = "0.7vh solid black";
                 Color = color.style.backgroundColor;
             });
             colorGrid.appendChild(color);
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonction de zoom avant
     zoomInBtn.addEventListener('click', () => {
-        if (zoomLevel < 3) { // Limite de zoom à 2x
+        if (zoomLevel < 4) { // Limite de zoom à 2x
             zoomLevel += zoomFactor;
             updateZoom();
         }
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonction de zoom arrière
     zoomOutBtn.addEventListener('click', () => {
-        if (zoomLevel > 1) { // Limite de zoom à 0.4x
+        if (zoomLevel > 1.4) { // Limite de zoom à 0.4x
             zoomLevel -= zoomFactor;
             updateZoom();
         }
@@ -138,20 +138,21 @@ document.addEventListener('DOMContentLoaded', () => {
         pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${X}px) translateY(${Y}px)`; 
     }
 
-    pixelGrid.addEventListener('mousedown', (e) => {
+    pixelGrid.addEventListener('touchstart', (e) => {
         drag = true;
+        console.log("ok");
         StartX = e.clientX;
         StartY = e.clientY;
     });
 
-    document.addEventListener('mouseup', (e) => {
+    document.addEventListener('touchend', (e) => {
         drag = false;
         dragImg = false;
         CurrentX = TransX;
         CurrentY = TransY;
     });
 
-    document.addEventListener('mousemove',(e) =>{   
+    document.addEventListener('touchmove',(e) =>{   
 
         if(drag){
 
