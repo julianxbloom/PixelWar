@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnimage = document.getElementById('moovefile');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
-    let zoomLevel = 1; // Niveau de zoom initial (1 = taille normale)
+    let zoomLevel = 1.8; // Niveau de zoom initial (1 = taille normale)
     const zoomFactor = 0.2; // Facteur de zoom
     const mooveFactorY = (gridSize * 9);
     const mooveFactorX = (gridSize * 8);
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonction de zoom avant
     zoomInBtn.addEventListener('click', () => {
-        if (zoomLevel < 2) { // Limite de zoom à 2x
+        if (zoomLevel < 3) { // Limite de zoom à 2x
             zoomLevel += zoomFactor;
             updateZoom();
         }
@@ -186,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Créer la grille au chargement de la page
     createPixelGrid();
     createColorGrid();
+    updateZoom();
 });
 
 
