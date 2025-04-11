@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnimage = document.getElementById('moovefile');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
-    let zoomLevel = 1; // Niveau de zoom initial (1 = taille normale)
+    let zoomLevel = 1.8; // Niveau de zoom initial (1 = taille normale)
     const zoomFactor = 0.2; // Facteur de zoom
     const mooveFactorY = (gridSize * 9);
     const mooveFactorX = (gridSize * 8);
@@ -72,13 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (i == 0){
                 ChooseColor = color;
-                ChooseColor.style.border = "0.7vmin solid black";
+                ChooseColor.style.border = "0.7vh solid black";
             }
             color.addEventListener('click', () => {
                 // Set the border style
                 ChooseColor.style.border = "0vh solid black";
                 ChooseColor = color;
-                ChooseColor.style.border = "0.7vmin solid black";
+                ChooseColor.style.border = "0.7vh solid black";
                 Color = color.style.backgroundColor;
             });
             colorGrid.appendChild(color);
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonction de zoom avant
     zoomInBtn.addEventListener('click', () => {
-        if (zoomLevel < 2) { // Limite de zoom à 2x
+        if (zoomLevel < 4) { // Limite de zoom à 2x
             zoomLevel += zoomFactor;
             updateZoom();
         }
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonction de zoom arrière
     zoomOutBtn.addEventListener('click', () => {
-        if (zoomLevel > 1) { // Limite de zoom à 0.4x
+        if (zoomLevel > 1.4) { // Limite de zoom à 0.4x
             zoomLevel -= zoomFactor;
             updateZoom();
         }
@@ -138,20 +138,21 @@ document.addEventListener('DOMContentLoaded', () => {
         pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${X}px) translateY(${Y}px)`; 
     }
 
-    pixelGrid.addEventListener('mousedown', (e) => {
+    pixelGrid.addEventListener('touchstart', (e) => {
         drag = true;
+        console.log("ok");
         StartX = e.clientX;
         StartY = e.clientY;
     });
 
-    document.addEventListener('mouseup', (e) => {
+    document.addEventListener('touchend', (e) => {
         drag = false;
         dragImg = false;
         CurrentX = TransX;
         CurrentY = TransY;
     });
 
-    document.addEventListener('mousemove',(e) =>{   
+    document.addEventListener('touchmove',(e) =>{   
 
         if(drag){
 
@@ -186,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Créer la grille au chargement de la page
     createPixelGrid();
     createColorGrid();
+    updateZoom();
 });
 
 
