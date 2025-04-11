@@ -72,13 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (i == 0){
                 ChooseColor = color;
-                ChooseColor.style.border = "1vmin solid black";
+                ChooseColor.style.border = "0.7vmin solid black";
             }
             color.addEventListener('click', () => {
                 // Set the border style
                 ChooseColor.style.border = "0vh solid black";
                 ChooseColor = color;
-                ChooseColor.style.border = "1vmin solid black";
+                ChooseColor.style.border = "0.7vmin solid black";
                 Color = color.style.backgroundColor;
             });
             colorGrid.appendChild(color);
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
             BetweenY = CurrentY + (e.clientY - StartY)/zoomLevel
             BetweenX = CurrentX + (e.clientX - StartX)/zoomLevel;
 
-            if(Math.abs(BetweenY) < mooveFactorY-window.innerHeight/(zoomLevel*2)+20 ){
+            if(Math.abs(BetweenY) < mooveFactorY-window.innerHeight/(zoomLevel*2)-50 ){
                 // See if can moove without leaving the screen
                 TransY = BetweenY;
             }

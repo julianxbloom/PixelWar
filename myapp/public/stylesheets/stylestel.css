@@ -14,6 +14,14 @@ h1 {
     margin-bottom: 1vw;
 }
 
+.containerTop{
+    display: flex;
+    position : relative;
+    height:10vh;
+    align-items: center;
+    justify-content: center;
+}
+
 .container {
     display: flex;
     position : relative;
@@ -24,14 +32,17 @@ h1 {
     overflow: hidden; /* Empêche la grille de dépasser */
 }
 
-.classcontainer {
-    height : "2vh";
-}
-
-.colorcontainer {
+.containerBottom{
     display: flex;
+    position : relative;
+    height:10vh;
+    align-items: center;
     justify-content: center;
     overflow: hidden; /* Empêche la grille de dépasser */
+}
+
+.classcontainer {
+    height : "2vh";
 }
 
 .pixel-grid {
@@ -70,18 +81,10 @@ h1 {
     border : 1.5vw solid black;
 }
 
-.controls {
-    margin-top: 1vw;
-}
-
 button {
     margin-top: 0vw;
     padding: 0vw 0vw;
     cursor: pointer;
-}
-
-input[type="color"] {
-    padding: 5px;
 }
 
 .zoom-controls {

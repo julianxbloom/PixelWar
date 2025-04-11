@@ -8,28 +8,26 @@
 
 </head>
 <body>
-    <h1>Pixel War</h1>
 
-    <input type="file" id="fileimage" accept="image/*" style="position: absolute; top: 2vh; left:1vw;">
-    <button id ="moovefile" style="position: absolute; top: 5vh; left:1vw;">Moove</button>
-    
+    <div class = "containerTop">
+        <h1>Pixel War</h1>
+        <input type="file" id="fileimage" accept="image/*" style="position: absolute; top: 2vh; left:1vw;">
+        <button id ="moovefile" style="position: absolute; top: 5vh; left:1vw;">Moove</button>
+    </div>
 
     <div class="container" id = 'container'>
         <img id="imagePreview" src="" alt="" style ="position: absolute; opacity: 0.5; z-index : 1; pointer-events: none;"/>
         <div class="pixel-grid" id="pixel-grid"></div>
     </div>
 
-    <div class="colorcontainer">
+    <div class="containerBottom">
         <div class="color-grid" id="color-grid"></div>
 
-        <div class="controls">
-        
-            <div class="zoom-controls">
-                <button id="zoom-in" >+</button>
-                <button id="zoom-out" >-</button>
-            </div>
-
+        <div class="zoom-controls">
+            <button id="zoom-in" >+</button>
+            <button id="zoom-out" >-</button>
         </div>
+
     </div>    
 
 </body>

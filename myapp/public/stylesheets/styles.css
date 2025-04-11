@@ -14,6 +14,14 @@ h1 {
     margin-bottom: 1vh;
 }
 
+.containerTop{
+    display: flex;
+    position : relative;
+    height:10vh;
+    align-items: center;
+    justify-content: center;
+}
+
 .container {
     display: flex;
     position : relative;
@@ -24,14 +32,25 @@ h1 {
     overflow: hidden; /* Empêche la grille de dépasser */
 }
 
-.classcontainer {
-    height : "2vh";
+.containerBottom{
+    position: absolute;
+    top: 50vh;
+    right: 50vw;
+    transform: translate(50%, 50%);
+    border-radius: 20px;
+    display: flex;
+    background-color: #000000;
+    border: 1vh solid #000000;
+    margin-left: auto;
+    margin-right: auto;
+    height:12vh;
+    width:47vh;
+
+    overflow: hidden; /* Empêche la grille de dépasser */
 }
 
-.colorcontainer {
-    display: flex;
-    justify-content: center;
-    overflow: hidden; /* Empêche la grille de dépasser */
+.classcontainer {
+    height : "2vh";
 }
 
 .pixel-grid {
@@ -51,17 +70,16 @@ h1 {
 }
 
 .color-grid {
+    overflow: hidden;
     display: grid;
-    grid-template-columns: repeat(8, 6vh);
-    grid-template-rows: repeat(2, 6vh);
-    gap: 1vh;
+    grid-template-columns: repeat(8, 12.5%);
+    grid-template-rows: repeat(2, 50%);
     border: 0px solid #000000;
-
 }
 
 .color {
-    width: 6vh;
-    height: 6vh;
+    width: 5vh;
+    height: 5vh;
     background-color: #ffffff;
     cursor: pointer;
 }
@@ -70,27 +88,22 @@ h1 {
     border : 1.5vh solid black;
 }
 
-.controls {
-    margin-top: 1vh;
-}
-
 button {
-    margin-top: 0vh;
-    padding: 0vh 0vw;
+    /*margin-top: 0vh;
+    padding: 0vh 0vw;*/
     cursor: pointer;
 }
 
-input[type="color"] {
-    padding: 5px;
-}
-
 .zoom-controls {
-    margin-top: 1.5vh;
+    display:flex;
+    flex-direction: column;
 }
 
 .zoom-controls button {
-    margin: 0 1vh;
-    padding: 1vh;
-    font-size: 1.6vh;
+    width:5vh;
+    height:5vh;
+    /*padding:1vh;
+    margin: 1 0.5vh;
+    /*font-size: 3vh;*/
     cursor: pointer;
 }
