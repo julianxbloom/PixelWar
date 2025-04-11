@@ -22,10 +22,6 @@ router.post('/', (req, res) => {
   else {
     res.render('login',{Btn : "Wrong pseudo,Retry"});
   }
-
-  
-  
-  
 });
 
 module.exports = router;
