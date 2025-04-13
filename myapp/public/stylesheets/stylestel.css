@@ -39,7 +39,7 @@ h1 {
     transform: translate(50%, 50%);
     border-radius: 20px;
     display: flex;
-    background-color: #da2f2f;
+    background-color: #000000;
     border: 1dvh solid #000000;
     margin-left: auto;
     margin-right: auto;
@@ -57,8 +57,6 @@ h1 {
     display: grid;
     grid-template-columns: repeat(100, 1.5dvw);
     grid-template-rows: repeat(100, 1.5dvw);
-    gap: 0.1dvw;
-    border: 0.1dvw solid #ddd;
     transition: transform 0s ease; /* Animation de zoom fluide */
 }
 
@@ -89,18 +87,25 @@ h1 {
 }
 
 button {
-    display:none;
     cursor: pointer;
 }
 
 .zoom-controls {
-    display:none;
     flex-direction: column;
 }
 
 .zoom-controls button {
     width:5dvh;
-    height:50dvh;
+    height:5dvh;
     display: none;
     cursor: pointer;
+}
+
+.imageFile-controls {
+    display:flex;
+    flex-direction: column;
+    position: absolute;
+    top: 20%;
+    right: 10%;
+    z-index: 2;
 }

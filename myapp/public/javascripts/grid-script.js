@@ -27,9 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const mooveFactorY = (gridSize * 9);
     const mooveFactorX = (gridSize * 8);
 
-    //let CurrentPseudo = localStorage.getItem("name");
-    //alert("Pseudo : " + CurrentPseudo);
-
     let StartX = 0;
     let StartY = 0;
     let TransX = 0;
@@ -163,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             initDistance = Math.hypot(dx, dy);
             initialZoom = zoomLevel;
-            
+
         } else if (e.touches.length === 1) {  // 1 doigt
             zoomInBtn.style.backgroundColor = "red";
             mooveGridBegin(e.touches[0]);

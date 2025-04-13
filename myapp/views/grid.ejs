@@ -11,8 +11,6 @@
 
     <div class = "containerTop">
         <h1>Pixel War</h1>
-        <input type="file" id="fileimage" accept="image/*" style="position: absolute; top: 2vh; left:1vw;">
-        <button id ="moovefile" style="position: absolute; top: 5vh; left:1vw;">Moove</button>
     </div>
 
     <div class="container" id = 'container'>
@@ -21,6 +19,13 @@
 
         <div class="containerBottom">
             <div class="color-grid" id="color-grid"></div>
+
+            <div class="imageFile-controls">
+                <label for="fileimage" class="file-label" style="color:white;">File</label>
+                <input type="file" id="fileimage" accept="image/*" style="display : none">
+                <button id ="moovefile" style="position: absolute; top: 5vh; left:1vw;">Moove</button>
+            </div>
+    
 
             <div class="zoom-controls">
                 <button id="zoom-in" >+</button>
