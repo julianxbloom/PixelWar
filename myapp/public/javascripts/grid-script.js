@@ -138,24 +138,48 @@ document.addEventListener('DOMContentLoaded', () => {
         pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${X}px) translateY(${Y}px)`; 
     }
 
+    /*Pour les pc*/
+    pixelGrid.addEventListener('mousedown', (e) => {
+        mooveGridBegin(e);
+    });
+
+    document.addEventListener('mouseup', (e) => {
+        mooveGridEnd(e);
+    });
+
+    document.addEventListener('mousemove',(e) =>{ 
+        moovePixelGrid(e);
+    });
+
+    /*Pour les tels*/
     pixelGrid.addEventListener('touchstart', (e) => {
-        drag = true;
-        console.log("ok");
-        StartX = e.clientX;
-        StartY = e.clientY;
+        mooveGridBegin(e);
     });
 
     document.addEventListener('touchend', (e) => {
+        mooveGridEnd(e);
+    });
+
+    document.addEventListener('touchmove',(e) =>{ 
+        moovePixelGrid(e);
+    });
+
+
+    function mooveGridBegin(e){
+        drag = true;
+        StartX = e.clientX;
+        StartY = e.clientY;
+    }
+    function mooveGridEnd(e){
         drag = false;
         dragImg = false;
         CurrentX = TransX;
-        CurrentY = TransY;
-    });
-
-    document.addEventListener('touchmove',(e) =>{   
+        CurrentY = TransY;     
+    }
+        
+    function moovePixelGrid (e){
 
         if(drag){
-
             BetweenY = CurrentY + (e.clientY - StartY)/zoomLevel
             BetweenX = CurrentX + (e.clientX - StartX)/zoomLevel;
 
@@ -166,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (Math.abs(BetweenX) < mooveFactorX-window.innerWidth/(zoomLevel*2)+50 ){
                 // See if can moove without leaving the screen
-                
                 TransX = BetweenX;         
             }
 
@@ -177,11 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
             imagePreview.style.left = (e.clientX - imgOffsetX) + 'px';
             imagePreview.style.top = (e.clientY - imgOffsetY) + 'px';
         }
-
-
-
-
-    });
+    };
 
 
     // Créer la grille au chargement de la page
