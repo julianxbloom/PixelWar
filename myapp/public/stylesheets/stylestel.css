@@ -34,13 +34,13 @@ h1 {
 
 .containerBottom{
     position: absolute;
-    top: 70vh;
-    right: 50vw;
+    top: 70dvh;
+    right: 50dvw;
     transform: translate(50%, 50%);
     border-radius: 20px;
     display: flex;
     background-color: #000000;
-    border: 1vh solid #000000;
+    border: 1dvh solid #000000;
     margin-left: auto;
     margin-right: auto;
     height:24vw;
@@ -55,16 +55,16 @@ h1 {
 
 .pixel-grid {
     display: grid;
-    grid-template-columns: repeat(100, 1.5vw);
-    grid-template-rows: repeat(100, 1.5vw);
-    gap: 0.1vw;
-    border: 0.1vw solid #ddd;
+    grid-template-columns: repeat(100, 1.5dvw);
+    grid-template-rows: repeat(100, 1.5dvw);
+    gap: 0.1dvw;
+    border: 0.1dvw solid #ddd;
     transition: transform 0s ease; /* Animation de zoom fluide */
 }
 
 .pixel {
-    width: 1.5vw;
-    height: 1.5vw;
+    width: 1.5dvw;
+    height: 1.5dvw;
     background-color: #ffffff;
     cursor: pointer;
 }
@@ -78,14 +78,14 @@ h1 {
 }
 
 .color {
-    width: 10vw;
-    height: 10vw;
+    width: 10dvw;
+    height: 10dvw;
     background-color: #ffffff;
     cursor: pointer;
 }
 
 .color-border{
-    border : 1.5vh solid black;
+    border : 1.5dvh solid black;
 }
 
 button {
@@ -98,7 +98,7 @@ button {
 }
 
 .zoom-controls button {
-    width:5vh;
-    height:5vh;
+    width:5dvh;
+    height:5dvh;
     cursor: pointer;
 }
