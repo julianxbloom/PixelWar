@@ -154,7 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*Pour les tels*/
     pixelGrid.addEventListener('touchstart', (e) => {
-        alert("ok");
         mooveGridBegin(e.touches[0]);
     });
 
