@@ -89,16 +89,18 @@ h1 {
 }
 
 button {
+    display:none;
     cursor: pointer;
 }
 
 .zoom-controls {
-    display:flex;
+    display:none;
     flex-direction: column;
 }
 
 .zoom-controls button {
     width:5dvh;
-    height:5dvh;
+    height:50dvh;
+    display: none;
     cursor: pointer;
 }
