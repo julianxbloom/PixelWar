@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             newDistance = Math.hypot(dx, dy);
-            rapportDistance = initDistance/newDistance
+            rapportDistance = newDistance/initDistance;
             zoomLevel = initialZoom*rapportDistance;  
             updateZoom();
         }
