@@ -105,7 +105,28 @@ button {
     display:flex;
     flex-direction: column;
     position: absolute;
-    top: 20%;
-    right: 10%;
+    top: 15%;
+    right: 5%;
     z-index: 2;
+}
+
+.joystick{
+    width: 10dvw;
+    height: 10dvw;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    position: absolute;
+    top: 90%;
+    right: -20%;
+    touch-action: none;
+}
+  
+.joystickThumb {
+    width: 4dvw;
+    height: 4dvw;
+    background: red;
+    border-radius: 50%;
+    position: absolute;
+    top: 30%;
+    right: 25%;
 }

@@ -19,7 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const colorGrid = document.getElementById('color-grid');
     const fileimage = document.getElementById('fileimage');
     const imagePreview = document.getElementById('imagePreview');
-    const btnimage = document.getElementById('moovefile');
+    const base = document.getElementById("joystick");
+    const thumb = document.getElementById("joystickThumb");
+    
+    let center = { x: 50, y: 50 };
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
     let zoomLevel = 1.8; // Niveau de zoom initial (1 = taille normale)
@@ -84,8 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fileimage.addEventListener('change', function(event){
 
-        console.log('nice');
-
         const ImageEle = event.target.files[0];
         if (ImageEle && ImageEle.type.startsWith('image/')){
 
@@ -100,11 +101,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    btnimage.addEventListener('mousedown',(e)=>{
-        dragImg = true;
-        imgOffsetX = e.clientX - imagePreview.offsetLeft;
-        imgOffsetY = e.clientY - imagePreview.offsetTop;
-    });
+    base.addEventListener("touchstart", start, { passive: false });
+    base.addEventListener("touchmove", move, { passive: false });
+    base.addEventListener("touchend", end);
+
+    function start(e){
+        e.preventDefault();
+    }
+
+    function move(e){
+        e.preventDefault();
+        const touch = e.touches[0];
+        const rect = base.getBoundingClientRect();
+        let x = touch.clientX - rect.left;
+        let y = touch.clientY - rect.top;
+      
+        let dx = x - center.x;
+        let dy = y - center.y;
+        let distance = Math.min(Math.sqrt(dx*dx + dy*dy), 40); // Max 40px
+        let angle = Math.atan2(dy, dx);
+      
+        let thumbX = Math.cos(angle) * distance + center.x - 20;
+        let thumbY = Math.sin(angle) * distance + center.y - 20;
+      
+        thumb.style.left = `${thumbX}px`;
+        thumb.style.top = `${thumbY}px`;
+    }
+
+    
+    function end(){
+        thumb.style.left = `30px`;
+        thumb.style.top = `30px`;
+      
+    }
 
     // Fonction de zoom avant
     zoomInBtn.addEventListener('click', () => {
