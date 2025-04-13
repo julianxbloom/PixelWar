@@ -140,27 +140,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*Pour les pc*/
     pixelGrid.addEventListener('mousedown', (e) => {
+        zoomInBtn.style.backgroundColor = "red";
         mooveGridBegin(e);
     });
 
     document.addEventListener('mouseup', (e) => {
+        zoomInBtn.style.backgroundColor = "green";
         mooveGridEnd(e);
     });
 
     document.addEventListener('mousemove',(e) =>{ 
+        zoomInBtn.style.backgroundColor = "yellow";
         moovePixelGrid(e);
     });
 
     /*Pour les tels*/
     pixelGrid.addEventListener('touchstart', (e) => {
+        zoomInBtn.style.backgroundColor = "red";
         mooveGridBegin(e.touches[0]);
     });
 
     document.addEventListener('touchend', (e) => {
+        zoomInBtn.style.backgroundColor = "green";
         mooveGridEnd(e.changedTouches[0]);
     });
 
     document.addEventListener('touchmove',(e) =>{ 
+        zoomInBtn.style.backgroundColor = "yellow";
         moovePixelGrid(e);
     });
 
