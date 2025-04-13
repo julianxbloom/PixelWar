@@ -155,11 +155,11 @@ document.addEventListener('DOMContentLoaded', () => {
     /*Pour les tels*/
     pixelGrid.addEventListener('touchstart', (e) => {
         alert("ok");
-        mooveGridBegin(e);
+        mooveGridBegin(e.touches[0]);
     });
 
     document.addEventListener('touchend', (e) => {
-        mooveGridEnd(e);
+        mooveGridEnd(e.changedTouches[0]);
     });
 
     document.addEventListener('touchmove',(e) =>{ 
