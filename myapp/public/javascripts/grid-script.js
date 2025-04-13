@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*Pour les pc*/
     pixelGrid.addEventListener('mousedown', (e) => {
+        alert("ok");
         mooveGridBegin(e);
     });
 
@@ -153,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*Pour les tels*/
     pixelGrid.addEventListener('touchstart', (e) => {
+        alert("ok");
         mooveGridBegin(e);
     });
 
