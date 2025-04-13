@@ -140,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*Pour les pc*/
     pixelGrid.addEventListener('mousedown', (e) => {
-        alert("ok");
         mooveGridBegin(e);
     });
 
