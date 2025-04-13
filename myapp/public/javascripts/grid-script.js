@@ -165,10 +165,11 @@ document.addEventListener('DOMContentLoaded', () => {
         mooveGridEnd(e.changedTouches[0]);
     });
 
-    document.addEventListener('touchmove',(e) =>{ 
+    document.addEventListener('touchmove', (e) => {
+        if (drag || dragImg) e.preventDefault(); // bloquer le scroll tactile
         zoomInBtn.style.backgroundColor = "yellow";
-        moovePixelGrid(e);
-    });
+        moovePixelGrid(e.touches[0]);
+    }, { passive: false })
 
 
     function mooveGridBegin(e){
