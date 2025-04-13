@@ -157,9 +157,17 @@ document.addEventListener('DOMContentLoaded', () => {
     /*Pour les tels*/
     pixelGrid.addEventListener('touchstart', (e) => {
         
-        zoomInBtn.style.backgroundColor = "red";
-        mooveGridBegin(e.touches[0]);
-        //e.preventDefault(); 
+        if (e.touches.length === 2) {  // 
+            // Deux doigts 
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            initDistance = Math.hypot(dx, dy);
+            initialZoom = zoomLevel;
+        } else if (e.touches.length === 1) {  //  doigt
+            zoomInBtn.style.backgroundColor = "red";
+            mooveGridBegin(e.touches[0]);
+        }
+
     });
 
     document.addEventListener('touchend', (e) => {
@@ -168,6 +176,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('touchmove', (e) => {
+
+        if (e.touches.length === 2){
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            newDistance = Math.hypot(dx, dy);
+            rapportDistance = initDistance/newDistance
+            zoomLevel = initialZoom*rapportDistance;  
+            updateZoom();
+        }
+
         e.preventDefault(); // bloquer le scroll tactile
         zoomInBtn.style.backgroundColor = "yellow";
         moovePixelGrid(e.touches[0]);
