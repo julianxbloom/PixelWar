@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('touchmove', (e) => {
-        if (drag || dragImg) e.preventDefault(); // bloquer le scroll tactile
+        e.preventDefault(); // bloquer le scroll tactile
         zoomInBtn.style.backgroundColor = "yellow";
         moovePixelGrid(e.touches[0]);
     }, { passive: false })
