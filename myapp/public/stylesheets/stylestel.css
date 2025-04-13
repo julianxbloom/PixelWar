@@ -34,7 +34,7 @@ h1 {
 
 .containerBottom{
     position: absolute;
-    top: 70dvh;
+    top: 70%;
     right: 50dvw;
     transform: translate(50%, 50%);
     border-radius: 20px;

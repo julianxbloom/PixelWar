@@ -156,8 +156,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*Pour les tels*/
     pixelGrid.addEventListener('touchstart', (e) => {
+        
         zoomInBtn.style.backgroundColor = "red";
         mooveGridBegin(e.touches[0]);
+        //e.preventDefault(); 
     });
 
     document.addEventListener('touchend', (e) => {
