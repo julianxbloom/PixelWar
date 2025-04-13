@@ -157,18 +157,20 @@ document.addEventListener('DOMContentLoaded', () => {
     /*Pour les tels*/
     pixelGrid.addEventListener('touchstart', (e) => {
         
+        e.preventDefault(); // bloquer le scroll tactile
+        
         if (e.touches.length === 2) {  // 
             // Deux doigts 
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             initDistance = Math.hypot(dx, dy);
             initialZoom = zoomLevel;
-        } else if (e.touches.length === 1) {  //  doigt
+        } else if (e.touches.length === 1) {  // 1 doigt
             zoomInBtn.style.backgroundColor = "red";
             mooveGridBegin(e.touches[0]);
         }
 
-    });
+    },{passive : false});
 
     document.addEventListener('touchend', (e) => {
         zoomInBtn.style.backgroundColor = "green";
@@ -178,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchmove', (e) => {
 
         if (e.touches.length === 2){
+            e.preventDefault(); // bloquer le scroll tactile
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             newDistance = Math.hypot(dx, dy);
@@ -186,10 +189,15 @@ document.addEventListener('DOMContentLoaded', () => {
             updateZoom();
         }
 
-        e.preventDefault(); // bloquer le scroll tactile
-        zoomInBtn.style.backgroundColor = "yellow";
-        moovePixelGrid(e.touches[0]);
-    }, { passive: false })
+        else{
+            
+            zoomInBtn.style.backgroundColor = "yellow";
+            moovePixelGrid(e.touches[0]);    
+        }
+        
+
+
+    }, { passive: false });
 
 
     function mooveGridBegin(e){
@@ -207,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function moovePixelGrid (e){
 
         if(drag){
+            e.preventDefault(); // bloquer le scroll tactile
             BetweenY = CurrentY + (e.clientY - StartY)/zoomLevel
             BetweenX = CurrentX + (e.clientX - StartX)/zoomLevel;
 
@@ -224,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if(dragImg){
+            e.preventDefault(); // bloquer le scroll tactile
             imagePreview.style.left = (e.clientX - imgOffsetX) + 'px';
             imagePreview.style.top = (e.clientY - imgOffsetY) + 'px';
         }
