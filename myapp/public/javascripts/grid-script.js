@@ -19,10 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const colorGrid = document.getElementById('color-grid');
     const fileimage = document.getElementById('fileimage');
     const imagePreview = document.getElementById('imagePreview');
-    const base = document.getElementById("joystick");
-    const thumb = document.getElementById("joystickThumb");
-    
-    let center = { x: 50, y: 50 };
+    const mode = document.getElementById('changeControl');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
     let zoomLevel = 1.8; // Niveau de zoom initial (1 = taille normale)
@@ -44,6 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let Color = "#fff"
     let LColors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
+
+    let drawing = true;
 
     // Fonction pour créer la grille de pixels
     function createPixelGrid() {
@@ -94,47 +93,12 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('nice');
             imagePreview.src = imgUrl;
             imagePreview.alt = "Image chargée avec succès";// sert a r
-            
+            imagePreview.style.transform = `scale(${zoomLevel}) translateX(${0}px) translateY(${0}px)`;
         }
         else{
             imagePreview.alt = "Fail to load image";
         }
     });
-
-    base.addEventListener("touchstart", start, { passive: false });
-    base.addEventListener("touchmove", move, { passive: false });
-    base.addEventListener("touchend", end);
-
-    function start(e){
-        e.preventDefault();
-    }
-
-    function move(e){
-        e.preventDefault();
-        const touch = e.touches[0];
-        const rect = base.getBoundingClientRect();
-        let x = touch.clientX - rect.left;
-        let y = touch.clientY - rect.top;
-      
-        let dx = x - center.x;
-        let dy = y - center.y;
-        let distance = Math.min(Math.sqrt(dx*dx + dy*dy), 40); // Max 40px
-        let angle = Math.atan2(dy, dx);
-      
-        let thumbX = Math.cos(angle) * distance + center.x - 20;
-        let thumbY = Math.sin(angle) * distance + center.y - 20;
-      
-        thumb.style.left = `${thumbX}px`;
-        thumb.style.top = `${thumbY}px`;
-    }
-
-    
-    function end(){
-        thumb.style.left = `30px`;
-        thumb.style.top = `30px`;
-      
-    }
-
     // Fonction de zoom avant
     zoomInBtn.addEventListener('click', () => {
         if (zoomLevel < 4) { // Limite de zoom à 2x
@@ -151,9 +115,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Fonction pour passer du mode dessin à celui ou on bouge la file
+    mode.addEventListener('click',()=>{
+        if (drawing){
+            //Mettre les couleurs en gris
+            mode.textContent = 'File'
+        }
+        else {
+            //enlever le gris des couleurs
+            mode.textContent = 'Drawing'
+        }
+        drawing = !drawing;
+    })
+
     // Appliquer l'échelle de zoom à la grille
     function updateZoom() {
-        pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${0}px) translateY(${0}px)`;
+        if (drawing){
+            pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${0}px) translateY(${0}px)`;
+        }
+        else{
+            imagePreview.style.transform = `scale(${zoomLevel}) translateX(${0}px) translateY(${0}px)`;
+        }
+        
         TransX = 0;
         CurrentX = 0;
         TransY = 0;
@@ -161,7 +144,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function updatePos(X,Y){
-        pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${X}px) translateY(${Y}px)`; 
+        if (drawing){
+            pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${X}px) translateY(${Y}px)`; 
+        }
+        else{
+            imagePreview.style.transform = `scale(${zoomLevel}) translateX(${X}px) translateY(${Y}px)`; 
+        }
     }
 
     /*Pour les pc*/

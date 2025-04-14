@@ -8,6 +8,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     text-align: center;
+    touch-action: manipulation;
 }
 
 h1 {
@@ -20,6 +21,15 @@ h1 {
     height:10vh;
     align-items: center;
     justify-content: center;
+}
+
+.containerTop button{
+    background-color: #000000;
+    position: absolute;
+    top: 30%;
+    right: 10%;
+    color : white;
+
 }
 
 .container {
@@ -105,23 +115,4 @@ button {
     position: absolute;
     top: 60vh;
     right: 70vw;
-}
-
-.joystick {
-    width: 100px;
-    height: 100px;
-    background: rgba(0,0,0,0.2);
-    border-radius: 50%;
-    position: relative;
-    touch-action: none;
-  }
-  
-.joystickThumb {
-    width: 40px;
-    height: 40px;
-    background: red;
-    border-radius: 50%;
-    position: absolute;
-    top: 30px;
-    left : 30px;
 }
