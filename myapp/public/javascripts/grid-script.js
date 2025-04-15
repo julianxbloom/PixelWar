@@ -23,9 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
     let zoomLevel = 1.8; // Niveau de zoom initial (1 = taille normale)
-    const zoomFactor = 0.2; // Facteur de zoom
-    const mooveFactorY = (gridSize * 9);
-    const mooveFactorX = (gridSize * 8);
+    const zoomFactor = 0.2; // Facteur de zoom    
 
     let StartX = 0;
     let StartY = 0;
@@ -57,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             pixelGrid.appendChild(pixel);
         }
-        
+        pixelGrid.children[100*99].style.backgroundColor = "#808000";
     }
 
     // Fonction pour créer la grille de couleur
@@ -130,17 +128,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Appliquer l'échelle de zoom à la grille
     function updateZoom() {
+
+        /*TransX = Math.max(Math.min(TransX,mooveFactorX/zoomLevel*2),-mooveFactorX/zoomLevel*2);
+        TransY = Math.max(Math.min(TransY,mooveFactorY/zoomLevel*2),-mooveFactorY/zoomLevel*2);*/
+
         if (drawing){
-            pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${0}px) translateY(${0}px)`;
+            pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${TransX}px) translateY(${TransY}px)`;
         }
         else{
-            imagePreview.style.transform = `scale(${zoomLevel}) translateX(${0}px) translateY(${0}px)`;
+            imagePreview.style.transform = `scale(${zoomLevel}) translateX(${TransX}px) translateY(${TransY}px)`;
         }
         
-        TransX = 0;
+        /*TransX = 0;
         CurrentX = 0;
         TransY = 0;
-        CurrentY = 0;
+        CurrentY = 0;*/
     };
 
     function updatePos(X,Y){
@@ -161,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mouseup', (e) => {
         zoomInBtn.style.backgroundColor = "green";
         mooveGridEnd(e);
+        /*alert(pixelGrid.children[99].getBoundingClientRect().right);*/
     });
 
     document.addEventListener('mousemove',(e) =>{ 
@@ -188,6 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchend', (e) => {
         zoomInBtn.style.backgroundColor = "green";
         mooveGridEnd(e.changedTouches[0]);
+        //alert(pixelGrid.children[49].getBoundingClientRect().right + pixelGrid.children[49].getBoundingClientRect().width*50/zoomLevel);
     });
 
     document.addEventListener('touchmove', (e) => {
@@ -231,14 +235,24 @@ document.addEventListener('DOMContentLoaded', () => {
             BetweenY = CurrentY + (e.clientY - StartY)/zoomLevel
             BetweenX = CurrentX + (e.clientX - StartX)/zoomLevel;
 
-            if(Math.abs(BetweenY) < mooveFactorY-window.innerHeight/(zoomLevel*2)-50 ){
-                // See if can moove without leaving the screen
+            if (pixelGrid.children[0].getBoundingClientRect().top > 100){
+                TransY = Math.min(TransY,BetweenY);
+            }
+            else if (pixelGrid.children[100*99].getBoundingClientRect().bottom < screen.height -200*zoomLevel){
+                TransY = Math.max(TransY,BetweenY);
+            }
+            else{
                 TransY = BetweenY;
             }
 
-            if (Math.abs(BetweenX) < mooveFactorX-window.innerWidth/(zoomLevel*2)+50 ){
-                // See if can moove without leaving the screen
-                TransX = BetweenX;         
+            if (pixelGrid.children[0].getBoundingClientRect().left > 100){
+                TransX = Math.min(TransX,BetweenX);
+            }
+            else if (pixelGrid.children[99].getBoundingClientRect().left < screen.width -50*zoomLevel){
+                TransX = Math.max(TransX,BetweenX);
+            }
+            else{
+                TransX = BetweenX;
             }
 
             updatePos(TransX,TransY); // Appliquer la translation 
