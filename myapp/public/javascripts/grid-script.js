@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (pixelGrid.children[0].getBoundingClientRect().top > 100){
                 TransY = Math.min(TransY,BetweenY);
             }
-            else if (pixelGrid.children[100*99].getBoundingClientRect().bottom < screen.height -200*zoomLevel){
+            else if (pixelGrid.children[100*99].getBoundingClientRect().bottom < window.innerHeight -200){
                 TransY = Math.max(TransY,BetweenY);
             }
             else{
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (pixelGrid.children[0].getBoundingClientRect().left > 100){
                 TransX = Math.min(TransX,BetweenX);
             }
-            else if (pixelGrid.children[99].getBoundingClientRect().left < screen.width -50*zoomLevel){
+            else if (pixelGrid.children[99].getBoundingClientRect().right < window.innerHeight -100){
                 TransX = Math.max(TransX,BetweenX);
             }
             else{
