@@ -8,7 +8,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     text-align: center;
-    touch-action: manipulation;
+    /*touch-action: manipulation;*/
 }
 
 h1 {
@@ -38,9 +38,8 @@ h1 {
     overflow: hidden;
     position : relative;
     height:90dvh;
-    align-items: center;
-    justify-content: center;
-    /*overflow: hidden; /* Empêche la grille de dépasser */
+    /*align-items: center;
+    justify-content: center;*/
 }
 
 .containerBottom{

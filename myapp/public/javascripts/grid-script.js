@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mode = document.getElementById('changeControl');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
-    let zoomLevel = 1.8; // Niveau de zoom initial (1 = taille normale)
+    let zoomLevel = 3; // Niveau de zoom initial (1 = taille normale)
     const zoomFactor = 0.2; // Facteur de zoom    
 
     let StartX = 0;
@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (pixelGrid.children[0].getBoundingClientRect().top > 100){
                 TransY = Math.min(TransY,BetweenY);
             }
-            else if (pixelGrid.children[100*99].getBoundingClientRect().bottom < window.innerHeight -200){
+            else if (pixelGrid.children[gridSize*(gridSize-1)].getBoundingClientRect().bottom < window.innerHeight -200){
                 TransY = Math.max(TransY,BetweenY);
             }
             else{
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (pixelGrid.children[0].getBoundingClientRect().left > 100){
                 TransX = Math.min(TransX,BetweenX);
             }
-            else if (pixelGrid.children[99].getBoundingClientRect().right < window.innerWidth -100){
+            else if (pixelGrid.children[gridSize-1].getBoundingClientRect().right < window.innerWidth -100){
                 TransX = Math.max(TransX,BetweenX);
             }
             else{
