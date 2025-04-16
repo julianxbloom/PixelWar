@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (pixelGrid.children[0].getBoundingClientRect().left > 100){
                 TransX = Math.min(TransX,BetweenX);
             }
-            else if (pixelGrid.children[99].getBoundingClientRect().right < window.innerHeight -100){
+            else if (pixelGrid.children[99].getBoundingClientRect().right < window.innerWidth -100){
                 TransX = Math.max(TransX,BetweenX);
             }
             else{
