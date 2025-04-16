@@ -35,6 +35,7 @@ h1 {
 
 .container {
     display: flex;
+    overflow: hidden;
     position : relative;
     height:90dvh;
     align-items: center;
