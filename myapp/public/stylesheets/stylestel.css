@@ -75,6 +75,7 @@ h1 {
     height: 1.5dvw;
     background-color: #ffffff;
     cursor: pointer;
+    z-index: 1;
 }
 
 .color-grid {
@@ -117,5 +118,5 @@ button {
     position: absolute;
     top: 15%;
     right: 5%;
-    z-index: 2;
+    z-index: 3;
 }
