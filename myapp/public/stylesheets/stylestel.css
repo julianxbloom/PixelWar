@@ -19,16 +19,18 @@ h1 {
     display: flex;
     position : relative;
     height:10dvh;
+    width : 50dvw;
+    margin: 10% auto; /* CENTRE le container horizontalement */
+    border-radius: 40px;
     align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    background-color: #75073aa2;
+    border: 0.5dvh solid #000000;
     z-index: 2;
 }
 
 .containerTop button{
     background-color: #000000;
-    position: absolute;
-    top: 30%;
-    right: 10%;
     color : white;
 
 }
@@ -36,13 +38,16 @@ h1 {
 .container {
     display: flex;
     overflow: hidden;
-    position : relative;
-    height:90dvh;
+    position : absolute;
+    height:100dvh;
+    width : 100dvw;
+    top: 0dvw;
     /*align-items: center;
     justify-content: center;*/
 }
 
 .containerBottom{
+    z-index: 2;
     position: absolute;
     top: 70%;
     right: 50dvw;
@@ -65,6 +70,7 @@ h1 {
 
 .pixel-grid {
     display: grid;
+    will-change: transform; /* optimisation du rendu */
     grid-template-columns: repeat(100, 1.5dvw);
     grid-template-rows: repeat(100, 1.5dvw);
     transition: transform 0s ease; /* Animation de zoom fluide */
@@ -98,17 +104,6 @@ h1 {
 }
 
 button {
-    cursor: pointer;
-}
-
-.zoom-controls {
-    flex-direction: column;
-}
-
-.zoom-controls button {
-    width:5dvh;
-    height:5dvh;
-    display: none;
     cursor: pointer;
 }
 

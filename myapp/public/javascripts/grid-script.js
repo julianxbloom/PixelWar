@@ -14,23 +14,21 @@ else {
 
 document.addEventListener('DOMContentLoaded', () => {
     const pixelGrid = document.getElementById('pixel-grid');
-    const zoomInBtn = document.getElementById('zoom-in');
-    const zoomOutBtn = document.getElementById('zoom-out');
     const colorGrid = document.getElementById('color-grid');
     const fileimage = document.getElementById('fileimage');
     const imagePreview = document.getElementById('imagePreview');
     const mode = document.getElementById('changeControl');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
-    let zoomLevel = 3; // Niveau de zoom initial (1 = taille normale)
+    let zoomLevel = [3,3]; // Niveau de zoom initial (1 = taille normale)
     const zoomFactor = 0.2; // Facteur de zoom    
 
     let StartX = 0;
     let StartY = 0;
     let TransX = 0;
     let TransY = 0;
-    let CurrentX = 0;
-    let CurrentY = 0;
+    let CurrentX = [0,0];
+    let CurrentY = [0,0];
     let drag = false;
     
     let imgOffsetX = 0;
@@ -50,12 +48,15 @@ document.addEventListener('DOMContentLoaded', () => {
             //pixel.innerHTML += 
             pixel.classList.add('pixel');
             pixel.addEventListener('click', () => {
-                pixel.style.backgroundColor = Color;
+                if (drawing){  //Après mettre si a asssez de recharge
+                    pixel.style.backgroundColor = Color;
+                }
+                
                 
             });
             pixelGrid.appendChild(pixel);
         }
-        pixelGrid.children[100*99].style.backgroundColor = "#808000";
+        //pixelGrid.children[100*99].style.backgroundColor = "#808000";
     }
 
     // Fonction pour créer la grille de couleur
@@ -97,21 +98,20 @@ document.addEventListener('DOMContentLoaded', () => {
             imagePreview.alt = "Fail to load image";
         }
     });
-    // Fonction de zoom avant
-    zoomInBtn.addEventListener('click', () => {
-        if (zoomLevel < 4) { // Limite de zoom à 2x
-            zoomLevel += zoomFactor;
-            updateZoom();
-        }
-    });
 
-    // Fonction de zoom arrière
-    zoomOutBtn.addEventListener('click', () => {
-        if (zoomLevel > 1.4) { // Limite de zoom à 0.4x
-            zoomLevel -= zoomFactor;
-            updateZoom();
+    document.addEventListener('wheel', function(e) {
+        //alert('DeltaY:', e.deltaY);
+        if (e.deltaY>0 && zoomLevel[0] > 0.8){
+            zoomLevel[0] -= 0.4;
         }
-    });
+        else if(e.deltaY<0 && zoomLevel[0] < 6){
+            zoomLevel[0] += 0.4;
+        }
+        
+        updateZoom();
+    
+        //e.preventDefault();//pour prevent le scroll de la page
+    }, { passive: false });
 
     // Fonction pour passer du mode dessin à celui ou on bouge la file
     mode.addEventListener('click',()=>{
@@ -124,50 +124,42 @@ document.addEventListener('DOMContentLoaded', () => {
             mode.textContent = 'Drawing'
         }
         drawing = !drawing;
+        CurrentX.reverse();
+        CurrentY.reverse();
+        zoomLevel.reverse();
     })
 
     // Appliquer l'échelle de zoom à la grille
     function updateZoom() {
 
-        /*TransX = Math.max(Math.min(TransX,mooveFactorX/zoomLevel*2),-mooveFactorX/zoomLevel*2);
-        TransY = Math.max(Math.min(TransY,mooveFactorY/zoomLevel*2),-mooveFactorY/zoomLevel*2);*/
-
         if (drawing){
-            pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${TransX}px) translateY(${TransY}px)`;
+            pixelGrid.style.transform = `scale(${zoomLevel[0]}) translateX(${TransX}px) translateY(${TransY}px)`;
         }
         else{
-            imagePreview.style.transform = `scale(${zoomLevel}) translateX(${TransX}px) translateY(${TransY}px)`;
+            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${TransX}px) translateY(${TransY}px)`;
         }
         
-        /*TransX = 0;
-        CurrentX = 0;
-        TransY = 0;
-        CurrentY = 0;*/
     };
 
     function updatePos(X,Y){
         if (drawing){
-            pixelGrid.style.transform = `scale(${zoomLevel}) translateX(${X}px) translateY(${Y}px)`; 
+            pixelGrid.style.transform = `scale(${zoomLevel[0]}) translateX(${X}px) translateY(${Y}px)`; 
         }
         else{
-            imagePreview.style.transform = `scale(${zoomLevel}) translateX(${X}px) translateY(${Y}px)`; 
+            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${X}px) translateY(${Y}px)`; 
         }
     }
 
     /*Pour les pc*/
     pixelGrid.addEventListener('mousedown', (e) => {
-        zoomInBtn.style.backgroundColor = "red";
         mooveGridBegin(e);
     });
 
     document.addEventListener('mouseup', (e) => {
-        zoomInBtn.style.backgroundColor = "green";
         mooveGridEnd(e);
-        /*alert(pixelGrid.children[99].getBoundingClientRect().right);*/
     });
 
     document.addEventListener('mousemove',(e) =>{ 
-        zoomInBtn.style.backgroundColor = "yellow";
         moovePixelGrid(e);
     });
 
@@ -179,17 +171,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             initDistance = Math.hypot(dx, dy);
-            initialZoom = zoomLevel;
+            initialZoom = zoomLevel[0];
 
         } else if (e.touches.length === 1) {  // 1 doigt
-            zoomInBtn.style.backgroundColor = "red";
             mooveGridBegin(e.touches[0]);
         }
 
     },{passive : false});
 
     document.addEventListener('touchend', (e) => {
-        zoomInBtn.style.backgroundColor = "green";
         mooveGridEnd(e.changedTouches[0]);
         //alert(pixelGrid.children[49].getBoundingClientRect().right + pixelGrid.children[49].getBoundingClientRect().width*50/zoomLevel);
     });
@@ -202,17 +192,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             newDistance = Math.hypot(dx, dy);
             rapportDistance = newDistance/initDistance;
-            zoomLevel = initialZoom*rapportDistance;  
+            zoomLevel[0] = initialZoom*rapportDistance;  
             updateZoom();
         }
 
         else{
             e.preventDefault(); // bloquer le scroll tactile
-            zoomInBtn.style.backgroundColor = "yellow";
             moovePixelGrid(e.touches[0]);    
         }
-        
-
 
     },{passive: false });
 
@@ -225,15 +212,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function mooveGridEnd(e){
         drag = false;
         dragImg = false;
-        CurrentX = TransX;
-        CurrentY = TransY;     
+        CurrentX[0] = TransX;
+        CurrentY[0] = TransY;     
     }
         
     function moovePixelGrid (e){
 
         if(drag){
-            BetweenY = CurrentY + (e.clientY - StartY)/zoomLevel
-            BetweenX = CurrentX + (e.clientX - StartX)/zoomLevel;
+            BetweenY = CurrentY[0] + (e.clientY - StartY)/zoomLevel[0];
+            BetweenX = CurrentX[0] + (e.clientX - StartX)/zoomLevel[0];
 
             if (pixelGrid.children[0].getBoundingClientRect().top > 100){
                 TransY = Math.min(TransY,BetweenY);
