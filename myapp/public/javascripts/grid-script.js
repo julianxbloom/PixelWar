@@ -47,13 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const pixel = document.createElement('div');
             //pixel.innerHTML += 
             pixel.classList.add('pixel');
+
+            pixel.addEventListener('mousedown',() => startTime = Date.now());
+            pixel.addEventListener('touchstart',() => startTime = Date.now());         
+
             pixel.addEventListener('click', () => {
-                if (drawing){  //Après mettre si a asssez de recharge
+                
+                if (drawing && Date.now() - startTime < 200){  //Après mettre si a asssez de recharge
                     pixel.style.backgroundColor = Color;
                 }
-                
-                
             });
+
+
+
             pixelGrid.appendChild(pixel);
         }
         //pixelGrid.children[100*99].style.backgroundColor = "#808000";
@@ -92,7 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('nice');
             imagePreview.src = imgUrl;
             imagePreview.alt = "Image chargée avec succès";// sert a r
-            imagePreview.style.transform = `scale(${zoomLevel}) translateX(${0}px) translateY(${0}px)`;
+            if(drawing){
+               imagePreview.style.transform = `scale(${zoomLevel}) translateX(${CurrentX[1]}px) translateY(${CurrentY[1]}px)`; 
+            }
+            else{
+                imagePreview.style.transform = `scale(${zoomLevel}) translateX(${CurrentX[0]}px) translateY(${CurrentY[0]}px)`; 
+            }
+            
         }
         else{
             imagePreview.alt = "Fail to load image";
@@ -109,9 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         updateZoom();
-    
-        //e.preventDefault();//pour prevent le scroll de la page
-    }, { passive: false });
+    });
+
+    document.addEventListener('dblclick', function(event) {
+        event.preventDefault();
+        alert("ok");
+    });
 
     // Fonction pour passer du mode dessin à celui ou on bouge la file
     mode.addEventListener('click',()=>{
@@ -181,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('touchend', (e) => {
         mooveGridEnd(e.changedTouches[0]);
-        //alert(pixelGrid.children[49].getBoundingClientRect().right + pixelGrid.children[49].getBoundingClientRect().width*50/zoomLevel);
     });
 
     document.addEventListener('touchmove', (e) => {
