@@ -87,17 +87,20 @@ h1 {
 .pixel:hover::before { /*Permet de faire la bulle quand hover*/
     content: attr(data-tooltip);/*Prend la valeur depui le js*/
     position: absolute;
-    top: -2dvw;
+    top: -3dvw;
     transform: translateX(-50%);/*Pour centrer*/
     background-color: #8f2121;
     color: white;
-    font-size:6px;/*Size of the text*/
+    font-size:7px;/*Size of the text*/
     font-family: 'Arial', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     padding: 1px;
     border-radius: 8px;
     white-space: nowrap;
     pointer-events: none;
     z-index: 1;
+    transform: scale(1);
 }
 
 .pixel:hover::after {
@@ -105,7 +108,7 @@ h1 {
     position: absolute;
     top: -0.3dvw;
     transform: translateX(-50%);/*Pour centrer*/
-    border-width: 4px;
+    border-width: 3px;
     border-style: solid;
     border-color: #8f2121 transparent transparent transparent;/*Pour faire le triangle*/
     pointer-events: none;
