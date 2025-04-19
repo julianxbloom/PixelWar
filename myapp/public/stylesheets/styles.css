@@ -55,8 +55,6 @@ h1 {
     display: flex;
     background-color: #000000;
     border: 1vh solid #000000;
-    margin-left: auto;
-    margin-right: auto;
     height:12vh;
     width:47vh;
 
@@ -79,6 +77,19 @@ h1 {
     height: 1.5vh;
     background-color: #ffffff;
     cursor: pointer;
+    align-items: center;
+}
+
+.pixel:hover::after{
+    content: "";
+    position: relative;
+    top: -2vh;
+    left : -1vh;
+    margin-right: auto;
+    background-color: #8f2121;
+    border-radius: 10px;
+    padding : 0vh 2vh;
+    pointer-events: none;
 }
 
 .color-grid {

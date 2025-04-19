@@ -20,8 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mode = document.getElementById('changeControl');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
-    let zoomLevel = [3,3]; // Niveau de zoom initial (1 = taille normale)
-    const zoomFactor = 0.2; // Facteur de zoom    
+    let zoomLevel = [3,3]; // Niveau de zoom initial (1 = taille normale)  
 
     let StartX = 0;
     let StartY = 0;
@@ -45,14 +44,15 @@ document.addEventListener('DOMContentLoaded', () => {
         pixelGrid.innerHTML = '';
         for (let i = 0; i < gridSize * gridSize; i++) {
             const pixel = document.createElement('div');
-            //pixel.innerHTML += 
             pixel.classList.add('pixel');
+
+            pixel.name = "Julian";//Var
+            pixel.date = Date.now();
 
             pixel.addEventListener('mousedown',() => startTime = Date.now());
             pixel.addEventListener('touchstart',() => startTime = Date.now());         
 
             pixel.addEventListener('click', () => {
-                
                 if (drawing && Date.now() - startTime < 200){  //Après mettre si a asssez de recharge
                     pixel.style.backgroundColor = Color;
                 }
@@ -123,9 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
         updateZoom();
     });
 
-    document.addEventListener('dblclick', function(event) {
+    document.addEventListener('dblclick', function(event) { //Previens le zoom quand clique 2x
         event.preventDefault();
-        alert("ok");
     });
 
     // Fonction pour passer du mode dessin à celui ou on bouge la file
