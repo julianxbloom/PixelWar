@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileimage = document.getElementById('fileimage');
     const imagePreview = document.getElementById('imagePreview');
     const mode = document.getElementById('changeControl');
+    const pseudo = document.getElementById('pseudo');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
     let zoomLevel = [3,3]; // Niveau de zoom initial (1 = taille normale)  
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let LColors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
 
     let drawing = true;
+    
 
     // Fonction pour créer la grille de pixels
     function createPixelGrid() {
@@ -46,15 +48,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const pixel = document.createElement('div');
             pixel.classList.add('pixel');
 
-            pixel.name = "Julian";//Var
-            pixel.date = Date.now();
+            pixel.name = "None "; //Va devoir recupere ces vaeurs depuis la base de donnée
+            pixel.date = new Date();
+
+            pixel.setAttribute('data-tooltip', pixel.name + `${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
 
             pixel.addEventListener('mousedown',() => startTime = Date.now());
-            pixel.addEventListener('touchstart',() => startTime = Date.now());         
+            pixel.addEventListener('touchstart',() => startTime = Date.now());
 
             pixel.addEventListener('click', () => {
                 if (drawing && Date.now() - startTime < 200){  //Après mettre si a asssez de recharge
                     pixel.style.backgroundColor = Color;
+                    pixel.name = pseudo.dataset.message;/*self.seudo*/
+                    pixel.date = new Date();
+                    pixel.setAttribute('data-tooltip', pixel.name + ` ${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
+        
                 }
             });
 

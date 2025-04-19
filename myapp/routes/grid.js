@@ -3,7 +3,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('grid')
+  const pseudo = req.session.pseudo;
+  res.render('grid',{pseudo})
 });
 
 //requete colori pixel :

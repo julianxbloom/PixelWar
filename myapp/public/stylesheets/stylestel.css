@@ -81,7 +81,32 @@ h1 {
     height: 1.5dvw;
     background-color: #ffffff;
     cursor: pointer;
-    z-index: 1;
+    position: relative; /* nécessaire pour positionner les pseudo-éléments */
+}
+
+.pixel:hover::before { /*Permet de faire la bulle quand hover*/
+    content: attr(data-tooltip);/*Prend la valeur depui le js*/
+    position: absolute;
+    top: -2dvw;
+    transform: translateX(-50%);/*Pour centrer*/
+    background-color: #8f2121;
+    color: white;
+    font-size:5px;
+    padding: 0.2dvw;/*Size of the text*/
+    border-radius: 8px;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.pixel:hover::after {
+    content: '';
+    position: absolute;
+    top: -0.3dvw;
+    transform: translateX(-50%);/*Pour centrer*/
+    border-width: 4px;
+    border-style: solid;
+    border-color: #8f2121 transparent transparent transparent;/*Pour faire le triangle*/
+    pointer-events: none;
 }
 
 .color-grid {
