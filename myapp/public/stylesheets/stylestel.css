@@ -18,7 +18,7 @@ h1 {
 .containerTop{
     display: flex;
     position : relative;
-    height:10dvh;
+    height:15dvh;
     width : 50dvw;
     margin: 10% auto; /* CENTRE le container horizontalement */
     border-radius: 40px;
@@ -91,11 +91,13 @@ h1 {
     transform: translateX(-50%);/*Pour centrer*/
     background-color: #8f2121;
     color: white;
-    font-size:5px;
-    padding: 0.2dvw;/*Size of the text*/
+    font-size:6px;/*Size of the text*/
+    font-family: 'Arial', sans-serif;
+    padding: 1px;
     border-radius: 8px;
     white-space: nowrap;
     pointer-events: none;
+    z-index: 1;
 }
 
 .pixel:hover::after {
@@ -107,6 +109,7 @@ h1 {
     border-style: solid;
     border-color: #8f2121 transparent transparent transparent;/*Pour faire le triangle*/
     pointer-events: none;
+    z-index: 1;
 }
 
 .color-grid {
