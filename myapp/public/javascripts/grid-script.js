@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     pixel.setAttribute('data-tooltip', pixel.name + ` ${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
         
                 }                
+                //si clic droit
                 rect = pixel.getBoundingClientRect()
                 bubble.style.left = `${rect.left}px`;
                 bubble.style.top = `${rect.top}px`;
