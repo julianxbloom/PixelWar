@@ -56,13 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
             pixel.addEventListener('mousedown',() => startTime = Date.now());
             pixel.addEventListener('touchstart',() => startTime = Date.now());
 
-            pixel.addEventListener('mouseover',() =>{
-                //bubble.style.content = pixel.getAttribute('data-tooltip');
-                bubble.style.top = pixel.style.top;
-                alert("ok");
-                //bubble.style.display = 'flex';
-            })
-
             pixel.addEventListener('click', () => {
                 if (drawing && Date.now() - startTime < 200){  //Après mettre si a asssez de recharge
                     pixel.style.backgroundColor = Color;
@@ -70,10 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     pixel.date = new Date();
                     pixel.setAttribute('data-tooltip', pixel.name + ` ${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
         
-                }
+                }                
+                rect = pixel.getBoundingClientRect()
+                bubble.style.left = `${rect.left}px`;
+                bubble.style.top = `${rect.top}px`;
+                bubble.style.display = 'flex';
+                bubble.textContent = pixel.getAttribute('data-tooltip');
             });
-
-
 
             pixelGrid.appendChild(pixel);
         }
