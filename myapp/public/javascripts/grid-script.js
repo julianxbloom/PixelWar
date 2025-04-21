@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagePreview = document.getElementById('imagePreview');
     const mode = document.getElementById('changeControl');
     const pseudo = document.getElementById('pseudo');
+    const bubble = document.getElementById('bubble');
 
     const gridSize = 100; // Taille de la grille (50x50 pixels)
     let zoomLevel = [3,3]; // Niveau de zoom initial (1 = taille normale)  
@@ -50,11 +51,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             pixel.name = "None "; //Va devoir recupere ces vaeurs depuis la base de donnée
             pixel.date = new Date();
-
             pixel.setAttribute('data-tooltip', pixel.name + `${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
 
             pixel.addEventListener('mousedown',() => startTime = Date.now());
             pixel.addEventListener('touchstart',() => startTime = Date.now());
+
+            pixel.addEventListener('mouseover',() =>{
+                //bubble.style.content = pixel.getAttribute('data-tooltip');
+                bubble.style.top = pixel.style.top;
+                alert("ok");
+                //bubble.style.display = 'flex';
+            })
 
             pixel.addEventListener('click', () => {
                 if (drawing && Date.now() - startTime < 200){  //Après mettre si a asssez de recharge

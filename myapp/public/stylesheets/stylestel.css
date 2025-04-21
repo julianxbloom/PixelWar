@@ -11,10 +11,6 @@ body {
     /*touch-action: manipulation;*/
 }
 
-h1 {
-    margin-bottom: 1vw;
-}
-
 .containerTop{
     display: flex;
     position : relative;
@@ -27,6 +23,10 @@ h1 {
     background-color: #75073aa2;
     border: 0.5dvh solid #000000;
     z-index: 2;
+}
+
+h1 {
+    margin-bottom: 1vw;
 }
 
 .containerTop button{
@@ -42,30 +42,6 @@ h1 {
     height:100dvh;
     width : 100dvw;
     top: 0dvw;
-    /*align-items: center;
-    justify-content: center;*/
-}
-
-.containerBottom{
-    z-index: 2;
-    position: absolute;
-    top: 70%;
-    right: 50dvw;
-    transform: translate(50%, 50%);
-    border-radius: 20px;
-    display: flex;
-    background-color: #000000;
-    border: 1dvh solid #000000;
-    margin-left: auto;
-    margin-right: auto;
-    height:24vw;
-    width:100vw;
-
-    /*overflow: hidden; /* Empêche la grille de dépasser */
-}
-
-.classcontainer {
-    height : "2vh";
 }
 
 .pixel-grid {
@@ -115,6 +91,21 @@ h1 {
     z-index: 1;
 }
 
+.containerBottom{
+    z-index: 2;
+    position: absolute;
+    top: 70%;
+    right: 50dvw;
+    transform: translate(50%, 50%);
+    border-radius: 20px;
+    display: flex;
+    background-color: #000000;
+    border: 1dvh solid #000000;
+    margin : 0 auto;
+    height:24vw;
+    width:100vw;
+}
+
 .color-grid {
     overflow: hidden;
     display: grid;
@@ -128,10 +119,6 @@ h1 {
     height: 10dvw;
     background-color: #ffffff;
     cursor: pointer;
-}
-
-.color-border{
-    border : 1.5dvh solid black;
 }
 
 button {

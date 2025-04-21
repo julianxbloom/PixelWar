@@ -11,10 +11,6 @@ body {
     touch-action: manipulation;
 }
 
-h1 {
-    margin-bottom: 1vh;
-}
-
 .containerTop{
     display: flex;
     position : relative;
@@ -29,6 +25,10 @@ h1 {
     z-index: 2;
 }
 
+h1 {
+    margin-bottom: 1vh;
+}
+
 .containerTop button{
     background-color: #000000;
     color : white;
@@ -40,9 +40,47 @@ h1 {
     height:100dvh;
     width : 100dvw;
     top: 0dvw;
-    align-items: center;
-    justify-content: center;
     overflow: hidden; /* Empêche la grille de dépasser */
+}
+
+.pixel-grid {
+    display: grid;
+    grid-template-columns: repeat(100, 1.5vh);
+    grid-template-rows: repeat(100, 1.5vh);
+    transition: transform 0s ease; /* Animation de zoom fluide */
+}
+
+.pixel {
+    width: 1.5vh;
+    height: 1.5vh;
+    background-color: #ffffff;
+    cursor: pointer;
+    position: relative; /* nécessaire pour positionner les pseudo-éléments */
+}
+
+.bubble { /*Permet de faire la bulle quand hover*/
+    content: "None";/*Prend la valeur depui le js*/
+    position: absolute;
+    top: 50vh;
+    background-color: #8f2121;
+    color: white;
+    font-size:5px;
+    padding: 2vh;/*Size of the text*/
+    border-radius: 8px;
+    z-index: 2;
+    white-space: nowrap;
+    pointer-events: none;
+}s
+
+.bubble::after {
+    content: '';
+    position: absolute;
+    top: -0.3vh;
+    transform: translateX(-50%);/*Pour centrer*/
+    border-width: 6px;
+    border-style: solid;
+    border-color: #8f2121 transparent transparent transparent;/*Pour faire le triangle*/
+    pointer-events: none;
 }
 
 .containerBottom{
@@ -61,50 +99,6 @@ h1 {
     overflow: hidden; /* Empêche la grille de dépasser */
 }
 
-.classcontainer {
-    height : "2vh";
-}
-
-.pixel-grid {
-    display: grid;
-    grid-template-columns: repeat(100, 1.5vh);
-    grid-template-rows: repeat(100, 1.5vh);
-    transition: transform 0s ease; /* Animation de zoom fluide */
-}
-
-.pixel {
-    width: 1.5vh;
-    height: 1.5vh;
-    background-color: #ffffff;
-    cursor: pointer;
-    position: relative; /* nécessaire pour positionner les pseudo-éléments */
-}
-
-.pixel:hover::before { /*Permet de faire la bulle quand hover*/
-    content: attr(data-tooltip);/*Prend la valeur depui le js*/
-    position: absolute;
-    top: -1.3vh;
-    transform: translateX(-50%);/*Pour centrer*/
-    background-color: #8f2121;
-    color: white;
-    font-size:5px;
-    padding: 0.2vh;/*Size of the text*/
-    border-radius: 8px;
-    white-space: nowrap;
-    pointer-events: none;
-}
-
-.pixel:hover::after {
-    content: '';
-    position: absolute;
-    top: -0.3vh;
-    transform: translateX(-50%);/*Pour centrer*/
-    border-width: 6px;
-    border-style: solid;
-    border-color: #8f2121 transparent transparent transparent;/*Pour faire le triangle*/
-    pointer-events: none;
-}
-
 .color-grid {
     overflow: hidden;
     display: grid;
@@ -117,10 +111,6 @@ h1 {
     height: 5vh;
     background-color: #ffffff;
     cursor: pointer;
-}
-
-.color-border{
-    border : 1.5vh solid black;
 }
 
 button {
