@@ -65,16 +65,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
                 }                
                 //si clic droit
-                rect = pixel.getBoundingClientRect()
-                bubble.style.left = `${rect.left}px`;
-                bubble.style.top = `${rect.top}px`;
                 bubble.style.display = 'flex';
-                bubble.textContent = pixel.getAttribute('data-tooltip');
+                bubble.textContent = pixel.getAttribute('data-tooltip');                
+                rect = pixel.getBoundingClientRect();
+                rectBubble = bubble.getBoundingClientRect();
+                bubble.style.left = `${rect.left + rect.width/2 - rectBubble.width*0.5}px`;
+                bubble.style.top = `${rect.top}px`;
             });
 
             pixelGrid.appendChild(pixel);
         }
-        //pixelGrid.children[100*99].style.backgroundColor = "#808000";
     }
 
     // Fonction pour créer la grille de couleur

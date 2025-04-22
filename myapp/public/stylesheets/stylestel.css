@@ -60,35 +60,31 @@ h1 {
     position: relative; /* nécessaire pour positionner les pseudo-éléments */
 }
 
-.pixel:hover::before { /*Permet de faire la bulle quand hover*/
-    content: attr(data-tooltip);/*Prend la valeur depui le js*/
+.bubble { /*Permet de faire la bulle quand hover*/
+    display : none;
     position: absolute;
-    top: -3dvw;
-    transform: translateX(-50%);/*Pour centrer*/
+    transform: translate(0%,-130%);
     background-color: #8f2121;
     color: white;
-    font-size:7px;/*Size of the text*/
-    font-family: 'Arial', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    padding: 1px;
+    font-size:30px;/*Size of the text*/
+    padding: 0 2vh;
     border-radius: 8px;
+    z-index: 2;
     white-space: nowrap;
     pointer-events: none;
-    z-index: 1;
-    transform: scale(1);
 }
 
-.pixel:hover::after {
+.bubble::after {
     content: '';
     position: absolute;
-    top: -0.3dvw;
-    transform: translateX(-50%);/*Pour centrer*/
-    border-width: 3px;
+    justify-content: center;
+    left : 50%;
+    top : 95%;
+    transform: translate(-50%);
+    border-width: 10px;
     border-style: solid;
     border-color: #8f2121 transparent transparent transparent;/*Pour faire le triangle*/
     pointer-events: none;
-    z-index: 1;
 }
 
 .containerBottom{
