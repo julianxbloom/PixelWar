@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Pixel War - Canvas</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #333;
+        }
+        canvas {
+            background: rgb(83, 83, 83);
+            display: block;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="pixelCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('pixelCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Taille du "pixel" en dessin
+        const pixelSize = 10;
+        let color = "#000000"; // Couleur de dessin par défaut
+
+        // Variables pour zoom et déplacement
+        let canvaSize = 100;
+        let scale = 1;
+        let offsetX = 0;
+        let offsetY = 0;
+        let isDragging = false;
+        let dragStartX, dragStartY;
+
+        const pixels = {};
+        for (let i = 0; i < canvaSize*canvaSize; i++) {
+            const x = pixelSize * (i%100);               // Calcul de la position x
+            const y = pixelSize * Math.floor(i/100); // Calcul de la position y
+            pixels[i] = {
+                color: "#FF0000", // ou la couleur par défaut
+                x: x,
+                y: y
+            };
+        }
+
+        // Resize du canvas pour qu'il remplisse la fenêtre
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            draw(); // Redessine au bon endroit après resize
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Dessiner un pixel à la position x,y
+        function drawPixel(x, y) {
+            if (y>=0 && x >=0 && y<=canvaSize^2 && x <= canvaSize^2){
+                pixels[y*100+x].color = color;
+                draw();
+            }
+        }
+
+        // Redessiner tout
+        function draw() {
+            ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
+            ctx.clearRect(-offsetX/scale, -offsetY/scale, canvas.width/scale, canvas.height/scale);
+
+            for (let keys in pixels) {
+                ctx.fillStyle = pixels[keys].color;
+                ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
+            }
+        }
+        // Clic pour dessiner
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX - rect.left - offsetX) / (scale * pixelSize);
+            const y = (e.clientY - rect.top - offsetY) / (scale * pixelSize);
+
+            drawPixel(Math.floor(x), Math.floor(y));
+        });
+
+        // Drag pour bouger
+        canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            dragStartX = e.clientX - offsetX;
+            dragStartY = e.clientY - offsetY;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                offsetX = e.clientX - dragStartX;
+                offsetY = e.clientY - dragStartY;
+                draw();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+        });
+
+        // Molette pour zoomer
+        canvas.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const zoomIntensity = 0.1;
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            const delta = e.deltaY > 0 ? -1 : 1;
+            const zoom = 1 + delta * zoomIntensity;
+
+            offsetX = mouseX - (mouseX - offsetX) * zoom;
+            offsetY = mouseY - (mouseY - offsetY) * zoom;
+            scale *= zoom;
+            draw();
+        }, { passive: false });
+    </script>
+</body>
+</html>

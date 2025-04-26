@@ -21,7 +21,8 @@
     <div class="container" id = 'container'>
         <img id="imagePreview" src="" alt="" style ="position: absolute; opacity: 0.5; z-index : 1; pointer-events: none;"/>
         <div class="pixel-grid" id="pixel-grid"></div>
-        <div class="bubble" id="bubble">bubble.content</div>
+        <canvas id="pixelCanvas"></canvas>
+        <div class="bubble" id="bubble"></div>
 
         <div class="containerBottom">
             <div class="color-grid" id="color-grid"></div>
@@ -30,7 +31,6 @@
                 <label for="fileimage" class="file-label" style="color:rgb(255, 255, 255);">File</label>
                 <input type="file" id="fileimage" accept="image/*" style="display : none">
             </div>
-
         </div>  
 
     </div>

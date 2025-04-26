@@ -64,8 +64,14 @@ h1 {
     overflow: hidden; /* Empêche la grille de dépasser */
 }
 
+canvas {
+    background: rgb(83, 83, 83);
+    display: block;
+    cursor: crosshair;
+}
+
 .pixel-grid {
-    display: grid;
+    display: none;
     grid-template-columns: repeat(100, 1.5vh);
     grid-template-rows: repeat(100, 1.5vh);
     transition: transform 0s ease; /* Animation de zoom fluide */

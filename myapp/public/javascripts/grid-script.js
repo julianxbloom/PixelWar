@@ -20,9 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const mode = document.getElementById('changeControl');
     const pseudo = document.getElementById('pseudo');
     const bubble = document.getElementById('bubble');
+    const canvas = document.getElementById('pixelCanvas');
+    const ctx = canvas.getContext('2d');
 
-    const gridSize = 100; // Taille de la grille (50x50 pixels)
-    let zoomLevel = [3,3]; // Niveau de zoom initial (1 = taille normale)  
+    const gridSize = 100; // r
+    let canvaSize = 100;
+    let pixelSize = 10;
+
+    let zoomLevel = [1,1]; // Niveau de zoom initial (1 = taille normale)  
 
     let StartX = 0;
     let StartY = 0;
@@ -36,10 +41,114 @@ document.addEventListener('DOMContentLoaded', () => {
     let imgOffsetY = 0;
     let dragImg = true;
 
-    let Color = "#fff"
-    let LColors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
+    let color = "#fff"
+    let Lcolors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
 
     let drawing = true;
+
+    // Variables pour zoom et déplacement
+    let offsetX = 0;
+    let offsetY = 0;
+    let dragStartX, dragStartY;
+
+    const pixels = {};
+    for (let i = 0; i < canvaSize*canvaSize; i++) {
+        const x = pixelSize * (i%100);               // Calcul de la position x
+        const y = pixelSize * Math.floor(i/100); // Calcul de la position y
+        pixels[i] = {
+            color: "#FF0000", // ou la couleur par défaut
+            x: x,
+            y: y
+        };
+    }
+
+    // Resize du canvas pour qu'il remplisse la fenêtre
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        draw(); // Redessine au bon endroit après resize
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Dessiner un pixel à la position x,y
+    function drawPixel(x, y) {
+        if (y>=0 && x >=0 && y<=canvaSize^2 && x <= canvaSize^2){
+            pixels[y*100+x].color = Color;
+            draw();
+        }
+    }
+
+    // Redessiner tout
+    function draw() {
+        ctx.setTransform(zoomLevel[0], 0, 0, zoomLevel[0], offsetX, offsetY);
+        ctx.clearRect(-offsetX/zoomLevel[0], -offsetY/zoomLevel[0], canvas.width/zoomLevel[0], canvas.height/zoomLevel[0]);
+
+        for (let keys in pixels) {
+            ctx.fillStyle = pixels[keys].color;
+            ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
+        }
+    }
+    // Clic pour dessiner
+    canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX - rect.left - offsetX) / (zoomLevel[0] * pixelSize);
+        const y = (e.clientY - rect.top - offsetY) / (zoomLevel[0] * pixelSize);
+
+        drawPixel(Math.floor(x), Math.floor(y));
+    });
+
+    // Drag pour bouger
+    canvas.addEventListener('mousedown', (e) => {
+        drag = true;
+        dragStartX = e.clientX - offsetX;
+        dragStartY = e.clientY - offsetY;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (drag) {
+            offsetX = e.clientX - dragStartX;
+            offsetY = e.clientY - dragStartY;
+            draw();
+        }
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        drag = false;
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+        drag = false;
+    });
+
+    // Molette pour zoomer
+    canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const zoomIntensity = 0.1;
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        const delta = e.deltaY > 0 ? -1 : 1;
+        const zoom = 1 + delta * zoomIntensity;
+
+        offsetX = mouseX - (mouseX - offsetX) * zoom;
+        offsetY = mouseY - (mouseY - offsetY) * zoom;
+        draw();
+
+    }, { passive: false });
+
+    document.addEventListener('wheel', (e) =>{
+        //alert('DeltaY:', e.deltaY);
+        if (e.deltaY>0 && zoomLevel[0] > 0.8){
+            zoomLevel[0] -= 0.4;
+        }
+        else if(e.deltaY<0 && zoomLevel[0] < 6){
+            zoomLevel[0] += 0.4;
+        }
+        offsetX = mouseX - (mouseX - offsetX) * zoom;
+        offsetY = mouseY - (mouseY - offsetY) * zoom;
+        draw();
+        updateZoom();
+    });
     
 
     // Fonction pour créer la grille de pixels
@@ -58,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             pixel.addEventListener('click', () => {
                 if (drawing && Date.now() - startTime < 200){  //Après mettre si a asssez de recharge
-                    pixel.style.backgroundColor = Color;
+                    pixel.style.backgroundcolor = color;
                     pixel.name = pseudo.dataset.message;/*self.seudo*/
                     pixel.date = new Date();
                     pixel.setAttribute('data-tooltip', pixel.name + ` ${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
@@ -78,24 +187,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Fonction pour créer la grille de couleur
-    function createColorGrid() {
+    function createcolorGrid() {
         colorGrid.innerHTML = '';
         for (let i = 0; i < 8 * 2; i++) {
             const color = document.createElement('div');
             //pixel.innerHTML += 
             color.classList.add('color');
-            color.style.background = LColors[i]
+            color.style.background = Lcolors[i]
 
             if (i == 0){
-                ChooseColor = color;
-                ChooseColor.style.border = "0.7vh solid black";
+                Choosecolor = color;
+                Choosecolor.style.border = "0.7vh solid black";
             }
             color.addEventListener('click', () => {
                 // Set the border style
-                ChooseColor.style.border = "0vh solid black";
-                ChooseColor = color;
-                ChooseColor.style.border = "0.7vh solid black";
-                Color = color.style.backgroundColor;
+                Choosecolor.style.border = "0vh solid black";
+                Choosecolor = color;
+                Choosecolor.style.border = "0.7vh solid black";
+                color = color.style.backgroundcolor;
             });
             colorGrid.appendChild(color);
         }
@@ -121,18 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
         else{
             imagePreview.alt = "Fail to load image";
         }
-    });
-
-    document.addEventListener('wheel', function(e) {
-        //alert('DeltaY:', e.deltaY);
-        if (e.deltaY>0 && zoomLevel[0] > 0.8){
-            zoomLevel[0] -= 0.4;
-        }
-        else if(e.deltaY<0 && zoomLevel[0] < 6){
-            zoomLevel[0] += 0.4;
-        }
-        
-        updateZoom();
     });
 
     document.addEventListener('dblclick', function(event) { //Previens le zoom quand clique 2x
@@ -279,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Créer la grille au chargement de la page
     createPixelGrid();
-    createColorGrid();
+    createcolorGrid();
     updateZoom();
 });
 
