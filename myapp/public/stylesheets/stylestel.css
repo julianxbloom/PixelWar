@@ -63,7 +63,7 @@ h1 {
 .bubble { /*Permet de faire la bulle quand hover*/
     display : none;
     position: absolute;
-    transform: translate(0%,-130%);
+    transform: translate(-50%,-100%);
     background-color: #8f2121;
     color: white;
     font-size:30px;/*Size of the text*/
