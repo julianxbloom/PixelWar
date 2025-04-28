@@ -13,7 +13,6 @@ else {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const pixelGrid = document.getElementById('pixel-grid');
     const colorGrid = document.getElementById('color-grid');
     const fileimage = document.getElementById('fileimage');
     const imagePreview = document.getElementById('imagePreview');
@@ -28,8 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let zoomLevel = [1,1]; // Niveau de zoom initial (1 = taille normale)  
 
-    let StartX = 0;
-    let StartY = 0;
     let TransX = 0;
     let TransY = 0;
     let CurrentX = [0,0];
@@ -98,35 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         draw();
     });
-    
-
-    // Fonction pour créer la grille de pixels
-    function createPixelGrid() {
-        pixelGrid.innerHTML = '';
-        for (let i = 0; i < canvaSize * canvaSize; i++) {
-            const pixel = document.createElement('div');
-            pixel.classList.add('pixel');
-
-            pixel.name = "None "; //Va devoir recupere ces vaeurs depuis la base de donnée
-            pixel.date = new Date();
-            pixel.setAttribute('data-tooltip', pixel.name + `${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
-
-            pixel.addEventListener('mousedown',() => startTime = Date.now());
-            pixel.addEventListener('touchstart',() => startTime = Date.now());
-
-            pixel.addEventListener('click', () => {
-                if (drawing && Date.now() - startTime < 200){  //Après mettre si a asssez de recharge
-                    pixel.style.backgroundcolor = currentColor;
-                    pixel.name = pseudo.dataset.message;/*self.seudo*/
-                    pixel.date = new Date();
-                    pixel.setAttribute('data-tooltip', pixel.name + ` ${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
-        
-                }                
-            });
-
-            pixelGrid.appendChild(pixel);
-        }
-    }
 
     // Fonction pour créer la grille de couleur
     function createcolorGrid() {
@@ -288,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dragStartX = e.clientX - offsetX;
         dragStartY = e.clientY - offsetY;
     }
+
     function mooveGridEnd(e){
         drag = false;
         dragImg = false;
@@ -308,7 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Créer la grille au chargement de la page
-    createPixelGrid();
     createcolorGrid();
     resizeCanvas();
 });

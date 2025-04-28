@@ -34,11 +34,11 @@ body {
     z-index: 2;
 }
 
-.containerTopPower{
+.containerTopTittle::after{
+    content: "Power : 5";
     display: flex;
     position : relative;
     height:10dvh;
-    width : 10dvw;
     margin: 5% auto; /* CENTRE le container horizontalement */
     border-radius: 90px;
     background-color: #75073aa2;
@@ -68,21 +68,6 @@ canvas {
     background: rgb(83, 83, 83);
     display: block;
     cursor: crosshair;
-}
-
-.pixel-grid {
-    display: none;
-    grid-template-columns: repeat(100, 1.5vh);
-    grid-template-rows: repeat(100, 1.5vh);
-    transition: transform 0s ease; /* Animation de zoom fluide */
-}
-
-.pixel {
-    width: 1.5vh;
-    height: 1.5vh;
-    background-color: #ffffff;
-    cursor: pointer;
-    position: relative; /* nécessaire pour positionner les pseudo-éléments */
 }
 
 .bubble { /*Permet de faire la bulle quand hover*/

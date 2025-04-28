@@ -12,14 +12,35 @@ body {
 }
 
 .containerTop{
+    position : relative;
+    height:10dvh;
+    width : 100dvw;
+    margin: 5% auto; /* CENTRE le container horizontalement */
+    align-items: center;
+    flex-direction: column;
+}
+
+.containerTopTittle{
     display: flex;
     position : relative;
-    height:15dvh;
-    width : 50dvw;
-    margin: 10% auto; /* CENTRE le container horizontalement */
+    height:10dvh;
+    width : 20dvw;
+    margin: 5% auto; /* CENTRE le container horizontalement */
     border-radius: 40px;
     align-items: center;
     flex-direction: column;
+    background-color: #75073aa2;
+    border: 0.5dvh solid #000000;
+    z-index: 2;
+}
+
+.containerTopTittle::after{
+    content: "Power : 5";
+    display: flex;
+    position : relative;
+    height:10dvh;
+    margin: 5% auto; /* CENTRE le container horizontalement */
+    border-radius: 90px;
     background-color: #75073aa2;
     border: 0.5dvh solid #000000;
     z-index: 2;
@@ -42,22 +63,6 @@ h1 {
     height:100dvh;
     width : 100dvw;
     top: 0dvw;
-}
-
-.pixel-grid {
-    display: grid;
-    will-change: transform; /* optimisation du rendu */
-    grid-template-columns: repeat(100, 1.5dvw);
-    grid-template-rows: repeat(100, 1.5dvw);
-    transition: transform 0s ease; /* Animation de zoom fluide */
-}
-
-.pixel {
-    width: 1.5dvw;
-    height: 1.5dvw;
-    background-color: #ffffff;
-    cursor: pointer;
-    position: relative; /* nécessaire pour positionner les pseudo-éléments */
 }
 
 .bubble { /*Permet de faire la bulle quand hover*/
