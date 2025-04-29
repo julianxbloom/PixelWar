@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const bubble = document.getElementById('bubble');
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
+    const power = document.getElementById('containerTopPower');
+    power.textContent = power.dataset.count;
 
     let canvaSize = 100;
     let pixelSize = 10;
@@ -67,7 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dessiner un pixel à la position x,y
     function drawPixel(x, y) {
-        if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize){
+        if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +power.dataset.count>0){
+            power.dataset.count -= 1;
+            power.textContent = power.dataset.count;
             pixels[y*100+x].color = currentColor;
             pixels[y*100+x].name = pseudo.dataset.message;/*self.seudo*/
             pixels[y*100+x].date = new Date();

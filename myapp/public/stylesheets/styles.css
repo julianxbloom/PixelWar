@@ -25,7 +25,7 @@ body {
     position : relative;
     height:10dvh;
     width : 20dvw;
-    margin: 5% auto; /* CENTRE le container horizontalement */
+    margin: 5% auto 0% auto; /* CENTRE le container horizontalement */
     border-radius: 40px;
     align-items: center;
     flex-direction: column;
@@ -34,16 +34,21 @@ body {
     z-index: 2;
 }
 
-.containerTopTittle::after{
-    content: "Power : 5";
+.containerTopPower{
+    content: "5";
     display: flex;
-    position : relative;
-    height:10dvh;
-    margin: 5% auto; /* CENTRE le container horizontalement */
+    position: relative;
+    height: 5dvh;
+    width: 5dvh;
+    left: 16dvh;
+    margin: 0% auto;
     border-radius: 90px;
     background-color: #75073aa2;
     border: 0.5dvh solid #000000;
     z-index: 2;
+    top: -7.5dvh;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {
