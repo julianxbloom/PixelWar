@@ -76,33 +76,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    canvas.addEventListener('wheel', (e) =>{
+    document.addEventListener('wheel', (e) =>{
         //alert('DeltaY:', e.deltaY);
         e.preventDefault();
-        if (e.deltaY>0 && zoomLevel[0] > 0.2 && drawing){
+        if (e.deltaY>0 && zoomLevel[0] > 0.2){
             offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 0.9;
             offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 0.9;
             zoomLevel[0] *= 0.9;
         }
-        else if(e.deltaY<0 && zoomLevel[0] < 6 && drawing){
+        else if(e.deltaY<0 && zoomLevel[0] < 6){
             offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 1.1;
             offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 1.1;
-            zoomLevel[0] *= 1.1;
-        }
-        draw();
-    },{passive : false});
-
-    imagePreview.addEventListener('wheel', (e) =>{
-        //alert('DeltaY:', e.deltaY);
-        e.preventDefault();
-        if (e.deltaY>0 && zoomLevel[0] > 0.2 && !drawing){
-            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 0.9/zoomLevel[0];
-            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 0.9/zoomLevel[0];
-            zoomLevel[0] *= 0.9;
-        }
-        else if(e.deltaY<0 && zoomLevel[0] < 6 && !drawing){
-            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 1.1/zoomLevel[0];
-            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 1.1/zoomLevel[0];
             zoomLevel[0] *= 1.1;
         }
         draw();
@@ -157,10 +141,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (drawing){
             //Mettre les couleurs en gris
             mode.textContent = 'File'
+            /*canvas.style.pointerEvents = "none";
+            imagePreview.style.pointerEvents = "auto";*/
         }
         else {
             //enlever le gris des couleurs
             mode.textContent = 'Drawing'
+            /*imagePreview.style.pointerEvents = "none";
+            canvas.style.pointerEvents = "auto";*/
         }
         drawing = !drawing;
         offsetX.reverse();
@@ -208,21 +196,21 @@ document.addEventListener('DOMContentLoaded', () => {
         
     });
 
-    canvas.addEventListener('mousedown', (e) =>{
+    document.addEventListener('mousedown', (e) =>{
         mooveGridBegin(e); 
         startTime = Date.now();
     });
 
-    canvas.addEventListener('mousemove', (e) => {
+    document.addEventListener('mousemove', (e) => {
         moovePixelGrid(e);
     });
 
-    canvas.addEventListener('mouseup', (e) => {
+    document.addEventListener('mouseup', (e) => {
         mooveGridEnd(e);
     });
 
     /*Pour les tels*/
-    canvas.addEventListener('touchstart', (e) => {
+    document.addEventListener('touchstart', (e) => {
 
         startTime = Date.now();
         
