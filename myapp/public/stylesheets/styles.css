@@ -67,6 +67,7 @@ h1 {
 canvas {
     background: rgb(83, 83, 83);
     display: block;
+    position : absolute;
     cursor: crosshair;
 }
 
@@ -79,7 +80,7 @@ canvas {
     font-size:30px;/*Size of the text*/
     padding: 0 2vh;
     border-radius: 8px;
-    z-index: 2;
+    z-index: 3;
     white-space: nowrap;
     pointer-events: none;
 }

@@ -25,17 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let canvaSize = 100;
     let pixelSize = 10;
 
-    let zoomLevel = [1,1]; // Niveau de zoom initial (1 = taille normale)  
+    let zoomLevel = [1.7,1]; // Niveau de zoom initial (1 = taille normale)  
 
     let TransX = 0;
     let TransY = 0;
-    let CurrentX = [0,0];
-    let CurrentY = [0,0];
     let drag = false;
-    
-    let imgOffsetX = 0;
-    let imgOffsetY = 0;
-    let dragImg = true;
+    let dragImg = false;
 
     let currentColor = "#fff"
     let Lcolors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
@@ -43,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let drawing = true;
 
     // Variables pour zoom et déplacement
-    let offsetX = 0;
-    let offsetY = 0;
+    let offsetX = [window.innerWidth/2 - canvaSize/2*pixelSize*zoomLevel[0],0] ;
+    let offsetY = [0,0];
     let dragStartX, dragStartY;
 
     const pixels = {};
@@ -83,18 +78,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('wheel', (e) =>{
         //alert('DeltaY:', e.deltaY);
+        e.preventDefault();
         if (e.deltaY>0 && zoomLevel[0] > 0.2){
-            offsetX = e.clientX - (e.clientX - offsetX) * 0.9;
-            offsetY = e.clientY - (e.clientY - offsetY) * 0.9;
+            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 0.9;
+            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 0.9;
             zoomLevel[0] *= 0.9;
         }
-        else if(e.deltaY<0 && zoomLevel[0] < 4){
-            offsetX = e.clientX - (e.clientX - offsetX) * 1.1;
-            offsetY = e.clientY - (e.clientY - offsetY) * 1.1;
+        else if(e.deltaY<0 && zoomLevel[0] < 6){
+            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 1.1;
+            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 1.1;
             zoomLevel[0] *= 1.1;
         }
         draw();
-    });
+    },{passive : false});
 
     // Fonction pour créer la grille de couleur
     function createcolorGrid() {
@@ -125,24 +121,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ImageEle && ImageEle.type.startsWith('image/')){
 
             const imgUrl = URL.createObjectURL(ImageEle);// crée l'url
-            console.log('nice');
             imagePreview.src = imgUrl;
             imagePreview.alt = "Image chargée avec succès";// sert a r
             if(drawing){
-               imagePreview.style.transform = `scale(${zoomLevel}) translateX(${CurrentX[1]}px) translateY(${CurrentY[1]}px)`; 
+               imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[1]}px) translateY(${offsetY[1]}px)`; 
             }
             else{
-                imagePreview.style.transform = `scale(${zoomLevel}) translateX(${CurrentX[0]}px) translateY(${CurrentY[0]}px)`; 
+                imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]}px) translateY(${offsetY[0]}px)`; 
             }
             
         }
         else{
             imagePreview.alt = "Fail to load image";
         }
-    });
-
-    document.addEventListener('dblclick', function(event) { //Previens le zoom quand clique 2x
-        event.preventDefault();
     });
 
     // Fonction pour passer du mode dessin à celui ou on bouge la file
@@ -156,8 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
             mode.textContent = 'Drawing'
         }
         drawing = !drawing;
-        CurrentX.reverse();
-        CurrentY.reverse();
+        offsetX.reverse();
+        offsetY.reverse();
         zoomLevel.reverse();
     })
 
@@ -165,8 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function draw() {
 
         if (drawing){
-            ctx.setTransform(zoomLevel[0], 0, 0, zoomLevel[0], offsetX, offsetY);
-            ctx.clearRect(-offsetX/zoomLevel[0], -offsetY/zoomLevel[0], canvas.width/zoomLevel[0], canvas.height/zoomLevel[0]);
+            ctx.setTransform(zoomLevel[0], 0, 0, zoomLevel[0], offsetX[0], offsetY[0]);
+            ctx.clearRect(-offsetX[0]/zoomLevel[0], -offsetY[0]/zoomLevel[0], canvas.width/zoomLevel[0], canvas.height/zoomLevel[0]);
 
             for (let keys in pixels) {
                 ctx.fillStyle = pixels[keys].color;
@@ -174,28 +165,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         else{
-            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${TransX}px) translateY(${TransY}px)`;
+            //alert("pk");
+            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]*zoomLevel[0]}px) translateY(${offsetY[0]*zoomLevel[0]}px)`;
         }
     }
 
+    function drawBubble(x,y){
+        bubble.style.opacity = 1;
+        bubble.textContent = `${pixels[y*100 + x].affiche}`;
+        const bubbleRect = bubble.getBoundingClientRect();
+        const bubbleX = x*pixelSize*zoomLevel[0] + offsetX[0] + pixelSize/2*zoomLevel[0];//pixelSize;
+        const bubbleY = y*pixelSize*zoomLevel[0] + offsetY[0] - bubbleRect.height/2;//pixelSize;
+        bubble.style.left = `${bubbleX}px`;
+        bubble.style.top = `${bubbleY}px`;
+    };
+
     // Clic pour dessiner
     canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left - offsetX[0]) / (zoomLevel[0] * pixelSize));
+        const y = Math.floor((e.clientY - rect.top - offsetY[0]) / (zoomLevel[0] * pixelSize));
+
         if (drawing && Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            const rect = canvas.getBoundingClientRect();
-            const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel[0] * pixelSize));
-            const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel[0] * pixelSize));
-            const nbr = y*100 + x;
-
             drawPixel(x,y);
-
-            bubble.style.opacity = 1;
-            bubble.textContent = `${pixels[nbr].affiche}`;
-            const bubbleRect = bubble.getBoundingClientRect();
-            const bubbleX = x*pixelSize*zoomLevel[0] + offsetX + pixelSize/2*zoomLevel[0];//pixelSize;
-            const bubbleY = y*pixelSize*zoomLevel[0] + offsetY - bubbleRect.height/2;//pixelSize;
-            bubble.style.left = `${bubbleX}px`;
-            bubble.style.top = `${bubbleY}px`;
+            drawBubble(x,y);
         }
+        
     });
 
     canvas.addEventListener('mousedown', (e) =>{
@@ -253,8 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mooveGridBegin(e){
         drag = true;
-        dragStartX = e.clientX - offsetX;
-        dragStartY = e.clientY - offsetY;
+        dragImg = true;
+        dragStartX = e.clientX - offsetX[0];
+        dragStartY = e.clientY - offsetY[0];
     }
 
     function mooveGridEnd(e){
@@ -264,17 +260,33 @@ document.addEventListener('DOMContentLoaded', () => {
         
     function moovePixelGrid (e){
 
-        if(drag){
-            offsetX = e.clientX - dragStartX;
-            offsetY = e.clientY - dragStartY;
+        if(drag && drawing){
+            offsetX[0] = e.clientX - dragStartX;
+            offsetY[0] = e.clientY - dragStartY;
             draw();
         }
 
-        if(dragImg){
-            imagePreview.style.left = (e.clientX - imgOffsetX) + 'px';
-            imagePreview.style.top = (e.clientY - imgOffsetY) + 'px';
+        else if(dragImg && !drawing){
+            offsetX[0] = e.clientX - dragStartX;
+            offsetY[0] = e.clientY - dragStartY;
+            /*imagePreview.style.left = (e.clientX - offsetX[0]) + 'px';
+            imagePreview.style.top = (e.clientY - offsetY[0]) + 'px';*/
+            draw();
         }
     };
+
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left - offsetX[0]) / (zoomLevel[0] * pixelSize));
+        const y = Math.floor((e.clientY - rect.top - offsetY[0]) / (zoomLevel[0] * pixelSize));
+        drawBubble(x,y);
+    });
+
+    document.addEventListener('dblclick', function(event) { //Previens le zoom quand clique 2x
+        event.preventDefault();
+    });
+      
 
     // Créer la grille au chargement de la page
     createcolorGrid();
