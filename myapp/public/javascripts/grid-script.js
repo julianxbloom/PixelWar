@@ -76,15 +76,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    document.addEventListener('wheel', (e) =>{
+    canvas.addEventListener('wheel', (e) =>{
         //alert('DeltaY:', e.deltaY);
         e.preventDefault();
-        if (e.deltaY>0 && zoomLevel[0] > 0.2){
+        if (e.deltaY>0 && zoomLevel[0] > 0.2 && drawing){
             offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 0.9;
             offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 0.9;
             zoomLevel[0] *= 0.9;
         }
-        else if(e.deltaY<0 && zoomLevel[0] < 6){
+        else if(e.deltaY<0 && zoomLevel[0] < 6 && drawing){
             offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 1.1;
             offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 1.1;
             zoomLevel[0] *= 1.1;
@@ -92,6 +92,22 @@ document.addEventListener('DOMContentLoaded', () => {
         draw();
     },{passive : false});
 
+    imagePreview.addEventListener('wheel', (e) =>{
+        //alert('DeltaY:', e.deltaY);
+        e.preventDefault();
+        if (e.deltaY>0 && zoomLevel[0] > 0.2 && !drawing){
+            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 0.9/zoomLevel[0];
+            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 0.9/zoomLevel[0];
+            zoomLevel[0] *= 0.9;
+        }
+        else if(e.deltaY<0 && zoomLevel[0] < 6 && !drawing){
+            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 1.1/zoomLevel[0];
+            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 1.1/zoomLevel[0];
+            zoomLevel[0] *= 1.1;
+        }
+        draw();
+    },{passive : false});
+    
     // Fonction pour créer la grille de couleur
     function createcolorGrid() {
         colorGrid.innerHTML = '';
@@ -124,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             imagePreview.src = imgUrl;
             imagePreview.alt = "Image chargée avec succès";// sert a r
             if(drawing){
-               imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[1]}px) translateY(${offsetY[1]}px)`; 
+               imagePreview.style.transform = `scale(${zoomLevel[1]}) translateX(${offsetX[1]}px) translateY(${offsetY[1]}px)`; 
             }
             else{
                 imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]}px) translateY(${offsetY[0]}px)`; 
@@ -165,8 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         else{
-            //alert("pk");
-            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]*zoomLevel[0]}px) translateY(${offsetY[0]*zoomLevel[0]}px)`;
+            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]/zoomLevel[0]}px) translateY(${offsetY[0]/zoomLevel[0]}px)`;
         }
     }
 
