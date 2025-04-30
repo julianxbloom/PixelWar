@@ -17,14 +17,12 @@ body {
     width : 100dvw;
     margin: 5% auto; /* CENTRE le container horizontalement */
     align-items: center;
-    flex-direction: column;
 }
 
 .containerTopTittle{
     display: flex;
     position : relative;
-    height:10dvh;
-    width : 20dvw;
+    width : 50dvw;
     margin: 5% auto; /* CENTRE le container horizontalement */
     border-radius: 40px;
     align-items: center;
@@ -34,20 +32,25 @@ body {
     z-index: 2;
 }
 
-.containerTopTittle::after{
-    content: "Power : 5";
+.containerTopPower{
+    content: "5";
     display: flex;
-    position : relative;
-    height:10dvh;
-    margin: 5% auto; /* CENTRE le container horizontalement */
+    position: relative;
+    height: 5dvh;
+    width: 5dvh;
+    left: 16dvh;
+    margin: 0% auto;
     border-radius: 90px;
     background-color: #75073aa2;
     border: 0.5dvh solid #000000;
     z-index: 2;
+    top: -10.5dvh;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {
-    margin-bottom: 1vw;
+    margin-bottom: 0dvw;
 }
 
 .containerTop button{
@@ -60,21 +63,20 @@ h1 {
     display: flex;
     overflow: hidden;
     position : absolute;
-    height:100dvh;
     width : 100dvw;
     top: 0dvw;
 }
 
 .bubble { /*Permet de faire la bulle quand hover*/
-    display : none;
+    opacity: 0;
     position: absolute;
     transform: translate(-50%,-100%);
     background-color: #8f2121;
     color: white;
-    font-size:30px;/*Size of the text*/
-    padding: 0 2vh;
+    font-size:20px;/*Size of the text*/
+    padding: 0 2vw;
     border-radius: 8px;
-    z-index: 2;
+    z-index: 3;
     white-space: nowrap;
     pointer-events: none;
 }
@@ -86,7 +88,7 @@ h1 {
     left : 50%;
     top : 95%;
     transform: translate(-50%);
-    border-width: 10px;
+    border-width: 15px;
     border-style: solid;
     border-color: #8f2121 transparent transparent transparent;/*Pour faire le triangle*/
     pointer-events: none;
@@ -103,8 +105,8 @@ h1 {
     background-color: #000000;
     border: 1dvh solid #000000;
     margin : 0 auto;
-    height:24vw;
-    width:100vw;
+    height:24dvw;
+    width:100dvw;
 }
 
 .color-grid {

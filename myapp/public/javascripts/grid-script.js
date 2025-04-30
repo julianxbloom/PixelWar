@@ -145,14 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (drawing){
             //Mettre les couleurs en gris
             mode.textContent = 'File'
-            /*canvas.style.pointerEvents = "none";
-            imagePreview.style.pointerEvents = "auto";*/
         }
         else {
             //enlever le gris des couleurs
             mode.textContent = 'Drawing'
-            /*imagePreview.style.pointerEvents = "none";
-            canvas.style.pointerEvents = "auto";*/
         }
         drawing = !drawing;
         offsetX.reverse();
