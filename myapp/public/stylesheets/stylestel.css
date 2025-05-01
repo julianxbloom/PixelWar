@@ -12,11 +12,18 @@ body {
 }
 
 .containerTop{
+    position : relative;
+    height:10dvh;
+    width : 100dvw;
+    margin: 5% auto; /* CENTRE le container horizontalement */
+    align-items: center;
+}
+
+.containerTopTittle{
     display: flex;
     position : relative;
-    height:15dvh;
     width : 50dvw;
-    margin: 10% auto; /* CENTRE le container horizontalement */
+    margin: 5% auto; /* CENTRE le container horizontalement */
     border-radius: 40px;
     align-items: center;
     flex-direction: column;
@@ -25,8 +32,25 @@ body {
     z-index: 2;
 }
 
+.containerTopPower{
+    content: "5";
+    display: flex;
+    position: relative;
+    height: 5dvh;
+    width: 5dvh;
+    left: 16dvh;
+    margin: 0% auto;
+    border-radius: 90px;
+    background-color: #75073aa2;
+    border: 0.5dvh solid #000000;
+    z-index: 2;
+    top: -10.5dvh;
+    justify-content: center;
+    align-items: center;
+}
+
 h1 {
-    margin-bottom: 1vw;
+    margin-bottom: 0dvw;
 }
 
 .containerTop button{
@@ -39,56 +63,35 @@ h1 {
     display: flex;
     overflow: hidden;
     position : absolute;
-    height:100dvh;
     width : 100dvw;
     top: 0dvw;
 }
 
-.pixel-grid {
-    display: grid;
-    will-change: transform; /* optimisation du rendu */
-    grid-template-columns: repeat(100, 1.5dvw);
-    grid-template-rows: repeat(100, 1.5dvw);
-    transition: transform 0s ease; /* Animation de zoom fluide */
-}
-
-.pixel {
-    width: 1.5dvw;
-    height: 1.5dvw;
-    background-color: #ffffff;
-    cursor: pointer;
-    position: relative; /* nécessaire pour positionner les pseudo-éléments */
-}
-
-.pixel:hover::before { /*Permet de faire la bulle quand hover*/
-    content: attr(data-tooltip);/*Prend la valeur depui le js*/
+.bubble { /*Permet de faire la bulle quand hover*/
+    opacity: 0;
     position: absolute;
-    top: -3dvw;
-    transform: translateX(-50%);/*Pour centrer*/
+    transform: translate(-50%,-100%);
     background-color: #8f2121;
     color: white;
-    font-size:7px;/*Size of the text*/
-    font-family: 'Arial', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    padding: 1px;
+    font-size:20px;/*Size of the text*/
+    padding: 0 2vw;
     border-radius: 8px;
+    z-index: 3;
     white-space: nowrap;
     pointer-events: none;
-    z-index: 1;
-    transform: scale(1);
 }
 
-.pixel:hover::after {
+.bubble::after {
     content: '';
     position: absolute;
-    top: -0.3dvw;
-    transform: translateX(-50%);/*Pour centrer*/
-    border-width: 3px;
+    justify-content: center;
+    left : 50%;
+    top : 95%;
+    transform: translate(-50%);
+    border-width: 15px;
     border-style: solid;
     border-color: #8f2121 transparent transparent transparent;/*Pour faire le triangle*/
     pointer-events: none;
-    z-index: 1;
 }
 
 .containerBottom{
@@ -102,8 +105,8 @@ h1 {
     background-color: #000000;
     border: 1dvh solid #000000;
     margin : 0 auto;
-    height:24vw;
-    width:100vw;
+    height:24dvw;
+    width:100dvw;
 }
 
 .color-grid {

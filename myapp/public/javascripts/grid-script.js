@@ -13,89 +13,107 @@ else {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const pixelGrid = document.getElementById('pixel-grid');
     const colorGrid = document.getElementById('color-grid');
     const fileimage = document.getElementById('fileimage');
     const imagePreview = document.getElementById('imagePreview');
     const mode = document.getElementById('changeControl');
     const pseudo = document.getElementById('pseudo');
     const bubble = document.getElementById('bubble');
+    const canvas = document.getElementById('pixelCanvas');
+    const ctx = canvas.getContext('2d');
+    const power = document.getElementById('containerTopPower');
+    power.textContent = power.dataset.count;
 
-    const gridSize = 100; // Taille de la grille (50x50 pixels)
-    let zoomLevel = [3,3]; // Niveau de zoom initial (1 = taille normale)  
+    let canvaSize = 100;
+    let pixelSize = 10;
 
-    let StartX = 0;
-    let StartY = 0;
+    let zoomLevel = [1.7,1]; // Niveau de zoom initial (1 = taille normale)  
+
     let TransX = 0;
     let TransY = 0;
-    let CurrentX = [0,0];
-    let CurrentY = [0,0];
     let drag = false;
-    
-    let imgOffsetX = 0;
-    let imgOffsetY = 0;
-    let dragImg = true;
+    let dragImg = false;
 
-    let Color = "#fff"
-    let LColors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
+    let currentColor = "#fff"
+    let Lcolors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
 
     let drawing = true;
-    
 
-    // Fonction pour créer la grille de pixels
-    function createPixelGrid() {
-        pixelGrid.innerHTML = '';
-        for (let i = 0; i < gridSize * gridSize; i++) {
-            const pixel = document.createElement('div');
-            pixel.classList.add('pixel');
+    // Variables pour zoom et déplacement
+    let offsetX = [window.innerWidth/2 - canvaSize/2*pixelSize*zoomLevel[0],0] ;
+    let offsetY = [0,0];
+    let dragStartX, dragStartY;
 
-            pixel.name = "None "; //Va devoir recupere ces vaeurs depuis la base de donnée
-            pixel.date = new Date();
-            pixel.setAttribute('data-tooltip', pixel.name + `${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
+    const pixels = {};
+    for (let i = 0; i < canvaSize*canvaSize; i++) {
+        const x = pixelSize * (i%100);               // Calcul de la position x
+        const y = pixelSize * Math.floor(i/100); // Calcul de la position y
+        const date = new Date();
 
-            pixel.addEventListener('mousedown',() => startTime = Date.now());
-            pixel.addEventListener('touchstart',() => startTime = Date.now());
-
-            pixel.addEventListener('click', () => {
-                if (drawing && Date.now() - startTime < 200){  //Après mettre si a asssez de recharge
-                    pixel.style.backgroundColor = Color;
-                    pixel.name = pseudo.dataset.message;/*self.seudo*/
-                    pixel.date = new Date();
-                    pixel.setAttribute('data-tooltip', pixel.name + ` ${pixel.date.getDate()}/${pixel.date.getMonth()+1} à ${pixel.date.getHours()}:${pixel.date.getMinutes()}`);/*C'est les el affiche lorsqu'on hover un pixel.*/
-        
-                }                
-                //si clic droit
-                rect = pixel.getBoundingClientRect()
-                bubble.style.left = `${rect.left}px`;
-                bubble.style.top = `${rect.top}px`;
-                bubble.style.display = 'flex';
-                bubble.textContent = pixel.getAttribute('data-tooltip');
-            });
-
-            pixelGrid.appendChild(pixel);
-        }
-        //pixelGrid.children[100*99].style.backgroundColor = "#808000";
+        pixels[i] = {
+            color: "#FF0000", // ou la couleur par défaut
+            x: x,
+            y: y,
+            name:"none",
+            date : new Date(),
+            affiche : "none " + `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
+        };
     }
 
+    // Resize du canvas pour qu'il remplisse la fenêtre
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        draw(); // Redessine au bon endroit après resize
+    }
+
+    // Dessiner un pixel à la position x,y
+    function drawPixel(x, y) {
+        if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +power.dataset.count>0){
+            power.dataset.count -= 1;
+            power.textContent = power.dataset.count;
+            pixels[y*100+x].color = currentColor;
+            pixels[y*100+x].name = pseudo.dataset.message;/*self.seudo*/
+            pixels[y*100+x].date = new Date();
+            pixels[y*100+x].affiche = pixels[y*100+x].name + ` ${pixels[y*100+x].date.getDate()}/${pixels[y*100+x].date.getMonth()+1} à ${pixels[y*100+x].date.getHours()}:${pixels[y*100+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+            draw();
+        }
+    }
+
+    document.addEventListener('wheel', (e) =>{
+        //alert('DeltaY:', e.deltaY);
+        e.preventDefault();
+        if (e.deltaY>0 && zoomLevel[0] > 0.2){
+            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 0.9;
+            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 0.9;
+            zoomLevel[0] *= 0.9;
+        }
+        else if(e.deltaY<0 && zoomLevel[0] < 6){
+            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 1.1;
+            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 1.1;
+            zoomLevel[0] *= 1.1;
+        }
+        draw();
+    },{passive : false});
+    
     // Fonction pour créer la grille de couleur
-    function createColorGrid() {
+    function createcolorGrid() {
         colorGrid.innerHTML = '';
         for (let i = 0; i < 8 * 2; i++) {
             const color = document.createElement('div');
-            //pixel.innerHTML += 
             color.classList.add('color');
-            color.style.background = LColors[i]
+            color.style.background = Lcolors[i]
 
             if (i == 0){
-                ChooseColor = color;
-                ChooseColor.style.border = "0.7vh solid black";
+                Choosecolor = color;
+                Choosecolor.style.border = "0.7vh solid black";
             }
             color.addEventListener('click', () => {
                 // Set the border style
-                ChooseColor.style.border = "0vh solid black";
-                ChooseColor = color;
-                ChooseColor.style.border = "0.7vh solid black";
-                Color = color.style.backgroundColor;
+                Choosecolor.style.border = "0vh solid black";
+                Choosecolor = color;
+                Choosecolor.style.border = "0.7vh solid black";
+                currentColor = `${color.style.backgroundColor}`;
             });
             colorGrid.appendChild(color);
         }
@@ -107,36 +125,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ImageEle && ImageEle.type.startsWith('image/')){
 
             const imgUrl = URL.createObjectURL(ImageEle);// crée l'url
-            console.log('nice');
             imagePreview.src = imgUrl;
             imagePreview.alt = "Image chargée avec succès";// sert a r
             if(drawing){
-               imagePreview.style.transform = `scale(${zoomLevel}) translateX(${CurrentX[1]}px) translateY(${CurrentY[1]}px)`; 
+               imagePreview.style.transform = `scale(${zoomLevel[1]}) translateX(${offsetX[1]}px) translateY(${offsetY[1]}px)`; 
             }
             else{
-                imagePreview.style.transform = `scale(${zoomLevel}) translateX(${CurrentX[0]}px) translateY(${CurrentY[0]}px)`; 
+                imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]}px) translateY(${offsetY[0]}px)`; 
             }
             
         }
         else{
             imagePreview.alt = "Fail to load image";
         }
-    });
-
-    document.addEventListener('wheel', function(e) {
-        //alert('DeltaY:', e.deltaY);
-        if (e.deltaY>0 && zoomLevel[0] > 0.8){
-            zoomLevel[0] -= 0.4;
-        }
-        else if(e.deltaY<0 && zoomLevel[0] < 6){
-            zoomLevel[0] += 0.4;
-        }
-        
-        updateZoom();
-    });
-
-    document.addEventListener('dblclick', function(event) { //Previens le zoom quand clique 2x
-        event.preventDefault();
     });
 
     // Fonction pour passer du mode dessin à celui ou on bouge la file
@@ -150,47 +151,68 @@ document.addEventListener('DOMContentLoaded', () => {
             mode.textContent = 'Drawing'
         }
         drawing = !drawing;
-        CurrentX.reverse();
-        CurrentY.reverse();
+        offsetX.reverse();
+        offsetY.reverse();
         zoomLevel.reverse();
     })
 
-    // Appliquer l'échelle de zoom à la grille
-    function updateZoom() {
+    // Redessiner tout
+    function draw() {
 
         if (drawing){
-            pixelGrid.style.transform = `scale(${zoomLevel[0]}) translateX(${TransX}px) translateY(${TransY}px)`;
-        }
-        else{
-            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${TransX}px) translateY(${TransY}px)`;
-        }
-        
-    };
+            ctx.setTransform(zoomLevel[0], 0, 0, zoomLevel[0], offsetX[0], offsetY[0]);
+            ctx.clearRect(-offsetX[0]/zoomLevel[0], -offsetY[0]/zoomLevel[0], canvas.width/zoomLevel[0], canvas.height/zoomLevel[0]);
 
-    function updatePos(X,Y){
-        if (drawing){
-            pixelGrid.style.transform = `scale(${zoomLevel[0]}) translateX(${X}px) translateY(${Y}px)`; 
+            for (let keys in pixels) {
+                ctx.fillStyle = pixels[keys].color;
+                ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
+            }
         }
         else{
-            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${X}px) translateY(${Y}px)`; 
+            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]/zoomLevel[0]}px) translateY(${offsetY[0]/zoomLevel[0]}px)`;
         }
     }
 
-    /*Pour les pc*/
-    pixelGrid.addEventListener('mousedown', (e) => {
-        mooveGridBegin(e);
+    function drawBubble(x,y){
+        bubble.style.opacity = 1;
+        bubble.textContent = `${pixels[y*100 + x].affiche}`;
+        const bubbleRect = bubble.getBoundingClientRect();
+        const bubbleX = x*pixelSize*zoomLevel[0] + offsetX[0] + pixelSize/2*zoomLevel[0];//pixelSize;
+        const bubbleY = y*pixelSize*zoomLevel[0] + offsetY[0] - bubbleRect.height/2;//pixelSize;
+        bubble.style.left = `${bubbleX}px`;
+        bubble.style.top = `${bubbleY}px`;
+    };
+
+    // Clic pour dessiner
+    canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left - offsetX[0]) / (zoomLevel[0] * pixelSize));
+        const y = Math.floor((e.clientY - rect.top - offsetY[0]) / (zoomLevel[0] * pixelSize));
+
+        if (drawing && Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
+            drawPixel(x,y);
+            drawBubble(x,y);
+        }
+        
+    });
+
+    document.addEventListener('mousedown', (e) =>{
+        mooveGridBegin(e); 
+        startTime = Date.now();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        moovePixelGrid(e);
     });
 
     document.addEventListener('mouseup', (e) => {
         mooveGridEnd(e);
     });
 
-    document.addEventListener('mousemove',(e) =>{ 
-        moovePixelGrid(e);
-    });
-
     /*Pour les tels*/
-    pixelGrid.addEventListener('touchstart', (e) => {
+    document.addEventListener('touchstart', (e) => {
+
+        startTime = Date.now();
         
         if (e.touches.length === 2) {  // 
             // Deux doigts 
@@ -202,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (e.touches.length === 1) {  // 1 doigt
             mooveGridBegin(e.touches[0]);
         }
-
     },{passive : false});
 
     document.addEventListener('touchend', (e) => {
@@ -210,19 +231,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('touchmove', (e) => {
-
+        e.preventDefault(); // bloquer le scroll tactile
         if (e.touches.length === 2){
-            e.preventDefault(); // bloquer le scroll tactile
+            
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             newDistance = Math.hypot(dx, dy);
             rapportDistance = newDistance/initDistance;
             zoomLevel[0] = initialZoom*rapportDistance;  
-            updateZoom();
+            draw();
         }
 
         else{
-            e.preventDefault(); // bloquer le scroll tactile
             moovePixelGrid(e.touches[0]);    
         }
 
@@ -231,57 +251,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mooveGridBegin(e){
         drag = true;
-        StartX = e.clientX;
-        StartY = e.clientY;
+        dragImg = true;
+        dragStartX = e.clientX - offsetX[0];
+        dragStartY = e.clientY - offsetY[0];
     }
+
     function mooveGridEnd(e){
         drag = false;
         dragImg = false;
-        CurrentX[0] = TransX;
-        CurrentY[0] = TransY;     
     }
         
     function moovePixelGrid (e){
 
-        if(drag){
-            BetweenY = CurrentY[0] + (e.clientY - StartY)/zoomLevel[0];
-            BetweenX = CurrentX[0] + (e.clientX - StartX)/zoomLevel[0];
-
-            if (pixelGrid.children[0].getBoundingClientRect().top > 100){
-                TransY = Math.min(TransY,BetweenY);
-            }
-            else if (pixelGrid.children[gridSize*(gridSize-1)].getBoundingClientRect().bottom < window.innerHeight -200){
-                TransY = Math.max(TransY,BetweenY);
-            }
-            else{
-                TransY = BetweenY;
-            }
-
-            if (pixelGrid.children[0].getBoundingClientRect().left > 100){
-                TransX = Math.min(TransX,BetweenX);
-            }
-            else if (pixelGrid.children[gridSize-1].getBoundingClientRect().right < window.innerWidth -100){
-                TransX = Math.max(TransX,BetweenX);
-            }
-            else{
-                TransX = BetweenX;
-            }
-
-            updatePos(TransX,TransY); // Appliquer la translation 
+        if(drag && drawing){
+            offsetX[0] = e.clientX - dragStartX;
+            offsetY[0] = e.clientY - dragStartY;
+            draw();
         }
 
-        if(dragImg){
-            imagePreview.style.left = (e.clientX - imgOffsetX) + 'px';
-            imagePreview.style.top = (e.clientY - imgOffsetY) + 'px';
+        else if(dragImg && !drawing){
+            offsetX[0] = e.clientX - dragStartX;
+            offsetY[0] = e.clientY - dragStartY;
+            /*imagePreview.style.left = (e.clientX - offsetX[0]) + 'px';
+            imagePreview.style.top = (e.clientY - offsetY[0]) + 'px';*/
+            draw();
         }
     };
 
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left - offsetX[0]) / (zoomLevel[0] * pixelSize));
+        const y = Math.floor((e.clientY - rect.top - offsetY[0]) / (zoomLevel[0] * pixelSize));
+        drawBubble(x,y);
+    });
+
+    document.addEventListener('dblclick', function(event) { //Previens le zoom quand clique 2x
+        event.preventDefault();
+    });
+      
 
     // Créer la grille au chargement de la page
-    createPixelGrid();
-    createColorGrid();
-    updateZoom();
+    createcolorGrid();
+    resizeCanvas();
 });
-
-
-//pixelGrid.children[5]style.background = "F00000"
