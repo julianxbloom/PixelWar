@@ -12,17 +12,42 @@ body {
 }
 
 .containerTop{
-    display: flex;
     position : relative;
     height:10dvh;
-    width : 20dvw;
+    width : 100dvw;
     margin: 5% auto; /* CENTRE le container horizontalement */
+    align-items: center;
+    flex-direction: column;
+}
+
+.containerTopTittle{
+    display: flex;
+    position : relative;
+    width : 20dvw;
+    margin: 5% auto 0% auto; /* CENTRE le container horizontalement */
     border-radius: 40px;
     align-items: center;
     flex-direction: column;
     background-color: #75073aa2;
     border: 0.5dvh solid #000000;
     z-index: 2;
+}
+
+.containerTopPower{
+    content: "5";
+    display: flex;
+    position: relative;
+    height: 5dvh;
+    width: 5dvh;
+    left: 16dvh;
+    margin: 0% auto;
+    border-radius: 90px;
+    background-color: #75073aa2;
+    border: 0.5dvh solid #000000;
+    z-index: 2;
+    top: -7.5dvh;
+    justify-content: center;
+    align-items: center;
 }
 
 h1 {
@@ -43,23 +68,15 @@ h1 {
     overflow: hidden; /* Empêche la grille de dépasser */
 }
 
-.pixel-grid {
-    display: grid;
-    grid-template-columns: repeat(100, 1.5vh);
-    grid-template-rows: repeat(100, 1.5vh);
-    transition: transform 0s ease; /* Animation de zoom fluide */
-}
-
-.pixel {
-    width: 1.5vh;
-    height: 1.5vh;
-    background-color: #ffffff;
-    cursor: pointer;
-    position: relative; /* nécessaire pour positionner les pseudo-éléments */
+canvas {
+    background: rgb(83, 83, 83);
+    display: block;
+    position : absolute;
+    cursor: crosshair;
 }
 
 .bubble { /*Permet de faire la bulle quand hover*/
-    display : none;
+    opacity: 0;
     position: absolute;
     transform: translate(-50%,-100%);
     background-color: #8f2121;
@@ -67,7 +84,7 @@ h1 {
     font-size:30px;/*Size of the text*/
     padding: 0 2vh;
     border-radius: 8px;
-    z-index: 2;
+    z-index: 3;
     white-space: nowrap;
     pointer-events: none;
 }
@@ -77,13 +94,12 @@ h1 {
     position: absolute;
     justify-content: center;
     left : 50%;
-    top : 100%;
+    top : 95%;
     transform: translate(-50%);
-    border-width: 10px;
+    border-width: 20px;
     border-style: solid;
     border-color: #8f2121 transparent transparent transparent;/*Pour faire le triangle*/
     pointer-events: none;
-    z-index: 3;
 }
 
 .containerBottom{
@@ -98,7 +114,6 @@ h1 {
     border: 1vh solid #000000;
     height:12vh;
     width:47vh;
-
     overflow: hidden; /* Empêche la grille de dépasser */
 }
 

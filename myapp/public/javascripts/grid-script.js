@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mode = document.getElementById('changeControl');
     const pseudo = document.getElementById('pseudo');
     const bubble = document.getElementById('bubble');
+    const bubbleRect = bubble.getBoundingClientRect();
+
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
     const power = document.getElementById('containerTopPower');
@@ -29,8 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let zoomLevel = [1.7,1]; // Niveau de zoom initial (1 = taille normale)  
 
-    let TransX = 0;
-    let TransY = 0;
     let drag = false;
     let dragImg = false;
 
@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Variables pour zoom et déplacement
     let offsetX = [window.innerWidth/2 - canvaSize/2*pixelSize*zoomLevel[0],0] ;
     let offsetY = [0,0];
+    let offsetBubble = [0,0];
+    let bubbleX = 0;
+    let bubbleY = 0;
     let dragStartX, dragStartY;
 
     const pixels = {};
@@ -171,16 +174,18 @@ document.addEventListener('DOMContentLoaded', () => {
         else{
             imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]/zoomLevel[0]}px) translateY(${offsetY[0]/zoomLevel[0]}px)`;
         }
+
+        bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX[0]}px`;
+        bubble.style.top = `${bubbleY + offsetBubble[1] + offsetY[0]}px`;
     }
 
     function drawBubble(x,y){
         bubble.style.opacity = 1;
         bubble.textContent = `${pixels[y*100 + x].affiche}`;
-        const bubbleRect = bubble.getBoundingClientRect();
-        const bubbleX = x*pixelSize*zoomLevel[0] + offsetX[0] + pixelSize/2*zoomLevel[0];//pixelSize;
-        const bubbleY = y*pixelSize*zoomLevel[0] + offsetY[0] - bubbleRect.height/2;//pixelSize;
-        bubble.style.left = `${bubbleX}px`;
-        bubble.style.top = `${bubbleY}px`;
+        bubbleX = x*pixelSize*zoomLevel[0] + offsetX[0] + pixelSize/2*zoomLevel[0];//pixelSize;
+        bubbleY = y*pixelSize*zoomLevel[0] + offsetY[0] - bubbleRect.height/2;//pixelSize;
+        bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX[0]}px`;
+        bubble.style.top = `${bubbleY + offsetBubble[1] + offsetY[0]}px`;
     };
 
     // Clic pour dessiner
@@ -254,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dragImg = true;
         dragStartX = e.clientX - offsetX[0];
         dragStartY = e.clientY - offsetY[0];
+        [offsetBubble[0],offsetBubble[1]] = [0 - offsetX[0],0 - offsetY[0]];
     }
 
     function mooveGridEnd(e){
@@ -272,8 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
         else if(dragImg && !drawing){
             offsetX[0] = e.clientX - dragStartX;
             offsetY[0] = e.clientY - dragStartY;
-            /*imagePreview.style.left = (e.clientX - offsetX[0]) + 'px';
-            imagePreview.style.top = (e.clientY - offsetY[0]) + 'px';*/
             draw();
         }
     };
