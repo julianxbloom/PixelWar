@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const date = new Date();
 
         pixels[i] = {
-            color: "#FF0000", // ou la couleur par défaut
+            color: "#C0C0C0", // ou la couleur par défaut
             x: x,
             y: y,
             name:"none",

@@ -142,3 +142,8 @@ button {
     right: 5%;
     z-index: 3;
 }
+
+a{
+    z-index: 2;
+    text-align: right;
+}
