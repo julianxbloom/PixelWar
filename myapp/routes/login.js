@@ -6,7 +6,8 @@ router.use(express.urlencoded({ extended: true }));
 
 /* GET request */
 router.get('/', (req, res) => {
-  res.render('login',{Btn : ""});
+  
+  res.render('login',{Btn : "tu n'es pas connecté"});
 });
 
 /* POST request */

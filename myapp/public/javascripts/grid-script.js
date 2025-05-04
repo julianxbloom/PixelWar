@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const power = document.getElementById('containerTopPower');
     power.textContent = power.dataset.count;
 
-    let canvaSize = 100;
+    let canvaSize = 150;
     let pixelSize = 10;
 
     let zoomLevel = [1.7,1]; // Niveau de zoom initial (1 = taille normale)  
@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pixels = {};
     for (let i = 0; i < canvaSize*canvaSize; i++) {
-        const x = pixelSize * (i%100);               // Calcul de la position x
-        const y = pixelSize * Math.floor(i/100); // Calcul de la position y
+        const x = pixelSize * (i%canvaSize);               // Calcul de la position x
+        const y = pixelSize * Math.floor(i/canvaSize); // Calcul de la position y
         const date = new Date();
 
         pixels[i] = {
@@ -75,10 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +power.dataset.count>0){
             power.dataset.count -= 1;
             power.textContent = power.dataset.count;
-            pixels[y*100+x].color = currentColor;
-            pixels[y*100+x].name = pseudo.dataset.message;/*self.seudo*/
-            pixels[y*100+x].date = new Date();
-            pixels[y*100+x].affiche = pixels[y*100+x].name + ` ${pixels[y*100+x].date.getDate()}/${pixels[y*100+x].date.getMonth()+1} à ${pixels[y*100+x].date.getHours()}:${pixels[y*100+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+            pixels[y*canvaSize+x].color = currentColor;
+            pixels[y*canvaSize+x].name = pseudo.dataset.message;/*self.seudo*/
+            pixels[y*canvaSize+x].date = new Date();
+            pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
             draw();
         }
     }
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function drawBubble(x,y){
         bubble.style.opacity = 1;
-        bubble.textContent = `${pixels[y*100 + x].affiche}`;
+        bubble.textContent = `${pixels[y*canvaSize + x].affiche}`;
         bubbleX = x*pixelSize*zoomLevel[0] + offsetX[0] + pixelSize/2*zoomLevel[0];//pixelSize;
         bubbleY = y*pixelSize*zoomLevel[0] + offsetY[0] - bubbleRect.height/2;//pixelSize;
         bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX[0]}px`;
