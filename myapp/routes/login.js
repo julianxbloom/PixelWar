@@ -16,10 +16,11 @@ router.post('/', (req, res) => {
   const pseudo = req.body.pseudo+req.body.CurrentClass
   if (pseudo == "JulianTG01"){
     req.session.pseudo = pseudo;
+    
     //Cookies pour le nbr de chg qu'un mec peut faire
     const {getCookie} = require('../public/javascripts/cookieUtils');
 
-    if (!getCookie){
+    if (1/*!getCookie*/){
       res.cookie("power",7,{path:'/',maxAge:2*60*1000});//le cookie reste 1 semaine
     }
 
