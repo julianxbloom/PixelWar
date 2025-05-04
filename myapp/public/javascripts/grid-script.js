@@ -12,6 +12,13 @@ else {
     link.href = 'stylesheets/stylestel.css';
 }
 
+//function via d'autres fichiers  :
+function getCookie(name) {
+    // Permet de récupérer la valeur de notre cookie qui a le nom : name
+    const value = document.cookie.split("; ").find(ele => ele.startsWith(name + "=")); 
+    return value ? value.split("=")[1] : 0;  // Si le cookie existe, retourne la valeur sinon retourne none
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const colorGrid = document.getElementById('color-grid');
     const fileimage = document.getElementById('fileimage');
@@ -24,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
     const power = document.getElementById('containerTopPower');
-    power.textContent = power.dataset.count;
+    power.textContent = getCookie("power");
 
     let canvaSize = 150;
     let pixelSize = 10;
@@ -72,9 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dessiner un pixel à la position x,y
     function drawPixel(x, y) {
-        if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +power.dataset.count>0){
-            power.dataset.count -= 1;
-            power.textContent = power.dataset.count;
+        if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +getCookie("power")>0){
+            document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
+            power.textContent = getCookie("power");
             pixels[y*canvaSize+x].color = currentColor;
             pixels[y*canvaSize+x].name = pseudo.dataset.message;/*self.seudo*/
             pixels[y*canvaSize+x].date = new Date();
