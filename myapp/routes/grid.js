@@ -3,10 +3,13 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  const pseudo = req.session.pseudo;
-  if (pseudo){
-    res.render('grid',{pseudo})
+ 
+  //Cookies pour le nbr de chg qu'un mec peut faire
+  const {getCookie} = require('../public/javascripts/cookieUtils'); 
+  if (getCookie("username",req) != null){
+    res.render('grid',{pseudo : getCookie("username",req)})
   }
+  
   else{
     res.redirect('/login');
   }
