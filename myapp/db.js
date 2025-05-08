@@ -21,6 +21,12 @@ con.connect(function(err) {
     if (err) throw err;
     console.log("Table users created!");
   });
+
+  con.query("SELECT * FROM users", function(err, result) {
+    if (err) throw err;
+    console.log(result);
+  });
+  
 });
 // fait avec github copilot, a voir si on garde ou pas
 // var pixel_creation = `CREATE TABLE IF NOT EXISTS pixels(
