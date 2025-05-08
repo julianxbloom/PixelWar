@@ -30,7 +30,7 @@ body {
     flex-direction: column;
     background-color: #75073aa2;
     border: 0.5dvh solid #000000;
-    z-index: 2;
+    z-index: 4;
 }
 
 .containerTopPower{
@@ -44,7 +44,7 @@ body {
     border-radius: 90px;
     background-color: #75073aa2;
     border: 0.5dvh solid #000000;
-    z-index: 2;
+    z-index: 4;
     top: -70px;
     justify-content: center;
     align-items: center;
@@ -84,7 +84,7 @@ canvas {
     font-size:30px;/*Size of the text*/
     padding: 0 2vh;
     border-radius: 8px;
-    z-index: 3;
+    z-index: 2;
     white-space: nowrap;
     pointer-events: none;
 }
