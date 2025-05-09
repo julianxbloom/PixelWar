@@ -48,10 +48,11 @@ app.use(function(err, req, res, next) {
 
 // Database connection & creation
 var con = mysql.createConnection({
-  host: "localhost",
+  host: "shortline.proxy.rlwy.net",
+  port: "55766",
+  database: "railway",
   user: "root",
-  password: "root",
-  database: "pixelwar"
+  password: "UGuFIepNYGzpVrXCLKkncLTjJXsALFEe"
 });
 
 con.connect(function(err) {
@@ -60,7 +61,7 @@ con.connect(function(err) {
   var user_creation = `CREATE TABLE IF NOT EXISTS users(
     id INT AUTO_INCREMENT,
     username VARCHAR(100),
-    pixelAvailable INT DEFAULT 5,
+    pixelAvailable INT DEFAULT 7,
     lastTimeUpdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
   )`;
@@ -69,7 +70,7 @@ con.connect(function(err) {
     console.log("Table users created!");
   });
 
-  con.query("SELECT * FROM users", function(err, result) {
+  con.query("SELECT * FROM name", function(err, result) {
     if (err) throw err;
     console.log(result);
   });
