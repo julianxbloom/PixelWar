@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mysql = require('mysql2');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -42,6 +43,36 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+
+// Database connection & creation
+var con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "root",
+  database: "pixelwar"
+});
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+  var user_creation = `CREATE TABLE IF NOT EXISTS users(
+    id INT AUTO_INCREMENT,
+    username VARCHAR(100),
+    pixelAvailable INT DEFAULT 5,
+    lastTimeUpdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+  )`;
+  con.query(user_creation, function(err, result) {
+    if (err) throw err;
+    console.log("Table users created!");
+  });
+
+  con.query("SELECT * FROM users", function(err, result) {
+    if (err) throw err;
+    console.log(result);
+  });
 });
 
 module.exports = app;
