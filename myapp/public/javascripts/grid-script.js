@@ -2,6 +2,22 @@ var link = document.createElement("link");
 link.type = 'text/css';
 link.rel = 'stylesheet';
 
+//Pour la bdd
+var mysql = require('mysql2');
+// Database connection & creation
+var con = mysql.createConnection({
+  host: "yamanote.proxy.rlwy.net",
+  port: "30831",
+  database: "railway",
+  user: "root",
+  password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
+});
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
+
 if (screen.width > 600)
 {
     document.head.appendChild(link);
@@ -177,6 +193,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.fillStyle = pixels[keys].color;
                 ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
             }
+            con.query("SELECT * FROM pixels", function(err,result){
+                if (err) throw err;
+
+                result.forEach(row => {
+                    const color = row.color; // Récupère la couleur de chaque ligne
+                    const x = row.x;         // Coordonnée x
+                    const y = row.y;         // Coordonnée y
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x, y, pixelSize, pixelSize);
+                  });
+
+            })
         }
         else{
             imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]/zoomLevel[0]}px) translateY(${offsetY[0]/zoomLevel[0]}px)`;

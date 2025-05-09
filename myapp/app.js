@@ -45,35 +45,18 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-
 // Database connection & creation
 var con = mysql.createConnection({
-  host: "shortline.proxy.rlwy.net",
-  port: "55766",
+  host: "yamanote.proxy.rlwy.net",
+  port: "30831",
   database: "railway",
   user: "root",
-  password: "UGuFIepNYGzpVrXCLKkncLTjJXsALFEe"
+  password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
 });
 
 con.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
-  var user_creation = `CREATE TABLE IF NOT EXISTS users(
-    id INT AUTO_INCREMENT,
-    username VARCHAR(100),
-    pixelAvailable INT DEFAULT 7,
-    lastTimeUpdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY(id)
-  )`;
-  con.query(user_creation, function(err, result) {
-    if (err) throw err;
-    console.log("Table users created!");
-  });
-
-  con.query("SELECT * FROM name", function(err, result) {
-    if (err) throw err;
-    console.log(result);
-  });
 });
 
-module.exports = app;
+module.exports = {app,con};
