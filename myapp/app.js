@@ -5,6 +5,9 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mysql = require('mysql2');
 
+const cors = require('cors');
+app.use(cors());
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var gridRouter = require('./routes/grid');
@@ -57,6 +60,15 @@ var con = mysql.createConnection({
 con.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
+});
+
+// Création d'une route API
+app.get('/api/donnees', (req, res) => {
+  const sql = 'SELECT * FROM pixels'; // Remplace 'ta_table' par le vrai nom
+  con.query(sql, (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
 });
 
 module.exports = {app,con};
