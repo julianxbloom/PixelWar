@@ -9,7 +9,6 @@ router.use(express.urlencoded({ extended: true }));
 
 /* GET request */
 router.get('/', (req, res) => {
-  
 
   if (getCookie("username",req) == "JulianTG01"){
     if (!getCookie("power",req)){
@@ -18,7 +17,7 @@ router.get('/', (req, res) => {
     res.redirect('/grid');
   }
   else {
-    res.render('login',{Btn : "tu n'es pas connecté"});
+    res.render('login',{Btn : "Tu n'es pas connecté"});
   }
 });
 
