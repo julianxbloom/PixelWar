@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pseudo = document.getElementById('pseudo');
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
+    const formBdd = document.getElementById('getPixelsForm');
 
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
@@ -180,18 +181,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
             }
 
-            fetch('http://localhost:3000/api/donnees')
-            .then(res => res.json())
-            .then(data => {
+            //formBdd.submit();
 
-                data.forEach(row => {
-                    const color = row.color; // Récupère la couleur de chaque ligne
-                    const x = row.x;         // Coordonnée x
-                    const y = row.y;         // Coordonnée y
-                    ctx.fillStyle = color;
-                    ctx.fillRect(x, y, pixelSize, pixelSize);
-                    });
-            });
+            pixels.forEach(row => {
+                const color = row.color; // Récupère la couleur de chaque ligne
+                const x = row.x;         // Coordonnée x
+                const y = row.y;         // Coordonnée y
+                ctx.fillStyle = color;
+                ctx.fillRect(x, y, pixelSize, pixelSize);
+                });
         }
         else{
             imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]/zoomLevel[0]}px) translateY(${offsetY[0]/zoomLevel[0]}px)`;

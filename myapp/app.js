@@ -3,10 +3,6 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mysql = require('mysql2');
-
-const cors = require('cors');
-app.use(cors());
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -48,27 +44,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// Database connection & creation
-var con = mysql.createConnection({
-  host: "yamanote.proxy.rlwy.net",
-  port: "30831",
-  database: "railway",
-  user: "root",
-  password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
-});
-
-con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-});
-
-// Création d'une route API
-app.get('/api/donnees', (req, res) => {
-  const sql = 'SELECT * FROM pixels'; // Remplace 'ta_table' par le vrai nom
-  con.query(sql, (err, results) => {
-    if (err) throw err;
-    res.json(results);
-  });
-});
-
-module.exports = {app,con};
+module.exports = {app};

@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixel War</title>
+    
+    <script>
+    // Les données sont injectées par le serveur
+    const pixels = <%- JSON.stringify(pixels) %>;
+    </script>
     <script src="javascripts/grid-script.js"></script>
 
 </head>
@@ -32,6 +37,8 @@
             </div>
         </div>  
         <a href="/credits">Julian et Timothée</a>
+        <!-- Formulaire caché -->
+        <form id="getPixelsForm" action="/grid" method="GET" style="display: none;"></form>
     </div>
 </body>
 </html>
