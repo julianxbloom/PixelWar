@@ -93,6 +93,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function sendPixel(x,y,color){
+        // Envoi de la couleur au serveur
+        const socket = io();
+        socket.emit('pixelUpdate', {
+            x: x,
+            y: y,
+            color: color,});
+    }
+
     document.addEventListener('wheel', (e) =>{
         //alert('DeltaY:', e.deltaY);
         e.preventDefault();
@@ -214,8 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (drawing && Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
             drawPixel(x,y);
             drawBubble(x,y);
+            sendPixel(x,y,currentColor);
         }
-        
     });
 
     document.addEventListener('mousedown', (e) =>{
@@ -285,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         drag = false;
         dragImg = false;
     }
-        
+
     function moovePixelGrid (e){
         if(drag && drawing){
             offsetX[0] = e.clientX - dragStartX;
@@ -311,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('dblclick', function(event) { //Previens le zoom quand clique 2x
         event.preventDefault();
     });
-      
+
 
     // Créer la grille au chargement de la page
     createcolorGrid();
