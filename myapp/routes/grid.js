@@ -23,7 +23,15 @@ router.get('/', function(req, res, next) {
   //Cookies pour le nbr de chg qu'un mec peut faire
   const {getCookie} = require('../public/javascripts/cookieUtils'); 
   if (getCookie("username",req) != null){
-    res.render('grid',{pseudo : getCookie("username",req), pixels : "none"})
+        //Requete bdd
+    const sql = 'SELECT * FROM pixels';
+    con.query(sql, (err, results) => {
+      if (err) {
+        return res.status(500).send('Erreur serveur');
+      }
+      console.log(JSON.stringify(results));
+      res.render('grid', {pseudo : getCookie("username",req), pixels: results }); // Renvoie une page avec les données
+    });
   }
   
   else{

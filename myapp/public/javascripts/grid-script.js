@@ -176,19 +176,17 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.setTransform(zoomLevel[0], 0, 0, zoomLevel[0], offsetX[0], offsetY[0]);
             ctx.clearRect(-offsetX[0]/zoomLevel[0], -offsetY[0]/zoomLevel[0], canvas.width/zoomLevel[0], canvas.height/zoomLevel[0]);
 
-            for (let keys in pixels) {
+            /*for (let keys in pixels) {
                 ctx.fillStyle = pixels[keys].color;
                 ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
-            }
+            }*/
 
             //formBdd.submit();
 
-            pixels.forEach(row => {
-                const color = row.color; // Récupère la couleur de chaque ligne
-                const x = row.x;         // Coordonnée x
-                const y = row.y;         // Coordonnée y
+            Object.values(pixelsBdd).forEach(({x,y,color}) => {
+                //console.log(x);
                 ctx.fillStyle = color;
-                ctx.fillRect(x, y, pixelSize, pixelSize);
+                ctx.fillRect(x*pixelSize, y*pixelSize, pixelSize, pixelSize);
                 });
         }
         else{
@@ -320,4 +318,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Créer la grille au chargement de la page
     createcolorGrid();
     resizeCanvas();
+    console.log(pixelsBdd);
 });
