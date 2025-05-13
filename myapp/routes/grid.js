@@ -17,13 +17,13 @@ con.connect(function(err) {
   console.log("Connected!");
 });
 
-/* GET home page. */
+
+//Vérification du cookie de l'utilisateur
 router.get('/', function(req, res, next) {
- 
   //Cookies pour le nbr de chg qu'un mec peut faire
   const {getCookie} = require('../public/javascripts/cookieUtils'); 
   if (getCookie("username",req) != null){
-        //Requete bdd
+    //Requete bdd
     const sql = 'SELECT * FROM pixels';
     con.query(sql, (err, results) => {
       if (err) {
@@ -32,16 +32,13 @@ router.get('/', function(req, res, next) {
       res.render('grid', {pseudo : getCookie("username",req), pixels: results }); // Renvoie une page avec les données
     });
   }
-  
   else{
     res.redirect('/login');
   }
-  
 });
 
-//requete colori pixel :
+//requete colori pixel
 router.get('/grid', (req, res) => {
-
   //Requete bdd
   const sql = 'SELECT * FROM pixels';
   con.query(sql, (err, results) => {
@@ -51,6 +48,14 @@ router.get('/grid', (req, res) => {
     res.render('grid', { pixels: results }); // Renvoie une page avec les données
   });
 });
+
+
+//socket.io session
+var io = require('socket.io')(http);
+io.on('connection', (socket) => {
+  socket.on('chat message', (msg) => {
+    console.log('message: ' + msg);
+});});
 
 // Modifie bdd 
 // Réimporte la grid pou rtt le monde
