@@ -1,5 +1,5 @@
 var express = require('express');
-const { route } = require('./grid');
+const { route } = require('./');
 var router = express.Router();
 
 router.use(express.urlencoded({ extended: true }));
@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
     if (!getCookie("power",req)){
       res.cookie("power",0,{path:'/',maxAge:2*60*1000});
     }
-    res.redirect('/grid');
+    res.redirect('/');
   }
 
   else if (pseudo == "JulianTG01"){
@@ -41,7 +41,7 @@ router.post('/', (req, res) => {
       res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 1 semaine
     }
 
-    res.redirect('/grid');
+    res.redirect('/');
   }
 
   else {
