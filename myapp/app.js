@@ -6,6 +6,7 @@ var { Server } = require('socket.io');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
 //var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var gridRouter = require('./routes/grid');
@@ -17,6 +18,10 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+
+var cors = require('cors');
+app.use(cors());//pour bibi car pbl
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -30,7 +35,13 @@ app.use('/login', loginRouter);
 app.use('/credits', creditRouter);
 
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server,{
+  cors: {
+    origin: ['http://127.0.0.1:3000', 'http://localhost:3000'], // Autoriser ces origines
+    methods: ['GET', 'POST'], // Méthodes HTTP autorisées
+    credentials: true // Autoriser les cookies si nécessaire
+  }
+});
 
 io.on('connection', (socket) => {
   console.log('Un utilisateur est connecté');
