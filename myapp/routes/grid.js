@@ -54,14 +54,14 @@ router.get('/grid', (req, res) => {
       console.log('Pixel mis à jour :', data);
   });*/
 
-/*socket.io session
+//socket.io session
 var http = require('http');
 var socketIo = require('socket.io');
 // à modifier
 
 io.on('connection', (socket) => {
-  socket.on('pixelUpdate', (msg) => {
-    console.log('pixel à modif: ' + msg);
+  socket.on('pixelUpdate', (data) => {
+    console.log('pixel à modif: ' + data);
 });});
 
 
