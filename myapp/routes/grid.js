@@ -51,6 +51,7 @@ router.get('/grid', (req, res) => {
 
 
 //socket.io session
+var http = require('http').Server(app);
 var io = require('socket.io')(http);
 io.on('connection', (socket) => {
   socket.on('chat message', (msg) => {

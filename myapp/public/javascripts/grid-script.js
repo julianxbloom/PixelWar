@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pseudo = document.getElementById('pseudo');
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
-    const formBdd = document.getElementById('getPixelsForm');
+    //const formBdd = document.getElementById('getPixelsForm');
 
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let canvaSize = 150;
     let pixelSize = 10;
 
-    let zoomLevel = [1.7,1]; // Niveau de zoom initial (1 = taille normale)  
+    let zoomLevel = [1.7,1]; // Niveau de zoom initial (1 = taille normale)
 
     let drag = false;
     let dragImg = false;
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pixels = {};
     for (let i = 0; i < canvaSize*canvaSize; i++) {
-        const x = pixelSize * (i%canvaSize);               // Calcul de la position x
+        const x = pixelSize * (i%canvaSize);           // Calcul de la position x
         const y = pixelSize * Math.floor(i/canvaSize); // Calcul de la position y
         const date = new Date();
 
@@ -287,7 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
         
     function moovePixelGrid (e){
-
         if(drag && drawing){
             offsetX[0] = e.clientX - dragStartX;
             offsetY[0] = e.clientY - dragStartY;
