@@ -23,7 +23,6 @@ function setSocketIo(socketIo) {
 
   // Configure socket.io events
   io.on('connection', (socket) => {
-    console.log('A user connected');
     socket.on('pixelUpdate', (data) => {
       console.log('Pixel to update: ', data);
     });
