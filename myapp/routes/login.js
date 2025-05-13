@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
     if (!getCookie("power",req)){
       res.cookie("power",0,{path:'/',maxAge:2*60*1000});
     }
-    res.redirect('/grid');
+    res.redirect('/');
   }
   else {
     res.render('login',{Btn : "Tu n'es pas connecté"});
