@@ -58,8 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const pixels = {};
     Object.values(pixelsBdd).forEach(({x,y,color,date}) => {
+        
 
-        pixels[x + pixelSize*y] = {
+        pixels[canvaSize*y+x] = {
+            
             color: color, // ou la couleur par défaut
             x: x*pixelSize,
             y: y*pixelSize,
@@ -69,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
     });
+    console.log(pixels);
 
     // Resize du canvas pour qu'il remplisse la fenêtre
     function resizeCanvas() {
@@ -85,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pixels[y*canvaSize+x].color = currentColor;
             pixels[y*canvaSize+x].name = pseudo.dataset.message;/*self.seudo*/
             pixels[y*canvaSize+x].date = new Date();
-            pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+            pixels[y*canvaSize+x].affiche = "non";//pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
             draw();
         }
     }
