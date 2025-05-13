@@ -17,6 +17,18 @@ con.connect(function(err) {
   console.log("Connected!");
 });
 
+//socket.io session
+function setSocketIo(socketIo) {
+  io = socketIo;
+
+  // Configure socket.io events
+  io.on('connection', (socket) => {
+    console.log('A user connected');
+    socket.on('pixelUpdate', (data) => {
+      console.log('Pixel to update: ', data);
+    });
+  });
+}
 
 // Vérification du cookie de l'utilisateur
 router.get('/', function(req, res, next) {
@@ -44,21 +56,6 @@ router.get('/grid', (req, res) => {
     res.render('grid', { pixels: results });
   });
 });
-
-
-//socket.io session
-function setSocketIo(socketIo) {
-  io = socketIo;
-
-  // Configure socket.io events
-  io.on('connection', (socket) => {
-    console.log('A user connected');
-    socket.on('pixelUpdate', (data) => {
-      console.log('Pixel to update: ', data);
-    });
-  });
-}
-
 
 // Modifie bdd 
 // Réimporte la grid pou rtt le monde
