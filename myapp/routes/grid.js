@@ -3,6 +3,7 @@ var router = express.Router();
 var mysql = require('mysql2');
 var app = require('../app');
 
+
 // Database connection & creation
 var con = mysql.createConnection({
   host: "yamanote.proxy.rlwy.net",
@@ -18,50 +19,55 @@ con.connect(function(err) {
 });
 
 
-//Vérification du cookie de l'utilisateur
+// Vérification du cookie de l'utilisateur
 router.get('/', function(req, res, next) {
-  //Cookies pour le nbr de chg qu'un mec peut faire
-  const {getCookie} = require('../public/javascripts/cookieUtils'); 
-  if (getCookie("username",req) != null){
-    //Requete bdd
+  const { getCookie } = require('../public/javascripts/cookieUtils'); 
+  if (getCookie("username", req) != null) {
     const sql = 'SELECT * FROM pixels';
     con.query(sql, (err, results) => {
       if (err) {
         return res.status(500).send('Erreur serveur');
       }
-      res.render('grid', {pseudo : getCookie("username",req), pixels: results }); // Renvoie une page avec les données
+      res.render('grid', { pseudo: getCookie("username", req), pixels: results });
     });
-  }
-  else{
+  } else {
     res.redirect('/login');
   }
 });
 
-//requete colori pixel
+// Requête colori pixel
 router.get('/grid', (req, res) => {
-  //Requete bdd
   const sql = 'SELECT * FROM pixels';
   con.query(sql, (err, results) => {
     if (err) {
       return res.status(500).send('Erreur serveur');
     }
-    res.render('grid', { pixels: results }); // Renvoie une page avec les données
+    res.render('grid', { pixels: results });
   });
 });
 
 
-//socket.io session
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+
+/*io.on('connection', (socket) => {
+  console.log('Un utilisateur est connecté');
+  /*socket.on('pixelUpdate', (data) => {
+      console.log('Pixel mis à jour :', data);
+  });*/
+
+/*socket.io session
+var http = require('http');
+var socketIo = require('socket.io');
+// à modifier
+
 io.on('connection', (socket) => {
-  socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
+  socket.on('pixelUpdate', (msg) => {
+    console.log('pixel à modif: ' + msg);
 });});
 
 
 
 // Modifie bdd 
 // Réimporte la grid pou rtt le monde
-// Lancer fct dessiner grid pour tt users
+// Lancer fct dessiner grid pour tt users*/
 
 module.exports = router;

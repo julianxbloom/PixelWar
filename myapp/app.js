@@ -1,6 +1,8 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+var http = require('http');
+var { Server } = require('socket.io');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
@@ -27,6 +29,13 @@ app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/credits', creditRouter);
 
+const server = http.createServer(app);
+const io = new Server(server);
+
+io.on('connection', (socket) => {
+  console.log('Un utilisateur est connecté');
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -43,4 +52,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = {app};
+module.exports = {app, server};
