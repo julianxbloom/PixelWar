@@ -9,7 +9,7 @@ router.use(express.urlencoded({ extended: true }));
 
 /* GET request */
 router.get('/', (req, res) => {
-
+  
   if (getCookie("username",req) == "JulianTG01"){
     if (!getCookie("power",req)){
       res.cookie("power",0,{path:'/',maxAge:2*60*1000});
