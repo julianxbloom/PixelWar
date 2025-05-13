@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const pseudo = document.getElementById('pseudo');
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
-    //const formBdd = document.getElementById('getPixelsForm');
 
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
@@ -58,20 +57,18 @@ document.addEventListener('DOMContentLoaded', () => {
     let dragStartX, dragStartY;
 
     const pixels = {};
-    for (let i = 0; i < canvaSize*canvaSize; i++) {
-        const x = pixelSize * (i%canvaSize);           // Calcul de la position x
-        const y = pixelSize * Math.floor(i/canvaSize); // Calcul de la position y
-        const date = new Date();
+    Object.values(pixelsBdd).forEach(({x,y,color,date}) => {
 
-        pixels[i] = {
-            color: "#C0C0C0", // ou la couleur par défaut
-            x: x,
-            y: y,
+        pixels[x + pixelSize*y] = {
+            color: color, // ou la couleur par défaut
+            x: x*pixelSize,
+            y: y*pixelSize,
             name:"none",
-            date : new Date(),
-            affiche : "none " + `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
+            date : new Date(),//à changer,
+            affiche : "none " //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
         };
-    }
+
+    });
 
     // Resize du canvas pour qu'il remplisse la fenêtre
     function resizeCanvas() {
@@ -185,17 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.setTransform(zoomLevel[0], 0, 0, zoomLevel[0], offsetX[0], offsetY[0]);
             ctx.clearRect(-offsetX[0]/zoomLevel[0], -offsetY[0]/zoomLevel[0], canvas.width/zoomLevel[0], canvas.height/zoomLevel[0]);
 
-            /*for (let keys in pixels) {
+            for (let keys in pixels) {
                 ctx.fillStyle = pixels[keys].color;
                 ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
-            }*/
+            }
 
-            //formBdd.submit();
-
-            Object.values(pixelsBdd).forEach(({x,y,color}) => {
-                ctx.fillStyle = color;
-                ctx.fillRect(x*pixelSize, y*pixelSize, pixelSize, pixelSize);
-                });
         }
         else{
             imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]/zoomLevel[0]}px) translateY(${offsetY[0]/zoomLevel[0]}px)`;

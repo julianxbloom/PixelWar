@@ -1,5 +1,5 @@
 var mysql = require('mysql2');
-const { connect } = require('./routes');
+
 
 const canvaSize = 150;
 
