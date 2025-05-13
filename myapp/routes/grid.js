@@ -57,6 +57,8 @@ io.on('connection', (socket) => {
     console.log('message: ' + msg);
 });});
 
+
+
 // Modifie bdd 
 // Réimporte la grid pou rtt le monde
 // Lancer fct dessiner grid pour tt users
