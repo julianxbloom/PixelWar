@@ -4,9 +4,10 @@
  * Module dependencies.
  */
 
-var {app, server, con} = require('../app');
+var app = require('../app');
 var debug = require('debug')('myapp:server');
 var http = require('http');
+var { Server } = require('socket.io');
 
 /**
  * Get port from environment and store in Express.
@@ -14,6 +15,19 @@ var http = require('http');
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+var server = http.createServer(app);
+
+/**
+ * Initialize Socket.io.
+ */
+var io = new Server(server);
+
+// Pass io to routes or other modules if needed
+require('../routes/grid').setSocketIo(io);
 
 /**
  * Listen on provided port, on all network interfaces.

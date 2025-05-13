@@ -58,18 +58,3 @@ function showTable(name){
     console.log(result);
   });
 }
-
-// fait avec github copilot, a voir si on garde ou pas
-// var pixel_creation = `CREATE TABLE IF NOT EXISTS pixels(
-//     id INT AUTO_INCREMENT,
-//     x INT,
-//     y INT,
-//     color VARCHAR(7),
-//     userId INT,
-//     PRIMARY KEY(id),
-//     FOREIGN KEY(userId) REFERENCES users(id)
-//   )`;
-// con.query(pixel_creation, function(err, result) {
-//   if (err) throw err;
-//   console.log("Table pixels created!");
-// }

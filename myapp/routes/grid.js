@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql2');
-var app = require('../app');
-
+var { io } = require('../app');
 
 // Database connection & creation
 var con = mysql.createConnection({
@@ -18,6 +17,18 @@ con.connect(function(err) {
   console.log("Connected!");
 });
 
+//socket.io session
+function setSocketIo(socketIo) {
+  io = socketIo;
+
+  // Configure socket.io events
+  io.on('connection', (socket) => {
+    console.log('A user connected');
+    socket.on('pixelUpdate', (data) => {
+      console.log('Pixel to update: ', data);
+    });
+  });
+}
 
 // Vérification du cookie de l'utilisateur
 router.get('/', function(req, res, next) {
@@ -35,7 +46,7 @@ router.get('/', function(req, res, next) {
   }
 });
 
-// Requête colori pixel
+// Requête pour colorier un pixel
 router.get('/grid', (req, res) => {
   const sql = 'SELECT * FROM pixels';
   con.query(sql, (err, results) => {
@@ -46,28 +57,8 @@ router.get('/grid', (req, res) => {
   });
 });
 
-
-
-/*io.on('connection', (socket) => {
-  console.log('Un utilisateur est connecté');
-  /*socket.on('pixelUpdate', (data) => {
-      console.log('Pixel mis à jour :', data);
-  });*/
-
-/*socket.io session
-var http = require('http');
-var socketIo = require('socket.io');
-// à modifier
-
-io.on('connection', (socket) => {
-  socket.on('pixelUpdate', (msg) => {
-    console.log('pixel à modif: ' + msg);
-});});
-
-
-
 // Modifie bdd 
 // Réimporte la grid pou rtt le monde
 // Lancer fct dessiner grid pour tt users*/
 
-module.exports = router;
+module.exports = { router, setSocketIo };

@@ -1,15 +1,13 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var http = require('http');
-var { Server } = require('socket.io');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 
 //var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var gridRouter = require('./routes/grid');
+var gridRouter = require('./routes/grid').router;
 var loginRouter = require('./routes/login');
 var creditRouter = require('./routes/credits');
 
@@ -35,13 +33,7 @@ app.use('/login', loginRouter);
 app.use('/credits', creditRouter);
 
 const server = http.createServer(app);
-const io = new Server(server,{
-  cors: {
-    origin: ['http://127.0.0.1:3000', 'http://localhost:3000'], // Autoriser ces origines
-    methods: ['GET', 'POST'], // Méthodes HTTP autorisées
-    credentials: true // Autoriser les cookies si nécessaire
-  }
-});
+const io = new Server(server);
 
 io.on('connection', (socket) => {
   console.log('Un utilisateur est connecté');
@@ -63,4 +55,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = {app, server};
+module.exports = app;
