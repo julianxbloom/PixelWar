@@ -184,7 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
             //formBdd.submit();
 
             Object.values(pixelsBdd).forEach(({x,y,color}) => {
-                //console.log(x);
                 ctx.fillStyle = color;
                 ctx.fillRect(x*pixelSize, y*pixelSize, pixelSize, pixelSize);
                 });
@@ -318,5 +317,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Créer la grille au chargement de la page
     createcolorGrid();
     resizeCanvas();
-    console.log(pixelsBdd);
 });
