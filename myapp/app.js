@@ -32,12 +32,6 @@ app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/credits', creditRouter);
 
-const server = http.createServer(app);
-const io = new Server(server);
-
-io.on('connection', (socket) => {
-  console.log('Un utilisateur est connecté');
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
