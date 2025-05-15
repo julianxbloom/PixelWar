@@ -23,7 +23,16 @@ function setSocketIo(socketIo) {
 
   // Configure socket.io events
   io.on('connection', (socket) => {
-    socket.on('dataPixel', (data) => {
+    socket.on('dataPixel', (data) => {  
+      const sql = 'UPDATE pixels SET color = ? WHERE x = ? AND y = ?';
+      const values = [data.color, data.x, data.y];
+      con.query(sql, values, (err, result) => {
+        if (err) {
+          console.error('Erreur lors de la mise à jour du pixel :', err);
+          return;
+        }
+        console.log('Pixel mis à jour avec succès !');
+      });
       socket.emit('pixelUpdate',{x:data.x,y:data.y,color:data.color});
       console.log('Pixel to update: ', data);
     });
