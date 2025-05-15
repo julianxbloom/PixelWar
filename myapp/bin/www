@@ -24,7 +24,13 @@ var server = http.createServer(app);
 /**
  * Initialize Socket.io.
  */
-var io = new Server(server);
+var io = new Server(server, {
+  cors: {
+    origin: ['http://127.0.0.1:3000', 'http://localhost:3000'], // Autoriser ces origines
+    methods: ['GET', 'POST'], // Méthodes HTTP autorisées
+    credentials: true // Autoriser les cookies si nécessaire
+  }
+});
 
 // Pass io to routes or other modules if needed
 require('../routes/grid').setSocketIo(io);
