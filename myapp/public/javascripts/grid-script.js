@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     socket.on('pixelUpdate', (data) => {
         // Mettre à jour la couleur du pixel 
-        drawPixel(data[x],data[y],data[color]);
+        drawPixel(data.x,data.y,data.color);
         console.log("Color updated");
     });
     
