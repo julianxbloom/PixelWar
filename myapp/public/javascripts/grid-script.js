@@ -78,11 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Dessiner un pixel à la position x,y
-    function drawPixel(x, y) {
+    function drawPixel(x, y, color) {
         if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +getCookie("power")>0){
             document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
             power.textContent = getCookie("power");
-            pixels[y*canvaSize+x].color = currentColor;
+            pixels[y*canvaSize+x].color = color;
             pixels[y*canvaSize+x].name = pseudo.dataset.message;/*self.seudo*/
             pixels[y*canvaSize+x].date = new Date();
             pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
@@ -93,12 +93,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function sendPixel(x,y,color){
         // Envoi de la couleur au serveur
         const socket = io();
-        socket.emit('pixelUpdate', {
+        socket.emit('dataPixel', {
             x: x,
             y: y,
-            color: color,});
+            color: color});
     }
-
+    
+    socket.on('pixelUpdate', (data) => {
+        // Mettre à jour la couleur du pixel 
+        drawPixel(data[x],data[y],data[color]);
+        console.log("Color updated");
+    });
+    
+    
     document.addEventListener('wheel', (e) =>{
         //alert('DeltaY:', e.deltaY);
         e.preventDefault();
@@ -212,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.clientY - rect.top - offsetY[0]) / (zoomLevel[0] * pixelSize));
 
         if (drawing && Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            drawPixel(x,y);
+            drawPixel(x,y,currentColor);
             drawBubble(x,y);
             sendPixel(x,y,currentColor);
         }

@@ -23,7 +23,8 @@ function setSocketIo(socketIo) {
 
   // Configure socket.io events
   io.on('connection', (socket) => {
-    socket.on('pixelUpdate', (data) => {
+    socket.on('dataPixel', (data) => {
+      socket.emit('pixelUpdate',{x:data[x],y:data[y],color:data[color]});
       console.log('Pixel to update: ', data);
     });
   });
