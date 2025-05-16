@@ -9,7 +9,7 @@ router.use(express.urlencoded({ extended: true }));
 /* GET request */
 router.get('/', (req, res) => {
   
-  if (getCookie("username",req) == "JulianTG01"){
+  if (getCookie("username",req) in ["JulianTG01"]){
     if (!getCookie("power",req)){
       res.cookie("power",0,{path:'/',maxAge:2*60*1000});
     }
@@ -24,9 +24,9 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
 
   //Verif a faire pour savoir si bon compte
-  const pseudo = req.body.pseudo+req.body.CurrentClass
+  const pseudo = req.body.pseudo+req.body.CurrentClass;
 
-  if (getCookie("username",req) == "JulianTG01"){
+  if (getCookie("username",req) in ["JulianTG01"]){
     if (!getCookie("power",req)){
       res.cookie("power",0,{path:'/',maxAge:2*60*1000});
     }
