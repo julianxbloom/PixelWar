@@ -19,7 +19,7 @@ app.set('view engine', 'ejs');
 
 var cors = require('cors');
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000','https://pixelwar-production-b630.up.railway.app'], // Autoriser ces origines
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000','https://pixelwarf1.up.railway.app'], // Autoriser ces origines
   methods: ['GET', 'POST'], // Autoriser uniquement certaines méthodes HTTP
   credentials: true // Autoriser l'envoi de cookies
 }));//pour bibi car pbl
