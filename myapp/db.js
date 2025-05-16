@@ -26,7 +26,8 @@ con.connect(function(err) {
     userId INT,
     x INT,
     y INT,
-    color VARCHAR(15) DEFAULT '#C0C0C0',
+    color VARCHAR(25) DEFAULT '#C0C0C0',
+    date TEXT DEFAULT blanck,
     PRIMARY KEY(id)
   )`;
   con.query(user_creation, function(err, result) {

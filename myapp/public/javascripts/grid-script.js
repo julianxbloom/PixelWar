@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
 
+    //socket : 
+    const socket = io();
+
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
     const power = document.getElementById('containerTopPower');
@@ -88,14 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
             pixels[y*canvaSize+x].color = color;
             pixels[y*canvaSize+x].name = pseudo.dataset.message;/*self.seudo*/
             pixels[y*canvaSize+x].date = new Date();
-            pixels[y*canvaSize+x].affiche = "non";//pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+            pixels[y*canvaSize+x].affiche = "none";//pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
             draw();
         }
     }
 
     function sendPixel(x,y,color){
         // Envoi de la couleur au serveur
-        const socket = io();
         socket.emit('dataPixel', {
             x: x,
             y: y,
@@ -105,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('pixelUpdate', (data) => {
         // Mettre à jour la couleur du pixel 
         drawPixel(data.x,data.y,data.color);
-        console.log("Color updated");
     });
     
     
@@ -222,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.clientY - rect.top - offsetY[0]) / (zoomLevel[0] * pixelSize));
 
         if (drawing && Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            drawPixel(x,y,currentColor);
+            drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
             drawBubble(x,y);
             sendPixel(x,y,currentColor);
         }
@@ -243,17 +244,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*Pour les tels*/
     document.addEventListener('touchstart', (e) => {
+         
+        e.preventDefault();
 
         startTime = Date.now();
         
-        if (e.touches.length === 2) {  // 
-            // Deux doigts 
-            e.preventDefault();
+        if (e.touches.length === 2) {  // Deux doigts
 
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             initDistance = Math.hypot(dx, dy);
             initialZoom = zoomLevel[0];
+            mooveGridBegin(e.touches[0]);
 
         } else if (e.touches.length === 1) {  // 1 doigt
             mooveGridBegin(e.touches[0]);
@@ -266,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('touchmove', (e) => {
         e.preventDefault(); // bloquer le scroll tactile
+
         if (e.touches.length === 2){
             
             const dx = e.touches[0].clientX - e.touches[1].clientX;
@@ -273,7 +276,12 @@ document.addEventListener('DOMContentLoaded', () => {
             newDistance = Math.hypot(dx, dy);
             rapportDistance = newDistance/initDistance;
             zoomLevel[0] = initialZoom*rapportDistance;  
+
+            offsetX[0] = e.touches[0].clientX - (e.touches[0].clientX - offsetX[0]) * rapportDistance;
+            offsetY[0] = e.touches[0].clientY - (e.touches[0].clientY - offsetY[0]) * rapportDistance;
+
             draw();
+
         }
 
         else{
