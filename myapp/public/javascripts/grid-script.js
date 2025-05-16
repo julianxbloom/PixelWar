@@ -60,17 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let dragStartX, dragStartY;
 
     const pixels = {};
-    Object.values(pixelsBdd).forEach(({x,y,color,date}) => {
+    Object.values(pixelsBdd).forEach(({x,y,color,date,affiche,user}) => {
         
-
         pixels[canvaSize*y+x] = {
             
             color: color, // ou la couleur par défaut
             x: x*pixelSize,
             y: y*pixelSize,
-            name:"none",
-            date : new Date(),//à changer,
-            affiche : "none " //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
+            name:user,
+            date : date,//à changer,
+            affiche : affiche //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
         };
 
     });
@@ -91,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             pixels[y*canvaSize+x].color = color;
             pixels[y*canvaSize+x].name = pseudo.dataset.message;/*self.seudo*/
             pixels[y*canvaSize+x].date = new Date();
-            pixels[y*canvaSize+x].affiche = "none";//pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+            pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
             draw();
         }
     }
