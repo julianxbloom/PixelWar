@@ -27,23 +27,16 @@
         <div class="containerTopTittle">
             <h1>Pixel War</h1>
             <div id="pseudo" data-message="<%= pseudo %>"><%= pseudo %></div>
-            <button id="changeControl">Drawing</button>
         </div>
         <div class=containerTopPower data-count = "5" id ="containerTopPower"></div>
     </div>
 
     <div class="container" id = 'container'>
-        <img id="imagePreview" src="" alt="" style ="position: absolute; opacity: 0.5; z-index : 1; pointer-events: none;"/>
         <canvas id="pixelCanvas"></canvas>
         <div class="bubble" id="bubble"></div>
 
         <div class="containerBottom">
             <div class="color-grid" id="color-grid"></div>
-
-            <div class="imageFile-controls">
-                <label for="fileimage" class="file-label" style="color:rgb(255, 255, 255);">File</label>
-                <input type="file" id="fileimage" accept="image/*" style="display : none">
-            </div>
         </div>  
         <a href="/credits">Crédit</a>
     </div>
