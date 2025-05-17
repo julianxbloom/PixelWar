@@ -274,10 +274,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             newDistance = Math.hypot(dx, dy);
             rapportDistance = newDistance/initDistance;
+            zoomdiff = initialZoom*rapportDistance/zoomLevel[0]
             zoomLevel[0] = initialZoom*rapportDistance;  
 
-            offsetX[0] = e.touches[0].clientX - (e.touches[0].clientX - offsetX[0]) * rapportDistance;
-            offsetY[0] = e.touches[0].clientY - (e.touches[0].clientY - offsetY[0]) * rapportDistance;
+            offsetX[0] = e.touches[0].clientX - (e.touches[0].clientX - offsetX[0]) * zoomdiff;
+            offsetY[0] = e.touches[0].clientY - (e.touches[0].clientY - offsetY[0]) * zoomdiff;
 
             draw();
 
