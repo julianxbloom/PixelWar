@@ -224,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
                 sendPixel(x,y,currentColor);
             drawBubble(x,y);
+            }
         }
     });
 
