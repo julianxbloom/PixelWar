@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileimage = document.getElementById('fileimage');
     const imagePreview = document.getElementById('imagePreview');
     const mode = document.getElementById('changeControl');
-    const pseudo = document.getElementById('pseudo');
+    const pseudo = document.getElementById('pseudo').dataset.message;
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
 
@@ -85,18 +85,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Dessiner un pixel à la position x,y
     function drawPixel(x, y, color) {
         pixels[y*canvaSize+x].color = color;
-        pixels[y*canvaSize+x].name = pseudo.dataset.message;/*self.seudo*/
+        pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
         pixels[y*canvaSize+x].date = new Date();
         pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+        sendPixel(x,y,currentColor,pseudo,pixels[y*canvaSize+x].affiche);
         draw();
     }
 
-    function sendPixel(x,y,color){
+    function sendPixel(x,y,color,user,affiche){
         // Envoi de la couleur au serveur
         socket.emit('dataPixel', {
             x: x,
             y: y,
-            color: color});
+            color: color,
+            user: user,
+            affiche: affiche});
     }
     
     socket.on('pixelUpdate', (data) => {
@@ -222,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
                 power.textContent = getCookie("power");
                 drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
-                sendPixel(x,y,currentColor);
             drawBubble(x,y);
             }
         }

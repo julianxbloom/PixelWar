@@ -22,9 +22,9 @@ function setSocketIo(socketIo) {
     socket.on('dataPixel', (data) => {  
 
       //Pixel color update
-      io.emit('pixelUpdate',{x:data.x,y:data.y,color:data.color});
+      io.emit('pixelUpdate',{x:data.x,y:data.y,color:data.color,user:data.user,affiche:data.affiche});
 
-      const sql = 'UPDATE pixels SET color = ? WHERE x = ? AND y = ?';
+      const sql = 'UPDATE pixels SET color = ?, user = ?, affiche = ? WHERE x = ? AND y = ?';
       const values = [data.color, data.x, data.y];
       con.query(sql, values, (err, result) => {
         if (err) {
