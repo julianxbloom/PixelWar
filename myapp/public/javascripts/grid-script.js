@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
     });
-    console.log(pixels);
 
     // Resize du canvas pour qu'il remplisse la fenêtre
     function resizeCanvas() {
