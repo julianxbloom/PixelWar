@@ -23,7 +23,6 @@ function getCookie(name) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const colorGrid = document.getElementById('color-grid');
-    const imagePreview = document.getElementById('imagePreview');
     const pseudo = document.getElementById('pseudo').dataset.message;
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
@@ -157,9 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
             }
 
-        }
-        else{
-            imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]/zoomLevel[0]}px) translateY(${offsetY[0]/zoomLevel[0]}px)`;
         }
 
         bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX[0]}px`;
