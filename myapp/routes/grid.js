@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql2');
-var { io } = require('../app');
+//var { io } = require('../app');
+let io;
 
 // Database connection & creation
-var con = mysql.createConnection({
+var con = mysql.createPool({
   host: "yamanote.proxy.rlwy.net",
   port: "30831",
   database: "railway",
@@ -12,10 +13,10 @@ var con = mysql.createConnection({
   password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
 });
 
-con.connect(function(err) {
+/*con.connect(function(err) {
   if (err) throw err;
   console.log("Connected!");
-});
+});*/
 
 //socket.io session
 function setSocketIo(socketIo) {
