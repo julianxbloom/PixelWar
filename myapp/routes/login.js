@@ -4,7 +4,7 @@ var router = express.Router();
 router.use(express.urlencoded({ extended: true }));
 
 //Cookies pour le nbr de chg qu'un mec peut faire
- const {getCookie} = require('../public/javascripts/cookieUtils');
+const {getCookie} = require('../public/javascripts/cookieUtils');
 
 /* GET request */
 router.get('/', (req, res) => {
