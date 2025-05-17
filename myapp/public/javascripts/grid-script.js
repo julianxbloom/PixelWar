@@ -84,15 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Dessiner un pixel à la position x,y
     function drawPixel(x, y, color) {
-        if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +getCookie("power")>0){
-            document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
-            power.textContent = getCookie("power");
-            pixels[y*canvaSize+x].color = color;
-            pixels[y*canvaSize+x].name = pseudo.dataset.message;/*self.seudo*/
-            pixels[y*canvaSize+x].date = new Date();
-            pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
-            draw();
-        }
+        pixels[y*canvaSize+x].color = color;
+        pixels[y*canvaSize+x].name = pseudo.dataset.message;/*self.seudo*/
+        pixels[y*canvaSize+x].date = new Date();
+        pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+        draw();
     }
 
     function sendPixel(x,y,color){
@@ -222,9 +218,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.clientY - rect.top - offsetY[0]) / (zoomLevel[0] * pixelSize));
 
         if (drawing && Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +getCookie("power")>0){
+                document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
+                power.textContent = getCookie("power");
+                drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
+                sendPixel(x,y,currentColor);
             drawBubble(x,y);
-            sendPixel(x,y,currentColor);
+            }
         }
     });
 
@@ -274,10 +274,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             newDistance = Math.hypot(dx, dy);
             rapportDistance = newDistance/initDistance;
+            zoomdiff = initialZoom*rapportDistance/zoomLevel[0]
             zoomLevel[0] = initialZoom*rapportDistance;  
 
-            offsetX[0] = e.touches[0].clientX - (e.touches[0].clientX - offsetX[0]) * rapportDistance;
-            offsetY[0] = e.touches[0].clientY - (e.touches[0].clientY - offsetY[0]) * rapportDistance;
+            offsetX[0] = e.touches[0].clientX - (e.touches[0].clientX - offsetX[0]) * zoomdiff;
+            offsetY[0] = e.touches[0].clientY - (e.touches[0].clientY - offsetY[0]) * zoomdiff;
 
             draw();
 
