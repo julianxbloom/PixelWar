@@ -38,19 +38,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let canvaSize = 150;
     let pixelSize = 10;
 
-    let zoomLevel = [1.7,1]; // Niveau de zoom initial (1 = taille normale)
+    let zoomLevel = 1; // Niveau de zoom initial (1 = taille normale)
 
     let drag = false;
-    let dragImg = false;
 
     let currentColor = "#fff"
     let Lcolors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
 
-    let drawing = true;
-
     // Variables pour zoom et déplacement
-    let offsetX = [window.innerWidth/2 - canvaSize/2*pixelSize*zoomLevel[0],0] ;
-    let offsetY = [0,0];
+    let offsetX = window.innerWidth/2 - canvaSize/2*pixelSize*zoomLevel ;
+    let offsetY = 0;
     let offsetBubble = [0,0];
     let bubbleX = 0;
     let bubbleY = 0;
@@ -108,15 +105,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('wheel', (e) =>{
         //alert('DeltaY:', e.deltaY);
         e.preventDefault();
-        if (e.deltaY>0 && zoomLevel[0] > 0.2){
-            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 0.9;
-            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 0.9;
-            zoomLevel[0] *= 0.9;
+        if (e.deltaY>0 && zoomLevel > 0.2){
+            offsetX = e.clientX - (e.clientX - offsetX) * 0.9;
+            offsetY = e.clientY - (e.clientY - offsetY) * 0.9;
+            zoomLevel *= 0.9;
         }
-        else if(e.deltaY<0 && zoomLevel[0] < 6){
-            offsetX[0] = e.clientX - (e.clientX - offsetX[0]) * 1.1;
-            offsetY[0] = e.clientY - (e.clientY - offsetY[0]) * 1.1;
-            zoomLevel[0] *= 1.1;
+        else if(e.deltaY<0 && zoomLevel < 6){
+            offsetX = e.clientX - (e.clientX - offsetX) * 1.1;
+            offsetY = e.clientY - (e.clientY - offsetY) * 1.1;
+            zoomLevel *= 1.1;
         }
         draw();
     },{passive : false});
@@ -147,37 +144,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Redessiner tout
     function draw() {
 
-        if (drawing){
-            ctx.setTransform(zoomLevel[0], 0, 0, zoomLevel[0], offsetX[0], offsetY[0]);
-            ctx.clearRect(-offsetX[0]/zoomLevel[0], -offsetY[0]/zoomLevel[0], canvas.width/zoomLevel[0], canvas.height/zoomLevel[0]);
+        ctx.setTransform(zoomLevel, 0, 0, zoomLevel, offsetX, offsetY);
+        ctx.clearRect(-offsetX/zoomLevel, -offsetY/zoomLevel, canvas.width/zoomLevel, canvas.height/zoomLevel);
 
-            for (let keys in pixels) {
-                ctx.fillStyle = pixels[keys].color;
-                ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
-            }
+        for (let keys in pixels) {
+            ctx.fillStyle = pixels[keys].color;
+            ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
 
         }
 
-        bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX[0]}px`;
-        bubble.style.top = `${bubbleY + offsetBubble[1] + offsetY[0]}px`;
+        bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX}px`;
+        bubble.style.top = `${bubbleY + offsetBubble[1] + offsetY}px`;
     }
 
     function drawBubble(x,y){
         bubble.style.opacity = 1;
         bubble.textContent = `${pixels[y*canvaSize + x].affiche}`;
-        bubbleX = x*pixelSize*zoomLevel[0] + offsetX[0] + pixelSize/2*zoomLevel[0];//pixelSize;
-        bubbleY = y*pixelSize*zoomLevel[0] + offsetY[0] - bubbleRect.height/2;//pixelSize;
-        bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX[0]}px`;
-        bubble.style.top = `${bubbleY + offsetBubble[1] + offsetY[0]}px`;
+        bubbleX = x*pixelSize*zoomLevel + offsetX + pixelSize/2*zoomLevel;//pixelSize;
+        bubbleY = y*pixelSize*zoomLevel + offsetY - bubbleRect.height/2;//pixelSize;
+        bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX}px`;
+        bubble.style.top = `${bubbleY + offsetBubble[1] + offsetY}px`;
     };
 
     // Clic pour dessiner
     canvas.addEventListener('click', (e) => {
         const rect = canvas.getBoundingClientRect();
-        const x = Math.floor((e.clientX - rect.left - offsetX[0]) / (zoomLevel[0] * pixelSize));
-        const y = Math.floor((e.clientY - rect.top - offsetY[0]) / (zoomLevel[0] * pixelSize));
+        const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
+        const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
-        if (drawing && Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
+        if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +getCookie("power")>0){
                 document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
                 power.textContent = getCookie("power");
@@ -212,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             initDistance = Math.hypot(dx, dy);
-            initialZoom = zoomLevel[0];
+            initialZoom = zoomLevel;
             mooveGridBegin(e.touches[0]);
 
         } else if (e.touches.length === 1) {  // 1 doigt
@@ -233,11 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             newDistance = Math.hypot(dx, dy);
             rapportDistance = newDistance/initDistance;
-            zoomdiff = initialZoom*rapportDistance/zoomLevel[0]
-            zoomLevel[0] = initialZoom*rapportDistance;  
+            zoomdiff = initialZoom*rapportDistance/zoomLevel
+            zoomLevel = initialZoom*rapportDistance;  
 
-            offsetX[0] = e.touches[0].clientX - (e.touches[0].clientX - offsetX[0]) * zoomdiff;
-            offsetY[0] = e.touches[0].clientY - (e.touches[0].clientY - offsetY[0]) * zoomdiff;
+            offsetX = e.touches[0].clientX - (e.touches[0].clientX - offsetX) * zoomdiff;
+            offsetY = e.touches[0].clientY - (e.touches[0].clientY - offsetY) * zoomdiff;
 
             draw();
 
@@ -252,27 +247,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mooveGridBegin(e){
         drag = true;
-        dragImg = true;
-        dragStartX = e.clientX - offsetX[0];
-        dragStartY = e.clientY - offsetY[0];
-        [offsetBubble[0],offsetBubble[1]] = [0 - offsetX[0],0 - offsetY[0]];
+        dragStartX = e.clientX - offsetX;
+        dragStartY = e.clientY - offsetY;
+        [offsetBubble[0],offsetBubble[1]] = [0 - offsetX,0 - offsetY];
     }
 
     function mooveGridEnd(e){
         drag = false;
-        dragImg = false;
     }
 
     function moovePixelGrid (e){
-        if(drag && drawing){
-            offsetX[0] = e.clientX - dragStartX;
-            offsetY[0] = e.clientY - dragStartY;
-            draw();
-        }
-
-        else if(dragImg && !drawing){
-            offsetX[0] = e.clientX - dragStartX;
-            offsetY[0] = e.clientY - dragStartY;
+        if(drag){
+            offsetX = e.clientX - dragStartX;
+            offsetY = e.clientY - dragStartY;
             draw();
         }
     };
@@ -280,8 +267,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
         const rect = canvas.getBoundingClientRect();
-        const x = Math.floor((e.clientX - rect.left - offsetX[0]) / (zoomLevel[0] * pixelSize));
-        const y = Math.floor((e.clientY - rect.top - offsetY[0]) / (zoomLevel[0] * pixelSize));
+        const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
+        const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
         drawBubble(x,y);
     });
 
