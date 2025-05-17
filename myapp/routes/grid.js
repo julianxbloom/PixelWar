@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql2');
-//var { io } = require('../app');
 let io;
 
 // Database connection & creation
@@ -13,10 +12,6 @@ var con = mysql.createPool({
   password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
 });
 
-/*con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-});*/
 
 //socket.io session
 function setSocketIo(socketIo) {
