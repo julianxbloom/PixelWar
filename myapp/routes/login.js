@@ -5,7 +5,7 @@ var mysql = require('mysql2');
 router.use(express.urlencoded({ extended: true }));
 
 //Cookies pour le nbr de chg qu'un mec peut faire
- const {getCookie} = require('../public/javascripts/cookieUtils');
+const {getCookie} = require('../public/javascripts/cookieUtils');
 
 var con = mysql.createPool({
   host: "yamanote.proxy.rlwy.net",
@@ -14,7 +14,7 @@ var con = mysql.createPool({
   user: "root",
   password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
 });
- 
+
 
 /* GET request */
 router.get('/', (req, res) => {
@@ -22,9 +22,19 @@ router.get('/', (req, res) => {
   con.query("SELECT * FROM user WHERE users = ?", [getCookie("username", req)], function(err, result) {
     if (err) throw err;
     console.log(result);
+    if (result.length == []){
+      console.log("No user found");
+      res.render('login',{Btn : "Tu n'es pas connecté"});
+    }
+    else {
+      if (!getCookie("power",req)){
+      res.cookie("power",0,{path:'/',maxAge:2*60*1000});
+      }
+      res.redirect('/');
+    }
   });
 
-  if (getCookie("username",req) in ["JulianTG01"]){
+/*  if (getCookie("username",req) in ["JulianTG01"]){
     if (!getCookie("power",req)){
       res.cookie("power",0,{path:'/',maxAge:2*60*1000});
     }
@@ -32,7 +42,7 @@ router.get('/', (req, res) => {
   }
   else {
     res.render('login',{Btn : "Tu n'es pas connecté"});
-  }
+  }*/
 });
 
 /* POST request */
