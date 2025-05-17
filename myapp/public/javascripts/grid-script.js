@@ -23,9 +23,7 @@ function getCookie(name) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const colorGrid = document.getElementById('color-grid');
-    const fileimage = document.getElementById('fileimage');
     const imagePreview = document.getElementById('imagePreview');
-    const mode = document.getElementById('changeControl');
     const pseudo = document.getElementById('pseudo').dataset.message;
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
@@ -146,43 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
             colorGrid.appendChild(color);
         }
     }
-
-    fileimage.addEventListener('change', function(event){
-
-        const ImageEle = event.target.files[0];
-        if (ImageEle && ImageEle.type.startsWith('image/')){
-
-            const imgUrl = URL.createObjectURL(ImageEle);// crée l'url
-            imagePreview.src = imgUrl;
-            imagePreview.alt = "Image chargée avec succès";// sert a r
-            if(drawing){
-               imagePreview.style.transform = `scale(${zoomLevel[1]}) translateX(${offsetX[1]}px) translateY(${offsetY[1]}px)`; 
-            }
-            else{
-                imagePreview.style.transform = `scale(${zoomLevel[0]}) translateX(${offsetX[0]}px) translateY(${offsetY[0]}px)`; 
-            }
-            
-        }
-        else{
-            imagePreview.alt = "Fail to load image";
-        }
-    });
-
-    // Fonction pour passer du mode dessin à celui ou on bouge la file
-    mode.addEventListener('click',()=>{
-        if (drawing){
-            //Mettre les couleurs en gris
-            mode.textContent = 'File'
-        }
-        else {
-            //enlever le gris des couleurs
-            mode.textContent = 'Drawing'
-        }
-        drawing = !drawing;
-        offsetX.reverse();
-        offsetY.reverse();
-        zoomLevel.reverse();
-    })
 
     // Redessiner tout
     function draw() {
@@ -337,3 +298,10 @@ document.addEventListener('DOMContentLoaded', () => {
     createcolorGrid();
     resizeCanvas();
 });
+
+
+//<button id="changeControl">Drawing</button>
+/*            <div class="imageFile-controls">
+                <label for="fileimage" class="file-label" style="color:rgb(255, 255, 255);">File</label>
+                <input type="file" id="fileimage" accept="image/*" style="display : none">
+            </div>*/
