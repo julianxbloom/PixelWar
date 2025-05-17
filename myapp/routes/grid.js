@@ -12,7 +12,6 @@ var con = mysql.createPool({
   password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
 });
 
-
 //socket.io session
 function setSocketIo(socketIo) {
   io = socketIo;
@@ -31,7 +30,6 @@ function setSocketIo(socketIo) {
           console.error('Erreur lors de la mise à jour du pixel :', err);
           return;
         }
-
       });
     });
   });
@@ -46,26 +44,11 @@ router.get('/', function(req, res, next) {
       if (err) {
         return res.status(500).send('Erreur serveur');
       }
-      res.render('grid', { pseudo: getCookie("username", req), pixels: results });
+      return res.render('grid', { pseudo: getCookie("username", req), pixels: results });
     });
   } else {
-    res.redirect('/login');
+    return res.redirect('/login');
   }
 });
-
-// Requête pour colorier un pixel
-router.get('/grid', (req, res) => {
-  const sql = 'SELECT * FROM pixels';
-  con.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).send('Erreur serveur');
-    }
-    res.render('grid', { pixels: results });
-  });
-});
-
-// Modifie bdd 
-// Réimporte la grid pou rtt le monde
-// Lancer fct dessiner grid pour tt users*/
 
 module.exports = { router, setSocketIo };
