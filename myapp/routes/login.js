@@ -16,72 +16,46 @@ var con = mysql.createPool({
 });
 
 
-/* GET request */
 router.get('/', (req, res) => {
-  
+
   con.query("SELECT * FROM user WHERE users = ?", [getCookie("username", req)], function(err, result) {
     if (err) throw err;
-    console.log(result);
     if (result.length == []){
-      console.log("No user found");
-      res.render('login',{Btn : "Tu n'es pas connecté"});
+      return res.render('login',{Btn : "Tu n'es pas connecté"});
     }
     else {
       if (!getCookie("power",req)){
       res.cookie("power",0,{path:'/',maxAge:2*60*1000});
       }
-      res.redirect('/');
+      return res.redirect('/');
     }
   });
-
-/*  if (getCookie("username",req) in ["JulianTG01"]){
-    if (!getCookie("power",req)){
-      res.cookie("power",0,{path:'/',maxAge:2*60*1000});
-    }
-    res.redirect('/');
-  }
-  else {
-    res.render('login',{Btn : "Tu n'es pas connecté"});
-  }*/
 });
 
 /* POST request */
 router.post('/', (req, res) => {
 
-  //Verif a faire pour savoir si bon compte
-  const pseudo = req.body.pseudo + req.body.CurrentClass;
-
-  var con = mysql.createPool({
-    host: "yamanote.proxy.rlwy.net",
-    port: "30831",
-    database: "railway",
-    user: "root",
-    password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
-  });
-  con.query("SELECT * FROM user WHERE users = ?", [pseudo], function(err, result) {
-    if (err) throw err;
-    console.log(result);
-  });
-
   if (getCookie("username",req) in ["JulianTG01"]){
     if (!getCookie("power",req)){
       res.cookie("power",0,{path:'/',maxAge:2*60*1000});
     }
-    res.redirect('/');
+    return res.redirect('/');
   }
 
-  else if (pseudo == "JulianTG01"){
+  else {
+      //Verif a faire pour savoir si bon compte
+    const pseudo = req.body.pseudo + req.body.CurrentClass;
+    con.query("SELECT * FROM user WHERE users = ?", [pseudo], function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    });
 
     if (!getCookie("power",req) || !getCookie("username",req)){
       res.cookie("power",7,{path:'/',maxAge:2*60*1000});//le cookie reste 1 semaine
       res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 1 semaine
     }
-
-    res.redirect('/');
-  }
-
-  else {
-    res.render('login',{Btn : "Wrong pseudo,Retry"});
+    //res.render('login',{Btn : "Wrong pseudo,Retry"});
+   return res.redirect('/');
   }
 });
 
