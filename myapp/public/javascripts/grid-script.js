@@ -23,33 +23,13 @@ function getCookie(name) {
     return value ? value.split("=")[1] : 0;  // Si le cookie existe, retourne la valeur sinon retourne none
 }
 
-const power = document.getElementById('containerTopPower');
-power.textContent = getCookie("power");
-
-function startCountdown(sec) {
-    min = Math.floor(sec/60);
-    sec = sec%60;
-    const countdown = setInterval(() => {
-        sec--;
-
-        if (sec < 0) {
-            if (min > 0) {
-                min--;
-                sec = 59;
-            } else {
-                clearInterval(countdown);
-                document.cookie =`power=${5}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
-                power.textContent = getCookie("power");
-        }}
-        power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;
-        }, 1000);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     const colorGrid = document.getElementById('color-grid');
     const pseudo = document.getElementById('pseudo').dataset.message;
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
+    const power = document.getElementById('containerTopPower');
+    power.textContent = getCookie("power");
 
     //socket : 
     const socket = io();
@@ -296,6 +276,24 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
     });
 
+    function startCountdown(sec) {
+        min = Math.floor(sec/60);
+        sec = sec%60;
+        const countdown = setInterval(() => {
+            sec--;
+
+            if (sec < 0) {
+                if (min > 0) {
+                    min--;
+                    sec = 59;
+                } else {
+                    clearInterval(countdown);
+                    document.cookie =`power=${5}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
+                    power.textContent = getCookie("power");
+            }}
+            power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;
+            }, 1000);
+    }
 
     // Créer la grille au chargement de la page
     createcolorGrid();
