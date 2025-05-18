@@ -52,17 +52,4 @@ router.get('/', function(req, res, next) {
   }
 });
 
-// Requête pour colorier un pixel
-/*
-router.get('/grid', (req, res) => {
-  const sql = 'SELECT * FROM pixels';
-  con.query(sql, (err, results) => {
-    if (err) {
-      return res.status(500).send('Erreur serveur');
-    }
-    return res.render('grid', { pixels: results });
-  });
-});
-*/
-
 module.exports = { router, setSocketIo };
