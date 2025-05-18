@@ -7,7 +7,7 @@ let powerBase = 7;
 let delay = 10;
 
 // Database connection & creation
-var con = mysql.con({
+var con = mysql.createPool({
   host: "yamanote.proxy.rlwy.net",
   port: "30831",
   database: "railway",
