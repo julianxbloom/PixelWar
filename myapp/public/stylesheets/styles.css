@@ -113,7 +113,6 @@ canvas {
     background-color: #000000;
     border: 10px solid #000000;
     height:120px;
-    width:470px;
     overflow: hidden; /* Empêche la grille de dépasser */
 }
 

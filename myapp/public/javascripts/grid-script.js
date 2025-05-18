@@ -14,11 +14,35 @@ else {
     link.href = 'stylesheets/stylestel.css';
 }
 
+//----------------------------------Cookie----------------------------------
+
 //function via d'autres fichiers  :
 function getCookie(name) {
     // Permet de récupérer la valeur de notre cookie qui a le nom : name
     const value = document.cookie.split("; ").find(ele => ele.startsWith(name + "=")); 
     return value ? value.split("=")[1] : 0;  // Si le cookie existe, retourne la valeur sinon retourne none
+}
+
+const power = document.getElementById('containerTopPower');
+power.textContent = getCookie("power");
+
+function startCountdown(sec) {
+    min = Math.floor(sec/60);
+    sec = sec%60;
+    const countdown = setInterval(() => {
+        sec--;
+
+        if (sec < 0) {
+            if (min > 0) {
+                min--;
+                sec = 59;
+            } else {
+                clearInterval(countdown);
+                document.cookie =`power=${5}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
+                power.textContent = getCookie("power");
+        }}
+        power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;
+        }, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -32,8 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
-    const power = document.getElementById('containerTopPower');
-    power.textContent = getCookie("power");
 
     let canvaSize = 150;
     let pixelSize = 10;
@@ -54,18 +76,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let dragStartX, dragStartY;
 
     const pixels = {};
-    Object.values(pixelsBdd).forEach(({x,y,color,date,affiche,user}) => {
+    Object.values(pixelsBdd).forEach(({x,y,color,affiche}) => {
         
         pixels[canvaSize*y+x] = {
             
             color: color, // ou la couleur par défaut
             x: x*pixelSize,
             y: y*pixelSize,
-            name:user,
-            date : date,//à changer,
             affiche : affiche //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
         };
-
     });
 
     // Resize du canvas pour qu'il remplisse la fenêtre
@@ -79,19 +98,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function drawPixel(x, y, color) {
         pixels[y*canvaSize+x].color = color;
         pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
-        pixels[y*canvaSize+x].date = new Date();
-        pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+        date = new Date();
+        pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
         sendPixel(x,y,currentColor,pseudo,pixels[y*canvaSize+x].affiche);
         draw();
     }
 
-    function sendPixel(x,y,color,user,affiche){
+    function sendPixel(x,y,color,affiche){
         // Envoi de la couleur au serveur
         socket.emit('dataPixel', {
             x: x,
             y: y,
             color: color,
-            user: user,
             affiche: affiche});
     }
     
@@ -176,8 +194,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
                 power.textContent = getCookie("power");
                 drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
-            drawBubble(x,y);
             }
+            else if (getCookie("power")<=0){
+                startCountdown(360);
+            }
+            drawBubble(x,y);
         }
     });
 
@@ -197,12 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
     /*Pour les tels*/
     document.addEventListener('touchstart', (e) => {
          
-        e.preventDefault();
-
         startTime = Date.now();
         
         if (e.touches.length === 2) {  // Deux doigts
-
+            e.preventDefault();
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             initDistance = Math.hypot(dx, dy);
@@ -219,9 +238,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('touchmove', (e) => {
-        e.preventDefault(); // bloquer le scroll tactile
+        
 
         if (e.touches.length === 2){
+            
+            e.preventDefault(); // bloquer le scroll tactile
             
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
