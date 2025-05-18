@@ -293,9 +293,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     min--;
                     sec = 59;
                 } else {
-                    clearInterval(countdown);
                     document.cookie =`power=${5}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
                     power.textContent = getCookie("power");
+                    clearInterval(countdown);
             }}
             power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;
             }, 1000);
