@@ -199,7 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 startCountdown(360);
             }
             drawBubble(x,y);
-            }
         }
     });
 
