@@ -12,10 +12,10 @@
     <script src="javascripts/grid-script.js"></script>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
-    const socket = io('http://localhost:3000');
+    /*const socket = io('http://localhost:3000');
     socket.on('connect', () => {
         console.log('Connected to the server');
-    });
+    });*/
     </script>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -28,7 +28,7 @@
             <h1>Pixel War</h1>
             <div id="pseudo" data-message="<%= pseudo %>"><%= pseudo %></div>
         </div>
-        <div class=containerTopPower data-count = "5" id ="containerTopPower"></div>
+        <div class=containerTopPower data-count = <%= power %> id ="containerTopPower"></div>
     </div>
 
     <div class="container" id = 'container'>

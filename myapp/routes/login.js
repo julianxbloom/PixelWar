@@ -23,40 +23,38 @@ router.get('/', (req, res) => {
     if (result.length == []){
       return res.render('login',{Btn : "Tu n'es pas connecté"});
     }
-    else {
-      if (!getCookie("power",req)){
-      res.cookie("power",0,{path:'/',maxAge:2*60*1000});
-      }
-      return res.redirect('/');
-    }
+
   });
 });
 
 /* POST request */
 router.post('/', (req, res) => {
 
-  if (getCookie("username",req) in ["JulianTG01"]){
-    if (!getCookie("power",req)){
-      res.cookie("power",0,{path:'/',maxAge:2*60*1000});
+  //Verif a faire pour savoir si bon compte
+  const pseudo = req.body.pseudo + req.body.CurrentClass;
+
+  if (!getCookie("username",req)){
+    res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
+  }
+
+  con.query("SELECT power FROM user WHERE users = ?", [pseudo], function(err, result) {
+  if (err) throw err;
+  if (result.length != []){
+    if(!getCookie("power",req)){
+      res.cookie("power",result[0].power,{path:'/',maxAge:2*60*1000});//le cookie reste 2 min
     }
     return res.redirect('/');
   }
-
   else {
-      //Verif a faire pour savoir si bon compte
-    const pseudo = req.body.pseudo + req.body.CurrentClass;
-    con.query("SELECT * FROM user WHERE users = ?", [pseudo], function(err, result) {
-    if (err) throw err;
-    console.log(result);
+    con.query('INSERT INTO user (users,power,time) VALUES (?,?,?)', [pseudo, 7, null], function(err,result) {
+      if (err) throw err;
+      return res.redirect('/');
     });
-
-    if (!getCookie("power",req) || !getCookie("username",req)){
-      res.cookie("power",7,{path:'/',maxAge:2*60*1000});//le cookie reste 1 semaine
-      res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 1 semaine
-    }
-    //res.render('login',{Btn : "Wrong pseudo,Retry"});
-   return res.redirect('/');
   }
+  });
+
+  //res.render('login',{Btn : "Wrong pseudo,Retry"});
+
 });
 
 module.exports = router;

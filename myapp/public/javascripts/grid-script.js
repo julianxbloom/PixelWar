@@ -2,6 +2,8 @@ var link = document.createElement("link");
 link.type = 'text/css';
 link.rel = 'stylesheet';
 
+let powerBase =  7;
+
 //Pour la bdd
 
 if (screen.width > 600)
@@ -28,8 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const pseudo = document.getElementById('pseudo').dataset.message;
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
+
     const power = document.getElementById('containerTopPower');
+
+    if (power.dataset.count > powerBase){
+        startCountdown(power.dataset.count);
+    }
+
     power.textContent = getCookie("power");
+    let delay = 10;
 
     //socket : 
     const socket = io();
@@ -174,10 +183,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
                 power.textContent = getCookie("power");
-                if (getCookie("power") == 0){
-                    startCountdown(10);
-                }
 
+                socket.emit('power', {power : power.textContent});
+
+                if (getCookie("power") == 0){
+                    startCountdown(delay);
+
+                    //Obj : envoyer la date dans la bdd, pour que quand se reconnecte, mette 5 pw ou pas
+                    d = Date.now();
+                    socket.emit('time', {time : d});
+                }
                 drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
 
             }
@@ -222,11 +237,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('touchmove', (e) => {
-        
+        e.preventDefault(); // bloquer le scroll tactile
 
         if (e.touches.length === 2){
-            
-            e.preventDefault(); // bloquer le scroll tactile
             
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
