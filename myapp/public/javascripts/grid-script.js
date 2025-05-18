@@ -14,12 +14,17 @@ else {
     link.href = 'stylesheets/stylestel.css';
 }
 
+//----------------------------------Cookie----------------------------------
+
 //function via d'autres fichiers  :
 function getCookie(name) {
     // Permet de récupérer la valeur de notre cookie qui a le nom : name
     const value = document.cookie.split("; ").find(ele => ele.startsWith(name + "=")); 
     return value ? value.split("=")[1] : 0;  // Si le cookie existe, retourne la valeur sinon retourne none
 }
+
+const power = document.getElementById('containerTopPower');
+power.textContent = getCookie("power");
 
 function startCountdown(sec) {
     min = Math.floor(sec/60);
@@ -33,8 +38,10 @@ function startCountdown(sec) {
                 sec = 59;
             } else {
                 clearInterval(countdown);
-                console.log("Temps écoulé !");
+                document.cookie =`power=${5}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
+                power.textContent = getCookie("power");
         }}
+        power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;
         }, 1000);
 }
 
@@ -49,8 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
-    const power = document.getElementById('containerTopPower');
-    power.textContent = getCookie("power");
 
     let canvaSize = 150;
     let pixelSize = 10;
@@ -189,6 +194,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
                 power.textContent = getCookie("power");
                 drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
+            else if (getCookie("power")<=0){
+                startCountdown(360);
+            }
             drawBubble(x,y);
             }
         }
