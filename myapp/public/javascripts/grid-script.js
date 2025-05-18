@@ -171,12 +171,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +getCookie("power")>0){
+
                 document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
-                power.textContent = getCookie("power");
-                drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
                 if (getCookie("power") == 0){
-                    startCountdown(120);
+                    startCountdown(10);
                 }
+                else {
+                    power.textContent = getCookie("power");
+                }
+
+                drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
+
             }
 
             drawBubble(x,y);
