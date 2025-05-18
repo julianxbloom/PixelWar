@@ -194,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
                 power.textContent = getCookie("power");
                 drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
+            }
             else if (getCookie("power")<=0){
                 startCountdown(360);
             }
