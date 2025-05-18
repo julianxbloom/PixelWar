@@ -287,17 +287,21 @@ document.addEventListener('DOMContentLoaded', () => {
         sec = sec%60;
         const countdown = setInterval(() => {
             sec--;
-
+            if (sec > -1){
+            power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;
+            }
             if (sec < 0) {
+                
                 if (min > 0) {
                     min--;
                     sec = 59;
+                    
                 } else {
                     document.cookie =`power=${5}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
                     power.textContent = getCookie("power");
                     clearInterval(countdown);
             }}
-            power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;
+            
             }, 1000);
     }
 
