@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
         date = new Date();
         pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
-        sendPixel(x,y,currentColor,pseudo,pixels[y*canvaSize+x].affiche);
+        sendPixel(x,y,currentColor,pixels[y*canvaSize+x].affiche);
         draw();
     }
 
@@ -173,11 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +getCookie("power")>0){
 
                 document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
+                power.textContent = getCookie("power");
                 if (getCookie("power") == 0){
                     startCountdown(10);
-                }
-                else {
-                    power.textContent = getCookie("power");
                 }
 
                 drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
