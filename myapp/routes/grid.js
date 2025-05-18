@@ -22,10 +22,10 @@ function setSocketIo(socketIo) {
     socket.on('dataPixel', (data) => {  
 
       //Pixel color update
-      io.emit('pixelUpdate',{x:data.x,y:data.y,color:data.color,user:data.user,affiche:data.affiche});
+      io.emit('pixelUpdate',{x:data.x,y:data.y,color:data.color,affiche:data.affiche});
 
-      const sql = 'UPDATE pixels SET color = ?, user = ?, affiche = ? WHERE x = ? AND y = ?';
-      const values = [data.color, data.user, data.affiche, data.x, data.y];
+      const sql = 'UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?';
+      const values = [data.color, data.affiche, data.x, data.y];
       con.query(sql, values, (err, result) => {
         if (err) {
           console.error('Erreur lors de la mise à jour du pixel :', err);
@@ -40,7 +40,7 @@ function setSocketIo(socketIo) {
 router.get('/', function(req, res, next) {
   const { getCookie } = require('../public/javascripts/cookieUtils'); 
   if (getCookie("username", req) != null) {
-    const sql = 'SELECT * FROM pixels';
+    const sql = 'SELECT x,y,color,affiche FROM pixels';
     con.query(sql, (err, results) => {
       if (err) {
         return res.status(500).send('Erreur serveur');

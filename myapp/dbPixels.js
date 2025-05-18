@@ -22,11 +22,9 @@ con.connect(function(err) {
   console.log("Connected!");
   var user_creation = `CREATE TABLE IF NOT EXISTS pixels(
     id INT AUTO_INCREMENT,
-    user VARCHAR(100) DEFAULT 'nobody',
     x INT,
     y INT,
     color VARCHAR(25) DEFAULT '#adacac',
-    date VARCHAR(100) DEFAULT 'blank',
     affiche VARCHAR(100) DEFAULT 'blank',
     PRIMARY KEY(id)
   )`;
@@ -49,7 +47,6 @@ function createTable(){
 
     const x = i%canvaSize;
     const y = Math.floor(i/canvaSize);
-
 
     const sql = `INSERT INTO pixels (x, y) VALUES (?, ?)`;
     con.query(sql, [x, y]);

@@ -21,6 +21,23 @@ function getCookie(name) {
     return value ? value.split("=")[1] : 0;  // Si le cookie existe, retourne la valeur sinon retourne none
 }
 
+function startCountdown(sec) {
+    min = Math.floor(sec/60);
+    sec = sec%60;
+    const countdown = setInterval(() => {
+        sec--;
+
+        if (sec < 0) {
+            if (min > 0) {
+                min--;
+                sec = 59;
+            } else {
+                clearInterval(countdown);
+                console.log("Temps écoulé !");
+        }}
+        }, 1000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const colorGrid = document.getElementById('color-grid');
     const pseudo = document.getElementById('pseudo').dataset.message;
@@ -54,18 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let dragStartX, dragStartY;
 
     const pixels = {};
-    Object.values(pixelsBdd).forEach(({x,y,color,date,affiche,user}) => {
+    Object.values(pixelsBdd).forEach(({x,y,color,affiche}) => {
         
         pixels[canvaSize*y+x] = {
             
             color: color, // ou la couleur par défaut
             x: x*pixelSize,
             y: y*pixelSize,
-            name:user,
-            date : date,//à changer,
             affiche : affiche //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
         };
-
     });
 
     // Resize du canvas pour qu'il remplisse la fenêtre
@@ -79,19 +93,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function drawPixel(x, y, color) {
         pixels[y*canvaSize+x].color = color;
         pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
-        pixels[y*canvaSize+x].date = new Date();
-        pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${pixels[y*canvaSize+x].date.getDate()}/${pixels[y*canvaSize+x].date.getMonth()+1} à ${pixels[y*canvaSize+x].date.getHours()}:${pixels[y*canvaSize+x].date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+        date = new Date();
+        pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
         sendPixel(x,y,currentColor,pseudo,pixels[y*canvaSize+x].affiche);
         draw();
     }
 
-    function sendPixel(x,y,color,user,affiche){
+    function sendPixel(x,y,color,affiche){
         // Envoi de la couleur au serveur
         socket.emit('dataPixel', {
             x: x,
             y: y,
             color: color,
-            user: user,
             affiche: affiche});
     }
     
@@ -197,12 +210,10 @@ document.addEventListener('DOMContentLoaded', () => {
     /*Pour les tels*/
     document.addEventListener('touchstart', (e) => {
          
-        e.preventDefault();
-
         startTime = Date.now();
         
         if (e.touches.length === 2) {  // Deux doigts
-
+            e.preventDefault();
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             initDistance = Math.hypot(dx, dy);
@@ -219,9 +230,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('touchmove', (e) => {
-        e.preventDefault(); // bloquer le scroll tactile
+        
 
         if (e.touches.length === 2){
+            
+            e.preventDefault(); // bloquer le scroll tactile
             
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
