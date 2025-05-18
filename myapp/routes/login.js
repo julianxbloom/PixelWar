@@ -15,7 +15,6 @@ var con = mysql.createPool({
   password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
 });
 
-
 router.get('/', (req, res) => {
 
   con.query("SELECT * FROM user WHERE users = ?", [getCookie("username", req)], function(err, result) {
