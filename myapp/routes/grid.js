@@ -5,6 +5,7 @@ const { getCookie } = require('../public/javascripts/cookieUtils');
 let io;
 let powerBase = 7;
 let delay = 10;
+let user = {pseudo: null, power: null, time : null};
 
 // Database connection & creation
 var con = mysql.createPool({
@@ -21,76 +22,63 @@ function setSocketIo(socketIo) {
 
   // Configure socket.io events
   io.on('connection', (socket) => {
-    socket.on('dataPixel', (data) => {  
-
-      //Pixel color update
-      io.emit('pixelUpdate',{x:data.x,y:data.y,color:data.color,affiche:data.affiche});
-
-      const sql = 'UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?';
-      const values = [data.color, data.affiche, data.x, data.y];
-      con.query(sql, values, (err, result) => {
-        if (err) {
-          console.error('Erreur lors de la mise à jour du pixel :', err);
-          return;
-        }
-      });
-    });
-
-    //Pour le time du user
-    socket.on('time', (data) => {
-      // Mettre à jour la couleur du pixel 
-      const sql = 'UPDATE user SET time = ? WHERE users = ?'
-      con.query(sql, [data.time,pseudo], (err,result) => {
-        if (err) {
-          console.error('Erreur lors de la mise à jour du time :', err);
-          return;
-        }
-      })
-    });
 
     //Pour le power du user
     socket.on('power', (data) => {
-      const sql = 'SELECT power FROM user WHERE users = ?';
-      con.query(sql, [pseudo], (err, result) => {
-        if (err) {
-          console.error('Erreur lors de la récupération du power :', err);
-          return;
-        }
-        if (result.length > 0) {
-          power = result[0].power;
-        } else { //Normalement pas possible
-          power = 0;
-        }
-      });
+
+      if (user.power <= 0) {
+
+          const t = user.time;
+          const d = Date.now();
+          if(d - t > 1000*delay){
+            user.power = powerBase;
+            sql = 'UPDATE user SET power = ? WHERE user = ?';
+            con.query(sql,[user.power,user.pseudo], (err,result) =>{
+              if (err){
+                return err;
+              }
+            });
+          }
+      }
 
       // Mettre à jour la couleur du pixel 
-      if (power > 0){
+      if (user.power > 0){
         sql = 'UPDATE user SET power = ? WHERE users = ?'
-        con.query(sql, [power-1,pseudo], (err,result) => {
+        con.query(sql, [user.power-1,user.pseudo], (err,result) => {
           if (err) {
             console.error('Erreur lors de la mise à jour du power :', err);
             return;
           }
         })
+
+        user.power -=1;
+
+        //Set time
+        if (user.power == 0){
+          sql = 'UPDATE user SET time = ? WHERE users = ?'
+          con.query(sql, [Date.now(),user.pseudo], (err,result) => {
+            if (err) {
+              console.error('Erreur lors de la mise à jour du time :', err);
+              return;
+            }
+            user.time = Date.now();
+            console.log(Date.now());
+          })
+        } 
+
+        //Pixel color update
+        io.emit('pixelUpdate',{x:data.x,y:data.y,color:data.color,affiche:data.affiche});
+
+        sql = 'UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?';
+        const values = [data.color, data.affiche, data.x, data.y];
+        con.query(sql, values, (err, result) => {
+          if (err) {
+            console.error('Erreur lors de la mise à jour du pixel :', err);
+            return;
+          }
+        });
+
       }
-
-                /*if (getCookie("power") > 0){
-                document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
-                power.textContent = getCookie("power");
-
-                socket.emit('power', {power : power.textContent});
-
-                if (getCookie("power") == 0){
-                    startCountdown(delay);
-
-                    //Obj : envoyer la date dans la bdd, pour que quand se reconnecte, mette 5 pw ou pas
-                    d = Date.now();
-                    socket.emit('time', {time : d});
-                }
-                drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
-
-            }*/
-
 
     });
 
@@ -100,36 +88,45 @@ function setSocketIo(socketIo) {
 // Vérification du cookie de l'utilisateur
 router.get('/', function(req, res, next) {
 
-  let pseudo = null;
-  let pow = 0;
-
   if (getCookie("username", req) != null) {
     const sql = 'SELECT x,y,color,affiche FROM pixels';
     con.query(sql, (err, results) => {
       if (err) {
         return res.status(500).send('Erreur serveur');
       }
-      pseudo = getCookie("username", req);
+      user.pseudo = getCookie("username", req);
 
-      con.query('SELECT power FROM user WHERE users = ?', [pseudo], function(err, result) {
+      con.query('SELECT power,time FROM user WHERE users = ?', [user.pseudo], function(err, result) {
         if (err) throw err;
-        if (result.length != []) {
-          d = Date.now();
-          if(result[0].time > powerBase){
-            if (d - result[0].time > 1000*delay) {
-              pow = powerBase;
+        if (result.length > 0) {
+
+          user.time = result[0].time;
+
+          if(result[0].power <= 0){
+            const t = user.time;
+            const d = Date.now();
+            if(d - t > 1000*delay){
+              user.power = powerBase;
+              const sql = 'UPDATE user SET power = ? WHERE user = ?';
+              con.query(sql,[user.power,user.pseudo], (err,result) =>{
+                if (err){
+                  return err;
+                }
+              });
             }
             else {
-              pow = dsec - result[0].time;
-              res.cookie("power",0,{path:'/',maxAge:2*60*1000});//le cookie reste 2 min
+              user.power = 0;
             }
           } 
-        } else {
-          pow = result[0].power;
-        }
-      });
+          else {
 
-      return res.render('grid', { pseudo: pseudo, pixels: results, power: pow });
+            user.power = result[0].power;
+          }
+
+        }
+
+        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : result[0].time });
+      });
 
     });
   } else {

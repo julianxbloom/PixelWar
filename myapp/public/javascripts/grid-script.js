@@ -3,6 +3,7 @@ link.type = 'text/css';
 link.rel = 'stylesheet';
 
 let powerBase =  7;
+let delay = 10;
 
 //Pour la bdd
 
@@ -32,13 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const bubbleRect = bubble.getBoundingClientRect();
 
     const power = document.getElementById('containerTopPower');
+    power.textContent = power.dataset.count;
 
-    if (power.dataset.count > powerBase){
-        startCountdown(power.dataset.count);
+    if (power.dataset.count <= 0){
+        console.log("datenow",Date.now()," time",power.dataset.time, "delat = ",Math.floor(Date.now() - power.dataset.time)/1000);
+        startCountdown(delay - Math.floor(Date.now() - power.dataset.time)/1000);
     }
-
-    power.textContent = getCookie("power");
-    let delay = 10;
+    
 
     //socket : 
     const socket = io();
@@ -84,27 +85,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Dessiner un pixel à la position x,y
-    function drawPixel(x, y, color) {
+    function drawPixel(x, y, color, affiche) {
         pixels[y*canvaSize+x].color = color;
         pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
         date = new Date();
-        pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
-        sendPixel(x,y,currentColor,pixels[y*canvaSize+x].affiche);
+        pixels[y*canvaSize+x].affiche = affiche;//pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+        
         draw();
-    }
-
-    function sendPixel(x,y,color,affiche){
-        // Envoi de la couleur au serveur
-        socket.emit('dataPixel', {
-            x: x,
-            y: y,
-            color: color,
-            affiche: affiche});
     }
     
     socket.on('pixelUpdate', (data) => {
         // Mettre à jour la couleur du pixel 
-        drawPixel(data.x,data.y,data.color);
+        drawPixel(data.x,data.y,data.color,data.affiche);
     });
     
     
@@ -179,8 +171,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize){
-                socket.emit('power');
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){
+                date = new Date();
+                socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`});
+                power.dataset.count -= 1;
+                power.textContent = power.dataset.count;
+                if (power.dataset.count < 1){
+                    startCountdown(delay);
+                }
             }
             drawBubble(x,y);
         }
@@ -279,8 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function startCountdown(sec) {
+        sec = sec;
         min = Math.floor(sec/60);
         sec = sec%60;
+        power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;//Celui de base
+
         const countdown = setInterval(() => {
             sec--;
             if (sec > -1){
@@ -293,8 +294,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     sec = 59;
                     
                 } else {
-                    document.cookie =`power=${5}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
-                    power.textContent = getCookie("power");
+                    power.dataset.count = powerBase;
+                    power.textContent = power.dataset.count;
                     clearInterval(countdown);
             }}
             
