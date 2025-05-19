@@ -179,24 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +getCookie("power")>0){
-
-                document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
-                power.textContent = getCookie("power");
-
-                socket.emit('power', {power : power.textContent});
-
-                if (getCookie("power") == 0){
-                    startCountdown(delay);
-
-                    //Obj : envoyer la date dans la bdd, pour que quand se reconnecte, mette 5 pw ou pas
-                    d = Date.now();
-                    socket.emit('time', {time : d});
-                }
-                drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
-
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize){
+                socket.emit('power');
             }
-
             drawBubble(x,y);
         }
     });

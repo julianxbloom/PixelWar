@@ -50,16 +50,49 @@ function setSocketIo(socketIo) {
 
     //Pour le power du user
     socket.on('power', (data) => {
-      // Mettre à jour la couleur du pixel 
-      const sql = 'UPDATE user SET power = ? WHERE users = ?'
-      con.query(sql, [data.power,pseudo], (err,result) => {
+      const sql = 'SELECT power FROM user WHERE users = ?';
+      con.query(sql, [pseudo], (err, result) => {
         if (err) {
-          console.error('Erreur lors de la mise à jour du power :', err);
+          console.error('Erreur lors de la récupération du power :', err);
           return;
         }
-      })
-    });
+        if (result.length > 0) {
+          power = result[0].power;
+        } else { //Normalement pas possible
+          power = 0;
+        }
+      });
 
+      // Mettre à jour la couleur du pixel 
+      if (power > 0){
+        sql = 'UPDATE user SET power = ? WHERE users = ?'
+        con.query(sql, [power-1,pseudo], (err,result) => {
+          if (err) {
+            console.error('Erreur lors de la mise à jour du power :', err);
+            return;
+          }
+        })
+      }
+
+                /*if (getCookie("power") > 0){
+                document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
+                power.textContent = getCookie("power");
+
+                socket.emit('power', {power : power.textContent});
+
+                if (getCookie("power") == 0){
+                    startCountdown(delay);
+
+                    //Obj : envoyer la date dans la bdd, pour que quand se reconnecte, mette 5 pw ou pas
+                    d = Date.now();
+                    socket.emit('time', {time : d});
+                }
+                drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
+
+            }*/
+
+
+    });
 
   });
 }
