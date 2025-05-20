@@ -1,11 +1,8 @@
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+
 document.getElementById("loginButton").onclick = onLoginButtonClick();
 
 function onLoginButtonClick() {
-    FingerprintJS.load().then(fingerprint => {
-    fingerprint.get().then(result => {
-        console.log(result.visitorId); // L'ID unique
-    });
-    });
     const pseudo = document.getElementById('pseudo').value;
     const CurrentClass = document.getElementById('CurrentClass').value;
     console.log(pseudo);
@@ -22,4 +19,35 @@ function onLoginButtonClick() {
     console.log(window.screen.orientation.type);
     console.log(window.screen.availWidth);
     console.log(window.screen.availHeight);
+
+    // Initialisation de l'agent
+    const fpPromise = FingerprintJS.load();
+
+    // Obtenir l'identifiant du visiteur
+    fpPromise
+    .then(fp => fp.get())
+    .then(result => {
+        // Cela contient l'identifiant unique du visiteur :
+        const visitorId = result.visitorId;
+        console.log(visitorId);
+    })
+    .catch(error => {
+        console.error('Erreur lors du chargement de FingerprintJS :', error);
+    });
+
+
 }
+
+/*<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+<script>
+  function onSignIn(googleUser) {
+    var profile = googleUser.getBasicProfile();
+    var userId = profile.getId();
+    var userName = profile.getName();
+    alert('ID: ' + userId);
+    alert('Name: ' + userName);
+  }
+</script>*/
