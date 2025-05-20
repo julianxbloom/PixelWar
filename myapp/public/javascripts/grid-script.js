@@ -277,7 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function startCountdown(sec) {
-        power.style.transform = rotate ? "rotateY(180deg)":"rotateY(0deg)";
+        power.style.transform = rotate ? "rotateY(0deg)":"rotateY(360deg)";
         rotate = !rotate;
         sec = sec;
         min = Math.floor(sec/60);
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     power.dataset.count = powerBase;
                     power.textContent = power.dataset.count;
-                    power.style.transform = rotate ? "rotateY(180deg)":"rotateY(0deg)";
+                    power.style.transform = rotate ? "rotateY(0deg)":"rotateY(360deg)";
                     rotate = !rotate;
                     clearInterval(countdown);
             }}
