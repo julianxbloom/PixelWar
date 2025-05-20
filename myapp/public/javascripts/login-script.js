@@ -1,5 +1,3 @@
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
-
 document.getElementById("loginButton").onclick = onLoginButtonClick();
 
 function onLoginButtonClick() {
@@ -20,24 +18,26 @@ function onLoginButtonClick() {
     console.log(window.screen.availWidth);
     console.log(window.screen.availHeight);
 
-    // Initialisation de l'agent
-    const fpPromise = FingerprintJS.load();
-
-    // Obtenir l'identifiant du visiteur
-    fpPromise
-    .then(fp => fp.get())
-    .then(result => {
-        // Cela contient l'identifiant unique du visiteur :
-        const visitorId = result.visitorId;
-        console.log(visitorId);
-    })
-    .catch(error => {
-        console.error('Erreur lors du chargement de FingerprintJS :', error);
-    });
-
-
 }
 
+function onGoogleSignIn(response) {
+    // Le token JWT envoyé par Google
+    const id_token = response.credential;
+    // Envoie le token à ton serveur pour vérification
+    fetch('/login/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_token })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success) {
+            window.location.href = '/';
+        } else {
+            alert('Erreur de connexion Google');
+        }
+    });
+}
 /*<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <div class="g-signin2" data-onsuccess="onSignIn"></div>
