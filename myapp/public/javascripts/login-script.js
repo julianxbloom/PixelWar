@@ -1,6 +1,11 @@
 document.getElementById("loginButton").onclick = onLoginButtonClick();
 
 function onLoginButtonClick() {
+    FingerprintJS.load().then(fingerprint => {
+    fingerprint.get().then(result => {
+        console.log(result.visitorId); // L'ID unique
+    });
+    });
     const pseudo = document.getElementById('pseudo').value;
     const CurrentClass = document.getElementById('CurrentClass').value;
     console.log(pseudo);
