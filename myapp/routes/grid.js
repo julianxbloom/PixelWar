@@ -4,7 +4,7 @@ var mysql = require('mysql2');
 const { getCookie } = require('../public/javascripts/cookieUtils'); 
 let io;
 let powerBase = 7;
-let delay = 60;
+let delay = 5;
 let user = {pseudo: null, power: null, time : null};
 
 // Database connection & creation

@@ -3,7 +3,7 @@ link.type = 'text/css';
 link.rel = 'stylesheet';
 
 let powerBase =  7;
-let delay = 60;
+let delay = 5;
 
 //Pour la bdd
 
@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const power = document.getElementById('containerTopPower');
     power.textContent = power.dataset.count;
+    var rotate = false;
 
     if (power.dataset.count <= 0){
         startCountdown(delay-Math.round(power.dataset.time/1000));
@@ -276,6 +277,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function startCountdown(sec) {
+        power.style.transform = rotate ? "rotateY(180deg)":"rotateY(0deg)";
+        rotate = !rotate;
         sec = sec;
         min = Math.floor(sec/60);
         sec = sec%60;
