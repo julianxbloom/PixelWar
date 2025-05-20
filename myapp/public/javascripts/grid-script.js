@@ -3,6 +3,7 @@ link.type = 'text/css';
 link.rel = 'stylesheet';
 
 let powerBase =  7;
+let delay = 5;
 
 //Pour la bdd
 
@@ -32,13 +33,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const bubbleRect = bubble.getBoundingClientRect();
 
     const power = document.getElementById('containerTopPower');
+    power.textContent = power.dataset.count;
+    var rotate = false;
 
-    if (power.dataset.count > powerBase){
-        startCountdown(power.dataset.count);
+    if (power.dataset.count <= 0){
+        startCountdown(delay-Math.round(power.dataset.time/1000));
     }
-
-    power.textContent = getCookie("power");
-    let delay = 10;
+    
 
     //socket : 
     const socket = io();
@@ -84,27 +85,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Dessiner un pixel à la position x,y
-    function drawPixel(x, y, color) {
+    function drawPixel(x, y, color, affiche) {
         pixels[y*canvaSize+x].color = color;
         pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
         date = new Date();
-        pixels[y*canvaSize+x].affiche = pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
-        sendPixel(x,y,currentColor,pixels[y*canvaSize+x].affiche);
+        pixels[y*canvaSize+x].affiche = affiche;//pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+        
         draw();
-    }
-
-    function sendPixel(x,y,color,affiche){
-        // Envoi de la couleur au serveur
-        socket.emit('dataPixel', {
-            x: x,
-            y: y,
-            color: color,
-            affiche: affiche});
     }
     
     socket.on('pixelUpdate', (data) => {
         // Mettre à jour la couleur du pixel 
-        drawPixel(data.x,data.y,data.color);
+        drawPixel(data.x,data.y,data.color,data.affiche);
     });
     
     
@@ -179,24 +171,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && +getCookie("power")>0){
-
-                document.cookie =`power=${getCookie("power")-1}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
-                power.textContent = getCookie("power");
-
-                socket.emit('power', {power : power.textContent});
-
-                if (getCookie("power") == 0){
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){
+                date = new Date();
+                socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`});
+                power.dataset.count -= 1;
+                power.textContent = power.dataset.count;
+                if (power.dataset.count < 1){
                     startCountdown(delay);
-
-                    //Obj : envoyer la date dans la bdd, pour que quand se reconnecte, mette 5 pw ou pas
-                    d = Date.now();
-                    socket.emit('time', {time : d});
                 }
-                drawPixel(x,y,currentColor);//Est redraw apres avec le socket.on mais pour qu'il apparaisse direct
-
             }
-
             drawBubble(x,y);
         }
     });
@@ -294,8 +277,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function startCountdown(sec) {
+        power.style.transform = rotate ? "rotateY(0deg)":"rotateY(360deg)";
+        rotate = !rotate;
+        sec = sec;
         min = Math.floor(sec/60);
         sec = sec%60;
+        power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;//Celui de base
+
         const countdown = setInterval(() => {
             sec--;
             if (sec > -1){
@@ -308,8 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     sec = 59;
                     
                 } else {
-                    document.cookie =`power=${5}; path=/; max-age=`+2*60*1000;//2 min pour le cookie
-                    power.textContent = getCookie("power");
+                    power.dataset.count = powerBase;
+                    power.textContent = power.dataset.count;
+                    power.style.transform = rotate ? "rotateY(0deg)":"rotateY(360deg)";
+                    rotate = !rotate;
                     clearInterval(countdown);
             }}
             
