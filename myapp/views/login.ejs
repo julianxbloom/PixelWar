@@ -7,19 +7,14 @@
     <link rel="stylesheet" href="stylesheets/styleLogin.css">
 </head>
 <body>
-    <script>
-        console.log(window.navigator.hardwareConcurrency);
-        console.log(window.navigator.userAgent);
-        console.log(window.navigator.languages);
-        console.log(window.navigator.maxTouchPoints);
-    </script>
+    <script src="javascripts/login-script.js"></script>
     <div class="wrapper">
         <h1>Login</h1>
         <form method="post" action = "/login">
             <div class="inputBox">
                 <input type="text" placeholder="Username" id="pseudo" name = "pseudo" class="inputField" maxlength="15" required>
             </div>
-            <select name="CurrentClass" id="class-select" class = "selectClass">
+            <select name="CurrentClass" id="CurrentClass" class = "selectClass">
                 <option value ="TG01">TG01</option>
                 <option value ="TG02">TG02</option>
                 <option value ="TG03">TG03</option>
@@ -50,7 +45,7 @@
                 <option value ="Autres">Autres</option>
             </select>
             <div class="inputBox">
-                <button type="submit" name = "button" id ="NextPage" class = "inputSubmit">Login</button>
+                <button onclick="onLoginButtonClick();" name = "button" id ="loginButton" class = "inputSubmit">Login</button>
             </div>
                 <div class="controls">
                     <%= Btn %>

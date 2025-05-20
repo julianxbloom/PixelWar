@@ -22,7 +22,6 @@ router.get('/', (req, res) => {
     if (result.length == []){
       return res.render('login',{Btn : "Tu n'es pas connecté"});
     }
-
   });
 });
 
