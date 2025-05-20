@@ -61,7 +61,7 @@ router.post('/', (req, res) => {
 
 router.post('/google', async (req, res) => {
   const { id_token } = req.body;
-  try {
+  //try {
     const ticket = await client.verifyIdToken({
       idToken: id_token,
       audience: CLIENT_ID,
@@ -70,7 +70,9 @@ router.post('/google', async (req, res) => {
     const googleId = payload['sub'];
     const username = payload['name'];
 
-    // Vérifie si l'utilisateur existe déjà
+    console.log("Google ID: " + googleId);
+
+    /*// Vérifie si l'utilisateur existe déjà
     con.query('SELECT * FROM user WHERE users = ?', [googleId], (err, result) => {
       if (err) return res.json({ success: false });
       if (result.length === 0) {
@@ -88,7 +90,7 @@ router.post('/google', async (req, res) => {
     });
   } catch (e) {
     return res.json({ success: false });
-  }
+  }*/
 });
 
 module.exports = router;
