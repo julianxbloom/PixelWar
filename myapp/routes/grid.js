@@ -30,6 +30,7 @@ function setSocketIo(socketIo) {
 
           const t = user.time;
           const d = Date.now();
+
           if(d - t > 1000*delay){
             user.power = powerBase;
             sql = 'UPDATE user SET power = ? WHERE user = ?';
@@ -49,7 +50,7 @@ function setSocketIo(socketIo) {
             console.error('Erreur lors de la mise à jour du power :', err);
             return;
           }
-        })
+        });
 
         user.power -=1;
 
@@ -62,7 +63,6 @@ function setSocketIo(socketIo) {
               return;
             }
             user.time = Date.now();
-            console.log(Date.now());
           })
         } 
 
@@ -125,7 +125,7 @@ router.get('/', function(req, res, next) {
 
         }
 
-        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : result[0].time });
+        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : Date.now() - user.time });
       });
 
     });

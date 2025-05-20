@@ -36,8 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     power.textContent = power.dataset.count;
 
     if (power.dataset.count <= 0){
-        console.log("datenow",Date.now()," time",power.dataset.time, "delat = ",Math.floor(Date.now() - power.dataset.time)/1000);
-        startCountdown(delay - Math.floor(Date.now() - power.dataset.time)/1000);
+        startCountdown(delay-Math.round(power.dataset.time/1000));
     }
     
 
