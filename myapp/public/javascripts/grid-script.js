@@ -298,6 +298,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     power.dataset.count = powerBase;
                     power.textContent = power.dataset.count;
+                    power.style.transform = rotate ? "rotateY(180deg)":"rotateY(0deg)";
+                    rotate = !rotate;
                     clearInterval(countdown);
             }}
             
