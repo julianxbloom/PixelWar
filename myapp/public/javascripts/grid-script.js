@@ -3,7 +3,7 @@ link.type = 'text/css';
 link.rel = 'stylesheet';
 
 let powerBase =  7;
-let delay = 10;
+let delay = 60;
 
 //Pour la bdd
 
