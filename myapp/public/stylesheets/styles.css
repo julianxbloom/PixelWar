@@ -59,6 +59,7 @@ body {
     left : 50%;
     top : -60px;
     transform: translate(-50%);
+    background-color: black;
     border-style: solid;
     pointer-events: none;
     height : 50px; 
