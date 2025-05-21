@@ -19,13 +19,14 @@ var con = mysql.createPool({
 });
 
 router.get('/', (req, res) => {
-    return res.render('google');
+    return res.render('google',{info:""});
 });
 
 router.post('/', async (req, res) => {
     console.log("Google login attempt");
     const { id_token } = req.body;
-    try {
+    console.log("ID token: " + id_token);
+    //try {
       const ticket = await client.verifyIdToken({
         idToken: id_token,
         audience: CLIENT_ID,
@@ -36,12 +37,16 @@ router.post('/', async (req, res) => {
       console.log("Google ID: " + googleId);
   
       // Vérifie si l'utilisateur existe déjà
-      con.query('SELECT * FROM user WHERE id = ?', [googleId], (err, result) => {
-        if (err) return res.json({ success: false });
-        if (result.length === 0) {
+      con.query('SELECT * FROM user WHERE googleId = ?', [googleId], (err, result) => {
+        if (err) {
+          console.log("Erreur de connexion à la base de données",err);
+          return res.json({ success: false })};
+        if (result.length == 0) {
           // Crée un nouvel utilisateur
-          con.query('INSERT INTO user (id,users, power, time) VALUES (?, ?, ?)', [googleId,null, 7, null], (err2) => {
-            if (err2) return res.json({ success: false });
+          con.query('INSERT INTO user (googleId,users, power, time) VALUES (?, ?, ?, ?)', [googleId,null, 7, null], (err2) => {
+            if (err2) {
+              console.log("Erreur de connexion à la base de données", err2);
+              return res.json({ success: false })};
             res.cookie("id", googleId, { path: '/', maxAge: 2*60*1000, httpOnly: false });
             return res.json({ success: true });
           });
@@ -51,9 +56,9 @@ router.post('/', async (req, res) => {
           return res.json({ success: true });
         }
       });
-    } catch (e) {
+    /*} catch (e) {
       return res.json({ success: false });
-    }
+    }*/
 });
 
 module.exports = router;

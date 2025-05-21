@@ -19,6 +19,7 @@ con.connect(function(err) {
   console.log("Connected!");
   var user_creation = `CREATE TABLE IF NOT EXISTS user(
     id INT AUTO_INCREMENT,
+    googleId VARCHAR(100) NOT NULL,
     users VARCHAR(100) DEFAULT 'nobody',
     power INT DEFAULT 5,
     time VARCHAR(100) DEFAULT 'none',
