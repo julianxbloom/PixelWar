@@ -21,17 +21,7 @@ var con = mysql.createPool({
 });
 
 router.get('/', (req, res) => {
-  const username = getCookie("username", req);
-  console.log("Cookie username :", username);
-  return res.render('login',{Btn : "Tu n'es pas connecté"});
-
-  // A remettre plus tard
-  /*con.query("SELECT * FROM user WHERE users = ?", [username], function(err, result) {
-    if (err) throw err;
-    if (result.length == []){
-      return res.render('login',{Btn : "Tu n'es pas connecté"});
-    }
-  });*/
+  return res.render('login');
 });
 
 // POST request 
@@ -43,13 +33,13 @@ router.post('/', (req, res) => {
 
   res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
 
-  con.query("SELECT power FROM user WHERE users = ?", [id], function(err, result) {
+  con.query("SELECT power FROM user WHERE id = ? AND users = ?", [id,pseudo], function(err, result) {
   if (err) throw err;
   if (result.length != []){
     return res.redirect('/');
   }
   else {
-    con.query('INSERT INTO user (users,power,time) VALUES (?,?,?)', [id, 7, null], function(err,result) {
+    con.query('UPDATE INTO user (users) VALUES (?)', [pseudo], function(err,result) {
       if (err) throw err;
       return res.redirect('/');
     });

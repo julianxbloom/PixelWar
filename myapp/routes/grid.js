@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql2');
 const { getCookie } = require('../public/javascripts/cookieUtils'); 
+const { get } = require('./google');
 let io;
 let powerBase = 7;
 let delay = 5;
@@ -84,9 +85,21 @@ function setSocketIo(socketIo) {
 
 // Vérification du cookie de l'utilisateur
 router.get('/', function(req, res, next) {
+  const user = getCookie("username", req);
+  const id = getCookie("id", req);
 
-  if (getCookie("username", req) != null) {
-    const sql = 'SELECT x,y,color,affiche FROM pixels';
+  if (user != null && id != null) {
+    // Vérification de l'existence de l'utilisateur dans la base de données
+    const sql = 'SELECT * FROM user WHERE users = ? AND id = ?';
+    con.query(sql, [user, id], (err, result) => {
+      if (err) {
+        return res.status(500).send('Erreur serveur');
+      }
+      if (result.length == 0) {
+        return res.redirect('/google');
+      }
+    
+    sql = 'SELECT x,y,color,affiche FROM pixels';
     con.query(sql, (err, results) => {
       if (err) {
         return res.status(500).send('Erreur serveur');

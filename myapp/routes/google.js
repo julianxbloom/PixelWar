@@ -36,11 +36,11 @@ router.post('/', async (req, res) => {
       console.log("Google ID: " + googleId);
   
       // Vérifie si l'utilisateur existe déjà
-      con.query('SELECT * FROM user WHERE users = ?', [googleId], (err, result) => {
+      con.query('SELECT * FROM user WHERE id = ?', [googleId], (err, result) => {
         if (err) return res.json({ success: false });
         if (result.length === 0) {
           // Crée un nouvel utilisateur
-          con.query('INSERT INTO user (users, power, time) VALUES (?, ?, ?)', [googleId, 7, null], (err2) => {
+          con.query('INSERT INTO user (id,users, power, time) VALUES (?, ?, ?)', [googleId,null, 7, null], (err2) => {
             if (err2) return res.json({ success: false });
             res.cookie("id", googleId, { path: '/', maxAge: 2*60*1000, httpOnly: false });
             return res.json({ success: true });
