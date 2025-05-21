@@ -77,11 +77,8 @@ function setSocketIo(socketIo) {
             return;
           }
         });
-
       }
-
     });
-
   });
 }
 
@@ -130,7 +127,7 @@ router.get('/', function(req, res, next) {
 
     });
   } else {
-    return res.redirect('/login');
+    return res.redirect('/google');
   }
 });
 

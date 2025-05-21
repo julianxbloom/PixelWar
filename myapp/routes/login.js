@@ -21,78 +21,41 @@ var con = mysql.createPool({
 });
 
 router.get('/', (req, res) => {
-  con.query("SELECT * FROM user WHERE users = ?", [getCookie("username", req)], function(err, result) {
+  const username = getCookie("username", req);
+  console.log("Cookie username :", username);
+  return res.render('login',{Btn : "Tu n'es pas connecté"});
+
+  // A remettre plus tard
+  /*con.query("SELECT * FROM user WHERE users = ?", [username], function(err, result) {
     if (err) throw err;
     if (result.length == []){
       return res.render('login',{Btn : "Tu n'es pas connecté"});
     }
-  });
+  });*/
 });
 
-
-/*// POST request 
+// POST request 
 router.post('/', (req, res) => {
 
   //Verif a faire pour savoir si bon compte
   const pseudo = req.body.pseudo + req.body.CurrentClass;
+  const id = getCookie("id", req);
 
-  if (!getCookie("username",req)){
-    res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
-  }
+  res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
 
-  con.query("SELECT power FROM user WHERE users = ?", [pseudo], function(err, result) {
+  con.query("SELECT power FROM user WHERE users = ?", [id], function(err, result) {
   if (err) throw err;
   if (result.length != []){
-    if(!getCookie("power",req)){
-      res.cookie("power",result[0].power,{path:'/',maxAge:2*60*1000});//le cookie reste 2 min
-    }
     return res.redirect('/');
   }
   else {
-    con.query('INSERT INTO user (users,power,time) VALUES (?,?,?)', [pseudo, 7, null], function(err,result) {
+    con.query('INSERT INTO user (users,power,time) VALUES (?,?,?)', [id, 7, null], function(err,result) {
       if (err) throw err;
       return res.redirect('/');
     });
   }
   });
-
   //res.render('login',{Btn : "Wrong pseudo,Retry"});
-
-});*/
-
-router.post('/google', async (req, res) => {
-  console.log("Google login attempt");
-  const { id_token } = req.body;
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken: id_token,
-      audience: CLIENT_ID,
-    });
-    const payload = ticket.getPayload();
-    const googleId = payload['sub'];
-    const username = payload['name'];
-
-    console.log("Google ID: " + googleId);
-
-    // Vérifie si l'utilisateur existe déjà
-    con.query('SELECT * FROM user WHERE users = ?', [googleId], (err, result) => {
-      if (err) return res.json({ success: false });
-      if (result.length === 0) {
-        // Crée un nouvel utilisateur
-        con.query('INSERT INTO user (users, power, time) VALUES (?, ?, ?)', [googleId, 7, null], (err2) => {
-          if (err2) return res.json({ success: false });
-          res.cookie("username", googleId, { path: '/', maxAge: 2*60*1000 });
-          return res.json({ success: true });
-        });
-      } else {
-        // Utilisateur déjà existant
-        res.cookie("username", googleId, { path: '/', maxAge: 2*60*1000 });
-        return res.json({ success: true });
-      }
-    });
-  } catch (e) {
-    return res.json({ success: false });
-  }
 });
 
 module.exports = router;
