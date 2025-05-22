@@ -98,7 +98,7 @@ router.get('/', function(req, res, next) {
       if (result.length == 0) {
         return res.redirect('/google');
       }
-    
+    });
     sql = 'SELECT x,y,color,affiche FROM pixels';
     con.query(sql, (err, results) => {
       if (err) {
