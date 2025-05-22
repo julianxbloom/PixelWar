@@ -87,9 +87,9 @@ function setSocketIo(socketIo) {
 router.get('/', function(req, res, next) {
   const user = getCookie("username", req);
   const id = getCookie("id", req);
-  user.id = id;
 
   if (user != null && id != null) {
+    user.id = id;
     // Vérification de l'existence de l'utilisateur dans la base de données
     const sql = 'SELECT * FROM user WHERE users = ? AND googleId = ?';
     con.query(sql, [user, id], (err, result) => {
@@ -99,6 +99,7 @@ router.get('/', function(req, res, next) {
       if (result.length == 0) {
         return res.redirect('/google');
       }
+    });
     
     sql = 'SELECT x,y,color,affiche FROM pixels';
     con.query(sql, (err, results) => {
