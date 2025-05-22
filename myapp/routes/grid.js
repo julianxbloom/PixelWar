@@ -136,7 +136,7 @@ router.get('/', function(req, res, next) {
 
         }
 
-        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : Date.now() - user.time });
+        return res.render('grid', { pseudo: user, pixels: results, power: user.power, time : Date.now() - user.time });
       });
 
     });
