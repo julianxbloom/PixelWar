@@ -101,8 +101,7 @@ router.get('/', function(req, res, next) {
       }
     });
     
-    sql = 'SELECT x,y,color,affiche FROM pixels';
-    con.query(sql, (err, results) => {
+    con.query('SELECT x,y,color,affiche FROM pixels', (err, results) => {
       if (err) {
         return res.status(500).send('Erreur serveur');
       }

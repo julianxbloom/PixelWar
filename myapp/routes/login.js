@@ -24,26 +24,27 @@ router.post('/', (req, res) => {
   const pseudo = req.body.pseudo + req.body.CurrentClass;
   const id = getCookie("id", req);
 
-  res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
-
-  con.query("SELECT id,users FROM user WHERE id = ?", [id], function(err, result) {
+  con.query("SELECT googleId,users FROM user WHERE googleId = ?", [id], function(err, result) {
   if (err) throw err;
   if (result.length != []){
+    console.log("Resultat de la requete : " + result[0].users);
     if (result[0].users != null && result[0].users == pseudo){
+      res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
       return res.redirect('/');
     }
-    else if(result[0].users != pseudo){
-      return res.render('/login');//,{Btn : "Mauvais pseudo"});
+    else if(result[0].users != pseudo && result[0].users != null){
+      return res.render('login');//,{Btn : "Mauvais pseudo"});
     }
     else {
-      con.query('UPDATE INTO user (users) VALUES (?)', [pseudo], function(err,result) {
+      con.query('UPDATE user SET users=? WHERE googleId = ?', [pseudo,id], function(err,result) {
         if (err) throw err;
+        res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
         return res.redirect('/');
       });
     }
   }
   });
-  res.render('login');//,{Btn : "No count found"});
+  //return res.render('login');//,{Btn : "No count found"});
 });
 
 module.exports = router;
