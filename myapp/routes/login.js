@@ -33,19 +33,24 @@ router.post('/', (req, res) => {
 
   res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
 
-  con.query("SELECT power FROM user WHERE id = ? AND users = ?", [id,pseudo], function(err, result) {
+  con.query("SELECT id,users FROM user WHERE id = ?", [id], function(err, result) {
   if (err) throw err;
   if (result.length != []){
-    return res.redirect('/');
-  }
-  else {
-    con.query('UPDATE INTO user (users) VALUES (?)', [pseudo], function(err,result) {
-      if (err) throw err;
+    if (result[0].users != null && result[0].users == pseudo){
       return res.redirect('/');
-    });
+    }
+    else if(result[0].users != pseudo){
+      return res.render('/login',{Btn : "Mauvais pseudo"});
+    }
+    else {
+      con.query('UPDATE INTO user (users) VALUES (?)', [pseudo], function(err,result) {
+        if (err) throw err;
+        return res.redirect('/');
+      });
+    }
   }
   });
-  //res.render('login',{Btn : "Wrong pseudo,Retry"});
+  res.render('login',{Btn : "No count found"});
 });
 
 module.exports = router;

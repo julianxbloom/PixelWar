@@ -6,7 +6,7 @@ const { get } = require('./google');
 let io;
 let powerBase = 7;
 let delay = 5;
-let user = {pseudo: null, power: null, time : null};
+let user = {pseudo: null,id:null, power: null, time : null};
 
 // Database connection & creation
 var con = mysql.createPool({
@@ -34,8 +34,8 @@ function setSocketIo(socketIo) {
 
           if(d - t > 1000*delay){
             user.power = powerBase;
-            sql = 'UPDATE user SET power = ? WHERE user = ?';
-            con.query(sql,[user.power,user.pseudo], (err,result) =>{
+            sql = 'UPDATE user SET power = ? WHERE googleId = ?';
+            con.query(sql,[user.power,user.id], (err,result) =>{
               if (err){
                 return err;
               }
@@ -45,8 +45,8 @@ function setSocketIo(socketIo) {
 
       // Mettre à jour la couleur du pixel 
       if (user.power > 0){
-        sql = 'UPDATE user SET power = ? WHERE users = ?'
-        con.query(sql, [user.power-1,user.pseudo], (err,result) => {
+        sql = 'UPDATE user SET power = ? WHERE googleId = ?'
+        con.query(sql, [user.power-1,user.id], (err,result) => {
           if (err) {
             console.error('Erreur lors de la mise à jour du power :', err);
             return;
@@ -57,8 +57,8 @@ function setSocketIo(socketIo) {
 
         //Set time
         if (user.power == 0){
-          sql = 'UPDATE user SET time = ? WHERE users = ?'
-          con.query(sql, [Date.now(),user.pseudo], (err,result) => {
+          sql = 'UPDATE user SET time = ? WHERE googleId = ?'
+          con.query(sql, [Date.now(),user.id], (err,result) => {
             if (err) {
               console.error('Erreur lors de la mise à jour du time :', err);
               return;
@@ -87,10 +87,11 @@ function setSocketIo(socketIo) {
 router.get('/', function(req, res, next) {
   const user = getCookie("username", req);
   const id = getCookie("id", req);
+  user.id = id;
 
   if (user != null && id != null) {
     // Vérification de l'existence de l'utilisateur dans la base de données
-    const sql = 'SELECT * FROM user WHERE users = ? AND id = ?';
+    const sql = 'SELECT * FROM user WHERE users = ? AND googleId = ?';
     con.query(sql, [user, id], (err, result) => {
       if (err) {
         return res.status(500).send('Erreur serveur');
@@ -98,7 +99,7 @@ router.get('/', function(req, res, next) {
       if (result.length == 0) {
         return res.redirect('/google');
       }
-    });
+    
     sql = 'SELECT x,y,color,affiche FROM pixels';
     con.query(sql, (err, results) => {
       if (err) {
@@ -106,7 +107,7 @@ router.get('/', function(req, res, next) {
       }
       user.pseudo = getCookie("username", req);
 
-      con.query('SELECT power,time FROM user WHERE users = ?', [user.pseudo], function(err, result) {
+      con.query('SELECT power,time FROM user WHERE googleId = ?', [user.id], function(err, result) {
         if (err) throw err;
         if (result.length > 0) {
 
@@ -117,8 +118,8 @@ router.get('/', function(req, res, next) {
             const d = Date.now();
             if(d - t > 1000*delay){
               user.power = powerBase;
-              const sql = 'UPDATE user SET power = ? WHERE user = ?';
-              con.query(sql,[user.power,user.pseudo], (err,result) =>{
+              const sql = 'UPDATE user SET power = ? WHERE googleId = ?';
+              con.query(sql,[user.power,user.id], (err,result) =>{
                 if (err){
                   return err;
                 }
