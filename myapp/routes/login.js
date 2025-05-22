@@ -2,13 +2,6 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql2');
 
-// authentification google
-const { OAuth2Client } = require('google-auth-library');
-const CLIENT_ID = '435477578567-5pnm940jdum7dusda7e4vkdh495g08ls.apps.googleusercontent.com'; // client ID Google du projet
-const client = new OAuth2Client(CLIENT_ID);
-
-router.use(express.urlencoded({ extended: true }));
-
 //Cookies pour le nbr de chg qu'un mec peut faire
 const {getCookie} = require('../public/javascripts/cookieUtils');
 
