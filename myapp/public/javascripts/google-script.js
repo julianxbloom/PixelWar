@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded',() =>{
+    const bg = document.getElementById('bgGoogle');
+})
+
 function onGoogleSignIn(response) {
     // Le token JWT envoyé par Google
     const id_token = response.credential;
@@ -11,6 +15,7 @@ function onGoogleSignIn(response) {
     .then(res => res.json())
     .then(data => {
         if(data.success) {
+            
             window.location.href = '/login';
         } else {
             alert('Erreur de connexion Google');

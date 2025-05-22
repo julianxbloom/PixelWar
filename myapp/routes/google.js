@@ -25,7 +25,6 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
     console.log("Google login attempt");
     const { id_token } = req.body;
-    console.log("ID token: " + id_token);
     //try {
       const ticket = await client.verifyIdToken({
         idToken: id_token,
@@ -33,9 +32,7 @@ router.post('/', async (req, res) => {
       });
       const payload = ticket.getPayload();
       const googleId = payload['sub'];
-  
-      console.log("Google ID: " + googleId);
-  
+    
       // Vérifie si l'utilisateur existe déjà
       con.query('SELECT * FROM user WHERE googleId = ?', [googleId], (err, result) => {
         if (err) {

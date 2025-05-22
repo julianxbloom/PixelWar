@@ -14,7 +14,12 @@ var con = mysql.createPool({
 });
 
 router.get('/', (req, res) => {
+  if (getCookie("id", req) != null){
   return res.render('login');
+  }
+  else {
+    return res.redirect('/google');
+  }
 });
 
 // POST request 
@@ -27,7 +32,6 @@ router.post('/', (req, res) => {
   con.query("SELECT googleId,users FROM user WHERE googleId = ?", [id], function(err, result) {
   if (err) throw err;
   if (result.length != []){
-    console.log("Resultat de la requete : " + result[0].users);
     if (result[0].users != null && result[0].users == pseudo){
       res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
       return res.redirect('/');

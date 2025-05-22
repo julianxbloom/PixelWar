@@ -1,0 +1,14 @@
+Done - Login : dire pseudo definitif
+- Google : si deja compte, alors redirige direct vers grid
+- Grid : changer de pseudo
+Done - Login : refuser accès si pas passé par google
+- Login : modifier tt car y va qu'1 fois
+- Styletel : animation de stles.css à mettre dans le styleTel
+- Google : bg + animation
+- Google : bg : slide vers le haut
+- Grid + Bdd : si affiche = alert le mec
+
+- Beautiful : Bootstrap
+
+- Timelapse
+- Webapp
