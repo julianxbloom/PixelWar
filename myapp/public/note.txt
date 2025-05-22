@@ -3,7 +3,7 @@ Done - Login : dire pseudo definitif
 - Grid : changer de pseudo
 Done - Login : refuser accès si pas passé par google
 - Login : modifier tt car y va qu'1 fois
-- Styletel : animation de stles.css à mettre dans le styleTel
+Done - Styletel : animation de stles.css à mettre dans le styleTel
 - Google : transformer le truc google pour que ca soit beau
 - Google : bg + animation
 - Google : bg : slide vers le haut
