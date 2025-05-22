@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
       return res.redirect('/');
     }
     else if(result[0].users != pseudo){
-      return res.render('/login',{Btn : "Mauvais pseudo"});
+      return res.render('/login');//,{Btn : "Mauvais pseudo"});
     }
     else {
       con.query('UPDATE INTO user (users) VALUES (?)', [pseudo], function(err,result) {
@@ -50,7 +50,7 @@ router.post('/', (req, res) => {
     }
   }
   });
-  res.render('login',{Btn : "No count found"});
+  res.render('login');//,{Btn : "No count found"});
 });
 
 module.exports = router;
