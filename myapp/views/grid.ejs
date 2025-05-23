@@ -9,6 +9,7 @@
     // Les données sont injectées par le serveur
     const pixelsBdd = <%- JSON.stringify(pixels) %>;
     const popup = <%- JSON.stringify(popup) %>;
+    const pseudo = <%- JSON.stringify(pseudo) %>;
     </script>
 
 </head>
@@ -16,8 +17,8 @@
     <div class="background", id='bgGoogle'></div>
     <div class = "containerTop">
         <div class="containerTopTittle">
-            <h1>Pixel War</h1>
-            <div id="pseudo" data-message="<%= pseudo %>"><%= pseudo %></div>
+            <h1>Prochain raid :</h1>
+            <h2 id="nextRaid"> <%= nextRaid %></h2>
         </div>
         <div class="animation" id="animation">
             <div class=containerTopPower data-count = <%= power %> data-time = <%= time%> id ="containerTopPower"></div>
