@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){
                 date = new Date();
-                socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`});
+                socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
                 power.dataset.count -= 1;
                 power.textContent = power.dataset.count;
                 if (power.dataset.count < 1){

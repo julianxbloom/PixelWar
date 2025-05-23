@@ -1,10 +1,8 @@
 - Google : si deja compte, alors redirige direct vers grid
 - Grid : changer de pseudo
+- Grid : regler barre pour chrono
 - Login : modifier tt car y va qu'1 fois
-Mettre animation sur grid et pas login
 - Google : transformer le truc google pour que ca soit beau
-- Google : bg + animation
-- Google : bg : slide vers le haut
 - Grid + Bdd : si affiche = alert le mec
 
 - Beautiful : Bootstrap

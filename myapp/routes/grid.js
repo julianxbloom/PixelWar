@@ -90,6 +90,7 @@ router.get('/', function(req, res, next) {
 
   if (username != null && id != null) {
     user.id = id;
+    user.pseudo = username;
     // Vérification de l'existence de l'utilisateur dans la base de données
     const sql = 'SELECT power,time FROM user WHERE users = ? AND googleId = ?';
     con.query(sql, [username, id], (err, result) => {
@@ -100,8 +101,6 @@ router.get('/', function(req, res, next) {
         return res.redirect('/google');
       }
       else{
-      user.pseudo = getCookie("username", req);
-      user.id = getCookie("id", req);
       con.query('SELECT x,y,color,affiche FROM pixels', (err, results) => {
         if (err) {
         return res.status(500).send('Erreur serveur');}
@@ -128,7 +127,7 @@ router.get('/', function(req, res, next) {
           user.power = result[0].power;
         }
 
-        return res.render('grid', { pseudo: user, pixels: results, power: user.power, time : Date.now() - user.time });
+        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : Date.now() - user.time });
           });  
         }
       });
