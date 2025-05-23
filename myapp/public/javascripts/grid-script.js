@@ -187,6 +187,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     startCountdown(delay);
                 }
             }
+        }
+        else{
             drawBubble(x,y);
         }
     });
@@ -242,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
             offsetY = e.touches[0].clientY - (e.touches[0].clientY - offsetY) * zoomdiff;
 
             draw();
-
         }
 
         else{
@@ -284,7 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function startCountdown(sec) {
-        console.log("Animation ?");
         power.style.transform = rotate ? "rotateY(0deg)":"rotateY(360deg)";
         rotate = !rotate;
         sec = sec;

@@ -1,6 +1,5 @@
 - Grid : changer de pseudo
-- Grid : regler barre pour chrono
-- Style.css : mettre dans styleTel.css
+- Grid : clic droit ou long clic = drawBubble
 - Login : modifier tt car y va qu'1 fois (fini ?)
 - Google : transformer le truc google pour que ca soit beau
 - Grid + Bdd : si affiche = alert le mec
