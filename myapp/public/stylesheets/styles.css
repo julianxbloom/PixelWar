@@ -147,7 +147,7 @@ canvas {
     border-radius: 25px;
     display: flex;
     background-color: #000000;
-    border: 10px solid #000000;
+    border: 7px solid #000000;
     height:120px;
     overflow: hidden; /* Empêche la grille de dépasser */
 }

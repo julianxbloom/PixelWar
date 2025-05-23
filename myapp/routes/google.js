@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
           return res.json({ success: false })};
         if (result.length == 0) {
           // Crée un nouvel utilisateur
-          con.query('INSERT INTO user (googleId,users, power, time) VALUES (?, ?, ?, ?)', [googleId,null, 7, null], (err2) => {
+          con.query('INSERT INTO user (googleId,users, power, time,popup) VALUES (?, ?, ?, ?,?)', [googleId,null, 7, null,null], (err2) => {
             if (err2) {
               console.log("Erreur de connexion à la base de données", err2);
               return res.json({ success: false })};

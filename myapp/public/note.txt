@@ -1,9 +1,8 @@
 - Pop-up : raid / h
-
+- Login : user unique
 - Grid : clic droit ou long clic = drawBubble
 - Login : modifier tt car y va qu'1 fois (fini ?)
 - Google : transformer le truc google pour que ca soit beau
-- Grid + Bdd : si affiche = alert le mec
 
 - Beautiful : Bootstrap
 - Tuto 

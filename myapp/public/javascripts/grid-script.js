@@ -29,12 +29,21 @@ function getCookie(name) {
 //-----------------------------------Animation-----------------------------------
 const bgslide = document.getElementById('bgGoogle');
 window.addEventListener('load', function() {
-    bgslide.classList.add('slide-up');
+    requestAnimationFrame(() => {
+        // Petite attente pour garantir le repaint
+        setTimeout(() => {
+            if (popup != null) {
+                alert(popup);
+            }
+            bgslide.classList.add('slide-up');
+        }, 50); // 50ms suffisent généralement
+    });
+
 });
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    alert('test'); 
+
     const colorGrid = document.getElementById('color-grid');
     const pseudo = document.getElementById('pseudo').dataset.message;
     const bubble = document.getElementById('bubble');

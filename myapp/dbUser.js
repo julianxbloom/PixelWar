@@ -23,6 +23,7 @@ con.connect(function(err) {
     users VARCHAR(100) DEFAULT 'nobody',
     power INT DEFAULT 5,
     time VARCHAR(100) DEFAULT 'none',
+    popup TEXT,
     PRIMARY KEY(id)
   )`;
   con.query(user_creation, function(err, result) {
