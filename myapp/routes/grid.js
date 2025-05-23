@@ -6,7 +6,7 @@ const { get } = require('./google');
 let io;
 let powerBase = 7;
 let delay = 5;
-let user = {pseudo: null,id:null, power: null, time : null};
+let user = {pseudo: null,id:null, power: null, time : null, id:null};
 
 // Database connection & creation
 var con = mysql.createPool({
@@ -85,62 +85,55 @@ function setSocketIo(socketIo) {
 
 // Vérification du cookie de l'utilisateur
 router.get('/', function(req, res, next) {
-  const user = getCookie("username", req);
+  const username = getCookie("username", req);
   const id = getCookie("id", req);
 
-  if (user != null && id != null) {
+  if (username != null && id != null) {
     user.id = id;
     // Vérification de l'existence de l'utilisateur dans la base de données
-    const sql = 'SELECT * FROM user WHERE users = ? AND googleId = ?';
-    con.query(sql, [user, id], (err, result) => {
+    const sql = 'SELECT power,time FROM user WHERE users = ? AND googleId = ?';
+    con.query(sql, [username, id], (err, result) => {
       if (err) {
         return res.status(500).send('Erreur serveur');
       }
       if (result.length == 0) {
         return res.redirect('/google');
       }
-    });
-    
-    con.query('SELECT x,y,color,affiche FROM pixels', (err, results) => {
-      if (err) {
-        return res.status(500).send('Erreur serveur');
-      }
+      else{
       user.pseudo = getCookie("username", req);
+      user.id = getCookie("id", req);
+      con.query('SELECT x,y,color,affiche FROM pixels', (err, results) => {
+        if (err) {
+        return res.status(500).send('Erreur serveur');}
 
-      con.query('SELECT power,time FROM user WHERE googleId = ?', [user.id], function(err, result) {
-        if (err) throw err;
-        if (result.length > 0) {
+        user.time = result[0].time;
 
-          user.time = result[0].time;
-
-          if(result[0].power <= 0){
-            const t = user.time;
-            const d = Date.now();
-            if(d - t > 1000*delay){
-              user.power = powerBase;
-              const sql = 'UPDATE user SET power = ? WHERE googleId = ?';
-              con.query(sql,[user.power,user.id], (err,result) =>{
-                if (err){
-                  return err;
-                }
-              });
-            }
-            else {
-              user.power = 0;
-            }
-          } 
-          else {
-
-            user.power = result[0].power;
+        if(result[0].power <= 0){
+          const t = user.time;
+          const d = Date.now();
+          if(d - t > 1000*delay){
+            user.power = powerBase;
+            const sql = 'UPDATE user SET power = ? WHERE googleId = ?';
+            con.query(sql,[user.power,user.id], (err,result) =>{
+              if (err){
+                return err;
+              }
+            });
           }
-
+          else {
+            user.power = 0;
+          }
+        } 
+        else {
+          user.power = result[0].power;
         }
 
         return res.render('grid', { pseudo: user, pixels: results, power: user.power, time : Date.now() - user.time });
+          });  
+        }
       });
-
-    });
-  } else {
+  }
+  else {
     return res.redirect('/google');
   }
 });

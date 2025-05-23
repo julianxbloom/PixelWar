@@ -26,6 +26,13 @@ function getCookie(name) {
     return value ? value.split("=")[1] : 0;  // Si le cookie existe, retourne la valeur sinon retourne none
 }
 
+//-----------------------------------Animation-----------------------------------
+const bgslide = document.getElementById('bgGoogle');
+window.addEventListener('load', function() {
+    bgslide.classList.add('slide-up');
+});
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const colorGrid = document.getElementById('color-grid');
     const pseudo = document.getElementById('pseudo').dataset.message;
@@ -277,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function startCountdown(sec) {
+        console.log("Animation ?");
         power.style.transform = rotate ? "rotateY(0deg)":"rotateY(360deg)";
         rotate = !rotate;
         sec = sec;
