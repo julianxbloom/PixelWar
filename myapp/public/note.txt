@@ -1,6 +1,7 @@
 - Google : si deja compte, alors redirige direct vers grid
 - Grid : changer de pseudo
 - Grid : regler barre pour chrono
+- Style.css : mettre dans styleTel.css
 - Login : modifier tt car y va qu'1 fois
 - Google : transformer le truc google pour que ca soit beau
 - Grid + Bdd : si affiche = alert le mec

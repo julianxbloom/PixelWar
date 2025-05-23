@@ -5,6 +5,7 @@ const { getCookie } = require('../public/javascripts/cookieUtils');
 const { get } = require('./google');
 let io;
 let powerBase = 7;
+let gridSize = 40;
 let delay = 5;
 let user = {pseudo: null,id:null, power: null, time : null, id:null};
 
@@ -101,7 +102,7 @@ router.get('/', function(req, res, next) {
         return res.redirect('/google');
       }
       else{
-      con.query('SELECT x,y,color,affiche FROM pixels', (err, results) => {
+      con.query('SELECT x,y,color,affiche FROM pixels WHERE x < ? AND y < ?',[gridSize,gridSize], (err, results) => {
         if (err) {
         return res.status(500).send('Erreur serveur');}
 

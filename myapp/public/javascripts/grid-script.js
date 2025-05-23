@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
 
-    let canvaSize = 150;
+    let canvaSize = 40;
     let pixelSize = 10;
 
     let zoomLevel = 1; // Niveau de zoom initial (1 = taille normale)
