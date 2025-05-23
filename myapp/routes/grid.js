@@ -2,13 +2,17 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql2');
 const { getCookie } = require('../public/javascripts/cookieUtils'); 
-const { get } = require('./google');
+//const { get } = require('./google');
 let io;
 let powerBase = 7;
 let gridSize = 40;
 let delay = 5;
-let user = {pseudo: null,id:null, power: null, time : null, id:null};
 
+// Date for raid
+let d = new Date();
+let raid = d.getHours == 18? "en cours" : d.getHours() < 18 ? "auj à 18h" : "demain à 18h";
+
+let user = {pseudo: null,id:null, power: null, time : null, id:null};
 // Database connection & creation
 var con = mysql.createPool({
   host: "yamanote.proxy.rlwy.net",
@@ -102,6 +106,8 @@ router.get('/', function(req, res, next) {
         return res.redirect('/google');
       }
       else{
+      con.query('UPDATE user SET popup = NULL WHERE googleId = ?', [user.id], (err, result) => {
+        if (err) throw err;});
       con.query('SELECT x,y,color,affiche FROM pixels WHERE x < ? AND y < ?',[gridSize,gridSize], (err, results) => {
         if (err) {
         return res.status(500).send('Erreur serveur');}
@@ -127,8 +133,7 @@ router.get('/', function(req, res, next) {
         else {
           user.power = result[0].power;
         }
-
-        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : Date.now() - user.time, popup:result[0].popup });
+        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : Date.now() - user.time, popup:result[0].popup, nextRaid:raid});
           });  
         }
       });
