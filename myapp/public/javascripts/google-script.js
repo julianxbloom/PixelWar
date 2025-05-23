@@ -21,7 +21,7 @@ function onGoogleSignIn(response) {
 
 window.onload = function() {
     google.accounts.id.initialize({
-        client_id: "714399815345-82uoa35gchtskh6o0q0gq0e04a886ubs.apps.googleusercontent.com",
+        client_id: "435477578567-5pnm940jdum7dusda7e4vkdh495g08ls.apps.googleusercontent.com",
         callback: onGoogleSignIn
     });
 
