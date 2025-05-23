@@ -18,3 +18,15 @@ function onGoogleSignIn(response) {
         }
     });
 }
+
+window.onload = function() {
+    google.accounts.id.initialize({
+        client_id: "714399815345-82uoa35gchtskh6o0q0gq0e04a886ubs.apps.googleusercontent.com",
+        callback: onGoogleSignIn
+    });
+
+    document.getElementById('googleBtn').onclick = function() {
+        console.log("Google button clicked");
+        google.accounts.id.prompt(); // Ouvre la popup Google
+    };
+};
