@@ -34,7 +34,7 @@ window.addEventListener('load', function() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    //alert('test'); a faire !
+    alert('test'); 
     const colorGrid = document.getElementById('color-grid');
     const pseudo = document.getElementById('pseudo').dataset.message;
     const bubble = document.getElementById('bubble');
