@@ -1,10 +1,13 @@
-- Grid : changer de pseudo
+- Pop-up : raid / h
+
 - Grid : clic droit ou long clic = drawBubble
 - Login : modifier tt car y va qu'1 fois (fini ?)
 - Google : transformer le truc google pour que ca soit beau
 - Grid + Bdd : si affiche = alert le mec
 
 - Beautiful : Bootstrap
+- Tuto 
+- Grid : changer de pseudo (pas obligé)
 
 - Timelapse
-- Webapp
+- Webapp (nop)
