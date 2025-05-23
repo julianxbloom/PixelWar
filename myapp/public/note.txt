@@ -3,7 +3,7 @@
 - Grid : modifier pour enlever le haut et mettre : raid
 - Grid : clic droit ou long clic = drawBubble
 - Login : modifier tt car y va qu'1 fois (fini ?)
-- Google : transformer le truc google pour que ca soit beau
+- Google : beau fini ?
 - probleme Google
 
 - Beautiful : Bootstrap

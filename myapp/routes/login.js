@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
           return res.redirect('/');
         }
         else {
-          return res.render('login');
+          return res.render('login',{info:"Attention, le pseudo est définitif"});
         }
       }
     });
@@ -41,15 +41,20 @@ router.post('/', (req, res) => {
   const pseudo = req.body.pseudo + req.body.CurrentClass;
   const id = getCookie("id", req);
 
+  con.query("SELECT users FROM user WHERE users = ?", [pseudo], function(err, result) {
+    if (err) throw err;
+    if (result.length > 0){
+      return res.render('login',{info:"Pseudo déjà utilisé"});//,{Btn : "Pseudo déjà utilisé"});
+    }
+  }
+  );
+
   con.query("SELECT googleId,users FROM user WHERE googleId = ?", [id], function(err, result) {
   if (err) throw err;
   if (result.length != []){
     if (result[0].users != null && result[0].users == pseudo){
       res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
       return res.redirect('/');
-    }
-    else if(result[0].users != pseudo && result[0].users != null){
-      return res.render('login');//,{Btn : "Mauvais pseudo"});
     }
     else {
       con.query('UPDATE user SET users=? WHERE googleId = ?', [pseudo,id], function(err,result) {

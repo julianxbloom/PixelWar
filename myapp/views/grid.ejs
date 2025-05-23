@@ -20,9 +20,7 @@
             <h1>Prochain raid :</h1>
             <h2 id="nextRaid"> <%= nextRaid %></h2>
         </div>
-        <div class="animation" id="animation">
-            <div class=containerTopPower data-count = <%= power %> data-time = <%= time%> id ="containerTopPower"></div>
-        </div>
+
     </div>
 
     <div class="container" id = 'container'>
@@ -32,6 +30,9 @@
         <div class="containerBottom">
             <div class="color-grid" id="color-grid"></div>
         </div>  
+        <div class="animation" id="animation">
+            <div class=containerTopPower data-count = <%= power %> data-time = <%= time%> id ="containerTopPower"></div>
+        </div>
         <a href="/utils">Crédit</a>
     </div>
     <script src="javascripts/grid-script.js"></script>
