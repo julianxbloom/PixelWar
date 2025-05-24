@@ -90,6 +90,14 @@ function setSocketIo(socketIo) {
 
 // Vérification du cookie de l'utilisateur
 router.get('/', function(req, res, next) {
+
+
+  con.query('SELECT maintenance FROM global WHERE id = 1', (err, result) => {
+    if (err) throw err;
+    if (result.length > 0 && result[0].maintenance) {
+      return res.redirect('/waiting');
+    } });
+
   const username = getCookie("username", req);
   const id = getCookie("id", req);
 

@@ -10,6 +10,7 @@ var gridRouter = require('./routes/grid').router;
 var loginRouter = require('./routes/login');
 var creditRouter = require('./routes/credits');
 var googleRouter = require('./routes/google');
+var waitingRouter = require('./routes/waiting');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/credits', creditRouter);
 app.use('/google', googleRouter);
+app.use('/waiting', waitingRouter);
 
 
 // catch 404 and forward to error handler

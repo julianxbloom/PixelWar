@@ -1,12 +1,12 @@
-- Pop-up : raid / h
+- Raid : modifier grid
+- Grid : si avant date = met page
+- Grid : taule ajouter : Welcome to Pixel War
 - Login : user unique
-- Grid : modifier pour enlever le haut et mettre : raid
 - Grid : clic droit ou long clic = drawBubble
-- Login : modifier tt car y va qu'1 fois (fini ?)
-- Google : transformer le truc google pour que ca soit beau
 
 - Beautiful : Bootstrap
 - Tuto 
+- Plus classe mais groupe que peux creer
 - Grid : changer de pseudo (pas obligé)
 
 - Timelapse
