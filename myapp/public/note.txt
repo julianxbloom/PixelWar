@@ -3,6 +3,8 @@
 - Grid : taule ajouter : Welcome to Pixel War
 - Login : user unique
 - Grid : clic droit ou long clic = drawBubble
+- Login : modifier tt car y va qu'1 fois (fini ?)
+- Google : transformer le truc google pour que ca soit beau
 
 - Beautiful : Bootstrap
 - Tuto 

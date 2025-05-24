@@ -8,7 +8,7 @@ var logger = require('morgan');
 var usersRouter = require('./routes/users');
 var gridRouter = require('./routes/grid').router;
 var loginRouter = require('./routes/login');
-var creditRouter = require('./routes/credits');
+var utilsRouter = require('./routes/utils');
 var googleRouter = require('./routes/google');
 var waitingRouter = require('./routes/waiting');
 
@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', gridRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
-app.use('/credits', creditRouter);
+app.use('/utils', utilsRouter);
 app.use('/google', googleRouter);
 app.use('/waiting', waitingRouter);
 

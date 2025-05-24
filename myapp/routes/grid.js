@@ -100,7 +100,7 @@ router.get('/', function(req, res, next) {
 
   const username = getCookie("username", req);
   const id = getCookie("id", req);
-
+  
   if (username != null && id != null) {
     user.id = id;
     user.pseudo = username;
