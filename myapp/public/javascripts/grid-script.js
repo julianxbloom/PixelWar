@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
 
-    const power = document.getElementById('containerTopPower');
+    const power = document.getElementById('containerPower');
     power.textContent = power.dataset.count;
     var rotate = false;
 
