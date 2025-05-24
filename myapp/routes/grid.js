@@ -92,8 +92,7 @@ function setSocketIo(socketIo) {
 router.get('/', function(req, res, next) {
   const username = getCookie("username", req);
   const id = getCookie("id", req);
-  return res.render('grid', { pseudo: username, pixels: [], power: 0, time : 0, popup:null, nextRaid:raid});
-
+  
   if (username != null && id != null) {
     user.id = id;
     user.pseudo = username;
