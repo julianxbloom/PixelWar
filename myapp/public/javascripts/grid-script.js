@@ -256,8 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
         bubble.style.opacity = 0;
 
         const rect = canvas.getBoundingClientRect();
-        const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
-        const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
+        const x = Math.floor((e.changedTouches[0].clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
+        const y = Math.floor((e.changedTouches[0].clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){
