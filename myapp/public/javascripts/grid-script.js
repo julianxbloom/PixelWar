@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', (e) => {
          
         startTime = Date.now();
-
+        const touch = e.touches[0];
         //Draw bubble après 0.5second
         const rect = canvas.getBoundingClientRect();
         const x = Math.floor((touch.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
