@@ -12,7 +12,7 @@
         <h1>Login</h1>
         <form method="post" action = "/login">
             <div class="inputBox">
-                <input type="text" placeholder="Username" id="pseudo" name = "pseudo" class="inputField" maxlength="15" required>
+                <input type="text" placeholder="Username" id="pseudo" name = "pseudo" class="inputField" maxlength="15" required  >
             </div>
             <select name="CurrentClass" id="CurrentClass" class = "selectClass">
                 <option value ="TG01">TG01</option>
@@ -45,9 +45,9 @@
                 <option value ="Autres">Autres</option>
             </select>
             <div class="inputBox">
-                <button onclick="onLoginButtonClick();" name = "button" id ="loginButton" class = "inputSubmit">Login</button>
+                <button type = "submit" name = "button" id ="loginButton" class = "inputSubmit">Login</button>
             </div>
-            <div><%= info %></div>
+            <div style="color: #000; font-weight: bold; background: #ffffff79; padding: 6px 12px; border-radius: 8px; display: inline-block; margin-top: 10px;"><%= info %></div>
 
         </form>
     </div>

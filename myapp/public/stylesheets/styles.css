@@ -79,6 +79,7 @@ h1 {
 }
 
 canvas {
+    z-index: 0;
     background: rgb(83, 83, 83);
     display: block;
     position : absolute;
@@ -127,12 +128,21 @@ canvas {
 }
 
 .color-grid {
+    z-index : 3;
     overflow: hidden;
     display: grid;
     grid-template-columns: repeat(8, 12.5%);
     grid-template-rows: repeat(2, 50%);
+    
 }
 
+.color {
+    z-index : 3;
+    width: 50px;
+    background-color: #ffffff;
+    cursor: pointer;
+    pointer-events: auto;
+}
 .containerPower{
     content: "5";
     display: flex;
@@ -151,10 +161,12 @@ canvas {
     align-items: center;
 }
 
-.color {
-    width: 50px;
-    background-color: #ffffff;
-    cursor: pointer;
+.color-grid .color{
+    touch-action : manipulation;
+    user-select: auto !important;
+    -webkit-user-select: auto !important;
+    -ms-user-select: auto !important;
+    pointer-events: auto !important;
 }
 
 button {

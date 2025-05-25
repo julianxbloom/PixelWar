@@ -102,8 +102,10 @@ router.get('/', function(req, res, next) {
       return res.redirect('/waiting');
     }
 
+  
   const username = getCookie("username", req);
   const id = getCookie("id", req);
+  console.log(username,id);
   
   if (username != null && id != null) {
     user.id = id;

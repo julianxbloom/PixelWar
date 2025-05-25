@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 router.post('/', async (req, res) => {
     console.log("Google login attempt");
     const { id_token } = req.body;
-    //try {
+    try {
       const ticket = await client.verifyIdToken({
         idToken: id_token,
         audience: CLIENT_ID,
@@ -44,18 +44,20 @@ router.post('/', async (req, res) => {
             if (err2) {
               console.log("Erreur de connexion à la base de données", err2);
               return res.json({ success: false })};
+            console.log("1er cas");
             res.cookie("id", googleId, { path: '/', maxAge: 24*60*60*1000, httpOnly: false });
             return res.json({ success: true });
           });
         } else {
           // Utilisateur déjà existant
+          console.log("2e cas");
           res.cookie("id", googleId, { path: '/', maxAge: 24*60*60*1000, httpOnly: false });
           return res.json({ success: true });
         }
       });
-    /*} catch (e) {
+    } catch (e) {
       return res.json({ success: false });
-    }*/
+    }
 });
 
 module.exports = router;

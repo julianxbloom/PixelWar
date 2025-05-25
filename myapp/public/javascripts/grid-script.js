@@ -147,13 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 Choosecolor = color;
                 Choosecolor.style.border = "0.7vh solid black";
             }
-            color.addEventListener('click', () => {
+            color.addEventListener('click', (e) => {
                 // Set the border style
                 Choosecolor.style.border = "0vh solid black";
                 Choosecolor = color;
                 Choosecolor.style.border = "0.7vh solid black";
                 currentColor = `${color.style.backgroundColor}`;
-            });
+            }, {passive: false});
             colorGrid.appendChild(color);
         }
     }
@@ -189,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });*/
 
     document.addEventListener('mousedown', (e) =>{
+        if (e.target.closest('#color-grid')) return;
         mooveGridBegin(e); 
         startTime = Date.now();
     });
@@ -224,6 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*Pour les tels*/
     document.addEventListener('touchstart', (e) => {
+
+        if (e.target.closest('#color-grid')) return;
         
         e.preventDefault();
          

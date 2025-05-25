@@ -14,6 +14,7 @@ var con = mysql.createPool({
 });
 
 router.get('/', (req, res) => {
+  console.log("Login page request");
   if (getCookie("id", req) != null){
     const id = getCookie("id", req);
     con.query("SELECT users FROM user WHERE googleId = ?", [id], function(err, result) {
@@ -30,6 +31,7 @@ router.get('/', (req, res) => {
     });
   }
   else {
+    console.log("Redirect");
     return res.redirect('/google');
   }
 });
@@ -41,28 +43,33 @@ router.post('/', (req, res) => {
   const pseudo = req.body.pseudo + req.body.CurrentClass;
   const id = getCookie("id", req);
 
+  if (!/^[A-Za-z0-9_-]{1,15}$/.test(req.body.pseudo)) {
+      return res.render('login', {info: "Seul les lettres et les chiffres sont autorisés"});//,{Btn : "Seul les lettres et les chiffres sont autorisés"});
+  }
+
   con.query("SELECT users FROM user WHERE users = ?", [pseudo], function(err, result) {
     if (err) throw err;
     if (result.length > 0){
       return res.render('login',{info:"Pseudo déjà utilisé"});//,{Btn : "Pseudo déjà utilisé"});
     }
-  }
-  );
+    else{
 
-  con.query("SELECT googleId,users FROM user WHERE googleId = ?", [id], function(err, result) {
-  if (err) throw err;
-  if (result.length != []){
-    if (result[0].users != null && result[0].users == pseudo){
-      res.cookie("username",pseudo,{path:'/',maxAge:24*60*60*1000});//le cookie reste 2min
-      return res.redirect('/');
-    }
-    else {
-      con.query('UPDATE user SET users=? WHERE googleId = ?', [pseudo,id], function(err,result) {
-        if (err) throw err;
+    con.query("SELECT googleId,users FROM user WHERE googleId = ?", [id], function(err, result) {
+    if (err) throw err;
+    if (result.length >0){
+      if (result[0].users != null && result[0].users == pseudo){
         res.cookie("username",pseudo,{path:'/',maxAge:24*60*60*1000});//le cookie reste 2min
         return res.redirect('/');
-      });
-    }
+      }
+      else {
+        con.query('UPDATE user SET users=? WHERE googleId = ?', [pseudo,id], function(err,result) {
+          if (err) throw err;
+          res.cookie("username",pseudo,{path:'/',maxAge:24*60*60*1000});//le cookie reste 2min
+          return res.redirect('/');
+        });
+      }
+    }    
+    });
   }
   });
   //return res.render('login');//,{Btn : "No count found"});
