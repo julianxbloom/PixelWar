@@ -44,12 +44,12 @@ router.post('/', async (req, res) => {
             if (err2) {
               console.log("Erreur de connexion à la base de données", err2);
               return res.json({ success: false })};
-            res.cookie("id", googleId, { path: '/', maxAge: 2*60*1000, httpOnly: false });
+            res.cookie("id", googleId, { path: '/', maxAge: 24*60*60*1000, httpOnly: false });
             return res.json({ success: true });
           });
         } else {
           // Utilisateur déjà existant
-          res.cookie("id", googleId, { path: '/', maxAge: 2*60*1000, httpOnly: false });
+          res.cookie("id", googleId, { path: '/', maxAge: 24*60*60*1000, httpOnly: false });
           return res.json({ success: true });
         }
       });

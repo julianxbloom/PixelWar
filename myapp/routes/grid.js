@@ -4,13 +4,16 @@ var mysql = require('mysql2');
 const { getCookie } = require('../public/javascripts/cookieUtils'); 
 //const { get } = require('./google');
 let io;
-let powerBase = 7;
+let powerBase = 5;
+let powerRaid = 3;
 let gridSize = 40;
 let delay = 5;
+let delayRaid = 60*5;
+let dateRaid = 18;
 
 // Date for raid
 let d = new Date();
-let raid = d.getHours == 18? "en cours" : d.getHours() < 18 ? "auj à 18h" : "demain à 18h";
+let raid = d.getHours == dateRaid? "en cours" : d.getHours() < dateRaid ? "auj à 18h" : "demain à 18h";
 
 let user = {pseudo: null,id:null, power: null, time : null, id:null};
 // Database connection & creation
@@ -37,8 +40,9 @@ function setSocketIo(socketIo) {
           const t = user.time;
           const d = Date.now();
 
-          if(d - t > 1000*delay){
-            user.power = powerBase;
+          if(d - t > new Date().getHours==18? 1000*delayRaid:1000*delay){
+            user.power = new Date().getHours()==dateRaid ? user.power = powerRaid: user.power = powerBase;
+            
             sql = 'UPDATE user SET power = ? WHERE googleId = ?';
             con.query(sql,[user.power,user.id], (err,result) =>{
               if (err){
@@ -96,7 +100,7 @@ router.get('/', function(req, res, next) {
     if (err) throw err;
     if (result.length > 0 && result[0].maintenance) {
       return res.redirect('/waiting');
-    } });
+    }
 
   const username = getCookie("username", req);
   const id = getCookie("id", req);
@@ -149,6 +153,7 @@ router.get('/', function(req, res, next) {
   else {
     return res.redirect('/google');
   }
+  });
 });
 
 module.exports = { router, setSocketIo };

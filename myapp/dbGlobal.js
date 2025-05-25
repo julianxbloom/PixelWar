@@ -18,10 +18,11 @@ con.connect(function(err) {
   });
   console.log("Connected!");
   var user_creation = `CREATE TABLE IF NOT EXISTS global(
-    id INT DEFAULT 1,
+    id INT AUTO_INCREMENT,
     maintenance BOOLEAN DEFAULT FALSE,
     mtnTittle VARCHAR(100) DEFAULT 'Debut :',
-    mtnText TEXT
+    mtnText TEXT,
+    PRIMARY KEY(id)
   )`;
   con.query(user_creation, function(err, result) {
     if (err) throw err;

@@ -3,7 +3,10 @@ link.type = 'text/css';
 link.rel = 'stylesheet';
 
 let powerBase =  7;
+let powerRaid = 3;
+let hourRaid = 18;
 let delay = 5;
+let delayRaid = 60*5;
 
 //Pour la bdd
 
@@ -36,11 +39,10 @@ window.addEventListener('load', function() {
                 alert(popup);
             }
             bgslide.classList.add('slide-up');
-        }, 50); // 50ms suffisent généralement
+        }, 1000); // 50ms suffisent généralement
     });
 
 });
-
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -54,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var rotate = false;
 
     if (power.dataset.count <= 0){
-        startCountdown(delay-Math.round(power.dataset.time/1000));
+        startCountdown((new Date().getHours == hourRaid? delayRaid:delay)-Math.round(power.dataset.time/1000));
     }
     
 
@@ -125,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
             offsetY = e.clientY - (e.clientY - offsetY) * 0.9;
             zoomLevel *= 0.9;
         }
-        else if(e.deltaY<0 && zoomLevel < 6){
+        else if(e.deltaY<0 && zoomLevel < 8){
             offsetX = e.clientX - (e.clientX - offsetX) * 1.1;
             offsetY = e.clientY - (e.clientY - offsetY) * 1.1;
             zoomLevel *= 1.1;
@@ -198,9 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        else{
-            drawBubble(x,y);
-        }
     });
 
     document.addEventListener('mousedown', (e) =>{
@@ -220,6 +219,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', (e) => {
          
         startTime = Date.now();
+
+        //Draw bubble après 0.5second
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((touch.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
+        const y = Math.floor((touch.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
+
+        const bubbleTimeout = setTimeout(() => {
+            if (drag){
+            drawBubble(x, y);}
+        }, 500);
         
         if (e.touches.length === 2) {  // Deux doigts
             e.preventDefault();
@@ -235,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     },{passive : false});
 
     document.addEventListener('touchend', (e) => {
+        bubble.style.opacity = 0;
         mooveGridEnd(e.changedTouches[0]);
     });
 
@@ -314,13 +324,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     sec = 59;
                     
                 } else {
-                    power.dataset.count = powerBase;
+                    power.dataset.count = new Date().getHours==hourRaid?powerRaid:powerBase;
                     power.textContent = power.dataset.count;
                     power.style.transform = rotate ? "rotateY(0deg)":"rotateY(360deg)";
                     rotate = !rotate;
                     clearInterval(countdown);
             }}
-            
             }, 1000);
     }
 

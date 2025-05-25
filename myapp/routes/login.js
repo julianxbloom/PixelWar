@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
       if (err) throw err;
       if (result.length >0){
         if (result[0].users != null){
-          res.cookie("username",result[0].users,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
+          res.cookie("username",result[0].users,{path:'/',maxAge:24*60*60*1000});//le cookie reste 2min
           return res.redirect('/');
         }
         else {
@@ -53,13 +53,13 @@ router.post('/', (req, res) => {
   if (err) throw err;
   if (result.length != []){
     if (result[0].users != null && result[0].users == pseudo){
-      res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
+      res.cookie("username",pseudo,{path:'/',maxAge:24*60*60*1000});//le cookie reste 2min
       return res.redirect('/');
     }
     else {
       con.query('UPDATE user SET users=? WHERE googleId = ?', [pseudo,id], function(err,result) {
         if (err) throw err;
-        res.cookie("username",pseudo,{path:'/',maxAge:2*60*1000});//le cookie reste 2min
+        res.cookie("username",pseudo,{path:'/',maxAge:24*60*60*1000});//le cookie reste 2min
         return res.redirect('/');
       });
     }
