@@ -9,25 +9,26 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100dvh;
-    background: url(../images/bgWaiting.png) no-repeat;
+    background: url(../images/bgWaitingTel.png) no-repeat;
     background-size: cover;
     background-position: center;
 }
 
 .box{
-    width: 420px;
-    background :transparent;
-    border:2px solid rgba(255, 255, 255, 0.2);
+    max-width: 500px;
+    background :rgba(0, 0, 0, 0.336);
+    border:10px solid rgba(255, 255, 255, 0.5);
     color : #fff;
-    border-radius : 12px;
+    border-radius : 24px;
     padding : 30px 40px;
+    text-align: center;
 }
 .box h1{
-    font-size: 36px;
+    font-size: 60px;
     text-align: center;
 }
 .box h2{
-    font-size: 24px;
+    font-size: 36px;
     text-align: center;
     margin-bottom: 20px;
 }

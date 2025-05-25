@@ -184,23 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Clic pour dessiner
-    canvas.addEventListener('click', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
-        const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
+    /*canvas.addEventListener('click', (e) => {
 
-        if (Date.now() - startTime< 100){//tes si : click rapide ou + de 200ms
-            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){
-                date = new Date();
-                socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
-                power.dataset.count -= 1;
-                power.textContent = power.dataset.count;
-                if (power.dataset.count < 1){
-                    startCountdown(delay);
-                }
-            }
-        }
-    });
+    });*/
 
     document.addEventListener('mousedown', (e) =>{
         mooveGridBegin(e); 
@@ -213,10 +199,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('mouseup', (e) => {
         mooveGridEnd(e);
+        bubble.style.opacity = 0;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
+        const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
+
+        if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){
+                date = new Date();
+                socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
+                power.dataset.count -= 1;
+                power.textContent = power.dataset.count;
+                if (power.dataset.count < 1){
+                    startCountdown(delay);
+                }
+            }
+        }
+        const bubbleTimeout = setTimeout(() => {
+            if (drag){
+            drawBubble(x, y);}
+        }, 500);
     });
 
     /*Pour les tels*/
     document.addEventListener('touchstart', (e) => {
+        
+        e.preventDefault();
          
         startTime = Date.now();
         const touch = e.touches[0];
@@ -231,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
         
         if (e.touches.length === 2) {  // Deux doigts
-            e.preventDefault();
+            
             const dx = e.touches[0].clientX - e.touches[1].clientX;
             const dy = e.touches[0].clientY - e.touches[1].clientY;
             initDistance = Math.hypot(dx, dy);
@@ -245,6 +254,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('touchend', (e) => {
         bubble.style.opacity = 0;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
+        const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
+
+        if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){
+                date = new Date();
+                socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
+                power.dataset.count -= 1;
+                power.textContent = power.dataset.count;
+                if (power.dataset.count < 1){
+                    startCountdown(delay);
+                }
+            }
+        }
         mooveGridEnd(e.changedTouches[0]);
     });
 
