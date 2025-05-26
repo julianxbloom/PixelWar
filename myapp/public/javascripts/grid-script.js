@@ -4,7 +4,7 @@ link.rel = 'stylesheet';
 
 let powerBase =  7;
 let powerRaid = 3;
-let hourRaid = 18;
+let hourRaid = 21;
 let delay = 5;
 let delayRaid = 60*5;
 

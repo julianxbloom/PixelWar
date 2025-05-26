@@ -9,7 +9,7 @@ let powerRaid = 3;
 let gridSize = 40;
 let delay = 5;
 let delayRaid = 60*5;
-let dateRaid = 18;
+let dateRaid = 21;
 
 // Date for raid
 let d = new Date();
