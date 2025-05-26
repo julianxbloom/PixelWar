@@ -68,13 +68,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let canvaSize = 40;
     let pixelSize = 10;
+    let startTime = Date.now();
 
     let zoomLevel = 1; // Niveau de zoom initial (1 = taille normale)
 
     let drag = false;
 
-    let currentColor = "#fff"
-    let Lcolors = ["#FFFFFF", "#C0C0C0", "#808080", "#000000", "#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
+    let currentColor = "rgb(255, 255, 255)";
+    let Lcolors = [
+        "rgb(255, 255, 255)", // #FFFFFF
+        "rgb(192, 192, 192)", // #C0C0C0
+        "rgb(128, 128, 128)", // #808080
+        "rgb(0, 0, 0)",       // #000000
+        "rgb(255, 0, 0)",     // #FF0000
+        "rgb(128, 0, 0)",     // #800000
+        "rgb(255, 255, 0)",   // #FFFF00
+        "rgb(128, 128, 0)",   // #808000
+        "rgb(0, 255, 0)",     // #00FF00
+        "rgb(0, 128, 0)",     // #008000
+        "rgb(0, 255, 255)",   // #00FFFF
+        "rgb(0, 128, 128)",   // #008080
+        "rgb(0, 0, 255)",     // #0000FF
+        "rgb(0, 0, 128)",     // #000080
+        "rgb(255, 0, 255)",   // #FF00FF
+        "rgb(128, 0, 128)"    // #800080
+    ];
+
 
     // Variables pour zoom et déplacement
     let offsetX = window.innerWidth/2 - canvaSize/2*pixelSize*zoomLevel ;
@@ -149,9 +168,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             color.addEventListener('click', (e) => {
                 // Set the border style
+                console.log("Color clicked:", color.style.background);
                 Choosecolor.style.border = "0vh solid black";
                 Choosecolor = color;
-                Choosecolor.style.border = "0.7vh solid black";
+                console.log(color.style.background=="rgb(0, 0, 0)");
+                Choosecolor.style.border = color.style.background=="rgb(0, 0, 0)"? "0.7vh solid white":"0.7vh solid black";
+
+                //Choosecolor.style.border = "0.7vh solid black";
                 currentColor = `${color.style.backgroundColor}`;
             }, {passive: false});
             colorGrid.appendChild(color);
@@ -207,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x].color){
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
                 power.dataset.count -= 1;
@@ -263,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.changedTouches[0].clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){//} && currentColor != pixels[y*canvaSize+x].color){
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
                 power.dataset.count -= 1;

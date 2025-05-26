@@ -9,11 +9,11 @@ let powerRaid = 3;
 let gridSize = 40;
 let delay = 5;
 let delayRaid = 60*5;
-let dateRaid = 21;
+let dateRaid = 18;
 
 // Date for raid
 let d = new Date();
-let raid = d.getHours == dateRaid? "en cours" : d.getHours() < dateRaid ? "auj à 18h" : "demain à 18h";
+let raid = d.getHours() == dateRaid? "en cours" : d.getHours() < dateRaid ? "auj à 18h" : "demain à 18h";
 
 let user = {pseudo: null,id:null, power: null, time : null, id:null};
 // Database connection & creation
@@ -39,8 +39,9 @@ function setSocketIo(socketIo) {
 
           const t = user.time;
           const d = Date.now();
+          console.log(new Date().getHours(),"Raid !!!");
 
-          if(d - t > new Date().getHours==18? 1000*delayRaid:1000*delay){
+          if(d - t > new Date().getHours()==dateRaid? 1000*delayRaid:1000*delay){
             user.power = new Date().getHours()==dateRaid ? user.power = powerRaid: user.power = powerBase;
             
             sql = 'UPDATE user SET power = ? WHERE googleId = ?';

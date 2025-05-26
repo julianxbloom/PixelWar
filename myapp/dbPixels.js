@@ -24,7 +24,7 @@ con.connect(function(err) {
     id INT AUTO_INCREMENT,
     x INT,
     y INT,
-    color VARCHAR(25) DEFAULT '#adacac',
+    color VARCHAR(25) DEFAULT 'rgb(128, 128, 128)',
     affiche VARCHAR(100) DEFAULT 'blank',
     PRIMARY KEY(id)
   )`;
