@@ -164,3 +164,22 @@ h1 {
 button {
     cursor: pointer;
 }
+
+a{
+    z-index: 2;
+    text-align: right;
+}
+
+#affichePseudo {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0;
+    color: #fff;
+    z-index: 5;
+    pointer-events: none; /* optionnel : le texte ne bloque pas les clics */
+    text-shadow: 0 0 4px #000;
+}

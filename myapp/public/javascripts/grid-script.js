@@ -83,11 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
         "rgb(255, 0, 0)",     // #FF0000
         "rgb(128, 0, 0)",     // #800000
         "rgb(255, 255, 0)",   // #FFFF00
-        "rgb(128, 128, 0)",   // #808000
+        "rgb(186, 156, 69)",   // #008080
+        "rgb(118, 88, 0)",   // #808000
         "rgb(0, 255, 0)",     // #00FF00
         "rgb(0, 128, 0)",     // #008000
         "rgb(0, 255, 255)",   // #00FFFF
-        "rgb(0, 128, 128)",   // #008080
         "rgb(0, 0, 255)",     // #0000FF
         "rgb(0, 0, 128)",     // #000080
         "rgb(255, 0, 255)",   // #FF00FF
@@ -213,8 +213,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('mousedown', (e) =>{
         if (e.target.closest('#color-grid')) return;
-        mooveGridBegin(e); 
+
+        mooveGridBegin(e);
         startTime = Date.now();
+
+        const bubbleTimeout = setTimeout(() => {
+            if (drag){
+                    //Draw bubble après 0.5second
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
+            const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
+            drawBubble(x, y);}
+        }, 500);
     });
 
     document.addEventListener('mousemove', (e) => {
@@ -224,6 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('mouseup', (e) => {
         mooveGridEnd(e);
         bubble.style.opacity = 0;
+
+        if (e.button === 2) return; // Ignore right-clicks
 
         const rect = canvas.getBoundingClientRect();
         const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
@@ -240,10 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        const bubbleTimeout = setTimeout(() => {
-            if (drag){
-            drawBubble(x, y);}
-        }, 500);
     });
 
     /*Pour les tels*/
