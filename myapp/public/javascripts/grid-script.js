@@ -20,11 +20,6 @@ else {
     link.href = 'stylesheets/stylestel.css';
 }
 
-//------------------Reload------------------
-socket.on('reloadServeur', () => {
-  window.location.reload();
-});
-
 //----------------------------------Cookie----------------------------------
 
 //function via d'autres fichiers  :
@@ -140,6 +135,11 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('pixelUpdate', (data) => {
         // Mettre à jour la couleur du pixel 
         drawPixel(data.x,data.y,data.color,data.affiche);
+    });
+
+    //------------------Reload------------------
+    socket.on('reloadServeur', () => {
+    window.location.reload();
     });
     
     

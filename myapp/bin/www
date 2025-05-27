@@ -34,7 +34,7 @@ var io = new Server(server, {
 
 // Pass io to routes or other modules if needed
 require('../routes/grid').setSocketIo(io);
-
+require('../routes/utils').setSocketIo(io);
 /**
  * Listen on provided port, on all network interfaces.
  */

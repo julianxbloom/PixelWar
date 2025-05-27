@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-let io = null; // Stockera l'instance io
 
 // Permet d'injecter io depuis le serveur principal
 function setSocketIo(socketIo) {
