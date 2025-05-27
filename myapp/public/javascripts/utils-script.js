@@ -8,12 +8,12 @@ socket.on('reloadServeur', () => {
 btn = document.getElementById('BtnReload');
 
 if (pseudo){
+    btn.style.display = "flex";
     btn.addEventListener('click', function() {
     socket.emit("reload");
     });
 }
 else{
-  console.log('test');
-  btn.style.display = "none";
+    btn.style.display = "none";
 }
 
