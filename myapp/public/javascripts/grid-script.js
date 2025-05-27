@@ -20,6 +20,11 @@ else {
     link.href = 'stylesheets/stylestel.css';
 }
 
+//------------------Reload------------------
+socket.on('reloadServeur', () => {
+  window.location.reload();
+});
+
 //----------------------------------Cookie----------------------------------
 
 //function via d'autres fichiers  :

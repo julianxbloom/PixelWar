@@ -29,9 +29,6 @@ var con = mysql.createPool({
 function setSocketIo(socketIo) {
   io = socketIo;
 
-  io.on('reload', (data) => {
-    console.log("Reloading grid");
-  });
 
   // Configure socket.io events
   io.on('connection', (socket) => {

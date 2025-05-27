@@ -7,6 +7,7 @@ function setSocketIo(socketIo) {
 
   // Configure socket.io events
   io.on('connection', (socket) => {
+    console.log("Socket.io connected");
     io.emit('reload',{Text: "Maintenance en cours, merci de patienter."});
   });
 };
