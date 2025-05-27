@@ -9,7 +9,7 @@ const fs = require('fs');
   const cookies = [{
     name: 'id',
     value: '113937883500129231761',
-    domain: 'pixelwarf1.up.railway.app', // important, le domaine doit correspondre au site
+    domain: 'pixelwar.up.railway.app', // important, le domaine doit correspondre au site
     path: '/',
     httpOnly: false,
     secure: false,
@@ -17,7 +17,7 @@ const fs = require('fs');
   {
     name: 'username',
     value: 'gTG01',
-    domain: 'pixelwarf1.up.railway.app',
+    domain: 'pixelwar.up.railway.app',
     path: '/',
     httpOnly: false,
     secure: false,
