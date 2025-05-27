@@ -2,11 +2,11 @@ var link = document.createElement("link");
 link.type = 'text/css';
 link.rel = 'stylesheet';
 
-let powerBase =  7;
+let powerBase =  5;
 let powerRaid = 3;
 let hourRaid = 21;
 let delay = 5;
-let delayRaid = 60*5;
+let delayRaid = 10;
 
 //Pour la bdd
 
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 power.dataset.count -= 1;
                 power.textContent = power.dataset.count;
                 if (power.dataset.count < 1){
-                    startCountdown(delay);
+                    startCountdown(new Date().getHours() == hourRaid ? delayRaid : delay);
                 }
             }
         }
@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     sec = 59;
                     
                 } else {
-                    power.dataset.count = new Date().getHours==hourRaid?powerRaid:powerBase;
+                    power.dataset.count = new Date().getHours()==hourRaid?powerRaid:powerBase;
                     power.textContent = power.dataset.count;
                     power.style.transform = rotate ? "rotateY(0deg)":"rotateY(360deg)";
                     rotate = !rotate;

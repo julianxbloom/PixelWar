@@ -8,12 +8,6 @@ let powerBase = 5;
 let powerRaid = 3;
 let gridSize = 40;
 let delay = 5;
-let delayRaid = 60*5;
-let dateRaid = 18;
-
-// Date for raid
-let d = new Date();
-let raid = d.getHours() == dateRaid? "en cours" : d.getHours() < dateRaid ? "auj à 18h" : "demain à 18h";
 
 let user = {pseudo: null,id:null, power: null, time : null, id:null};
 // Database connection & creation
@@ -33,6 +27,10 @@ function setSocketIo(socketIo) {
   // Configure socket.io events
   io.on('connection', (socket) => {
 
+    let delayRaid = 10;
+    let powerBase = 5;
+    let dateRaid = 21;
+
     //Pour le power du user
     socket.on('power', (data) => {
 
@@ -40,10 +38,10 @@ function setSocketIo(socketIo) {
 
           const t = user.time;
           const d = Date.now();
-          console.log(new Date().getHours(),"Raid !!!");
+          const time = new Date().getHours()+2==dateRaid? 1000*delayRaid:1000*delay;
 
-          if(d - t > new Date().getHours()==dateRaid? 1000*delayRaid:1000*delay){
-            user.power = new Date().getHours()==dateRaid ? user.power = powerRaid: user.power = powerBase;
+          if(d - t > time){
+            user.power = new Date().getHours()+2==dateRaid ? user.power = powerRaid: user.power = powerBase;
             
             sql = 'UPDATE user SET power = ? WHERE googleId = ?';
             con.query(sql,[user.power,user.id], (err,result) =>{
@@ -68,14 +66,15 @@ function setSocketIo(socketIo) {
 
         //Set time
         if (user.power == 0){
+          user.time = Date.now();
           sql = 'UPDATE user SET time = ? WHERE googleId = ?'
           con.query(sql, [Date.now(),user.id], (err,result) => {
             if (err) {
               console.error('Erreur lors de la mise à jour du time :', err);
               return;
             }
-            user.time = Date.now();
-          })
+            
+          });
         } 
 
         //Pixel color update
@@ -104,10 +103,13 @@ router.get('/', function(req, res, next) {
       return res.redirect('/waiting');
     }
 
-    // Date for raid
+  // Date for raid
+  let dateRaid = 21;
+
   let d = new Date();
-  let raid = d.getHours() == dateRaid? "en cours" : d.getHours() < dateRaid ? "auj à 21h" : "demain à 21h";
-    
+  let raid = d.getHours()+2 == dateRaid? "en cours" : d.getHours() < dateRaid ? "auj à 21h" : "demain à 21h";
+  console.log("Raid : ", raid,d.getHours(),dateRaid,d); 
+  
   const username = getCookie("username", req);
   const id = getCookie("id", req);
   console.log(username,id);
