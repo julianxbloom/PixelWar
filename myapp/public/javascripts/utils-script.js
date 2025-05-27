@@ -13,6 +13,7 @@ if (pseudo){
     });
 }
 else{
-    btn.style.display = "none";
+  console.log('test');
+  btn.style.display = "none";
 }
 
