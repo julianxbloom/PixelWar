@@ -104,7 +104,10 @@ router.get('/', function(req, res, next) {
       return res.redirect('/waiting');
     }
 
-  
+    // Date for raid
+  let d = new Date();
+  let raid = d.getHours() == dateRaid? "en cours" : d.getHours() < dateRaid ? "auj à 21h" : "demain à 21h";
+    
   const username = getCookie("username", req);
   const id = getCookie("id", req);
   console.log(username,id);
