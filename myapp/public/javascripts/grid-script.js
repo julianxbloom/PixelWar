@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "rgb(255, 0, 0)",     // #FF0000
         "rgb(128, 0, 0)",     // #800000
         "rgb(255, 255, 0)",   // #FFFF00
-        "rgb(186, 156, 69)",   // #008080
+        "rgb(255, 174, 0)",   // #008080
         "rgb(118, 88, 0)",   // #808000
         "rgb(0, 255, 0)",     // #00FF00
         "rgb(0, 128, 0)",     // #008000
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.changedTouches[0].clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){//} && currentColor != pixels[y*canvaSize+x].color){
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x].color){//} && currentColor != pixels[y*canvaSize+x].color){
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
                 power.dataset.count -= 1;
