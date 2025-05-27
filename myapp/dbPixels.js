@@ -19,12 +19,12 @@ con.connect(function(err) {
     if (err) throw err;
     console.log("Table pixels dropped!");
   });
-  console.log("Connected!");
+  console.log("Connected!"); //Couleur de base blanc à voir si good
   var user_creation = `CREATE TABLE IF NOT EXISTS pixels(
     id INT AUTO_INCREMENT,
     x INT,
     y INT,
-    color VARCHAR(25) DEFAULT 'rgb(128, 128, 128)',
+    color VARCHAR(25) DEFAULT 'rgb(255, 255, 255)',
     affiche VARCHAR(100) DEFAULT 'blank',
     PRIMARY KEY(id)
   )`;
