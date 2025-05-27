@@ -9,6 +9,7 @@ function setSocketIo(socketIo) {
 
     io.on('connection', (socket) => {
         socket.on('reload', () => {
+            console.log("Reloading server...");
             io.emit('reloadServeur');
         });
     });
