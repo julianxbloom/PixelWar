@@ -5,7 +5,14 @@ socket.on('reloadServeur', () => {
   window.location.reload();
 });
 
-document.getElementById('BtnReload').addEventListener('click', function() {
-    console.log("Reloading server...");
+btn = document.getElementById('BtnReload');
+
+if (pseudo){
+    btn.addEventListener('click', function() {
     socket.emit("reload");
-});
+    });
+}
+else{
+    btn.style.display = "none";
+}
+
