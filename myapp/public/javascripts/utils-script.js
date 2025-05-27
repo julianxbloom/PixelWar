@@ -13,7 +13,4 @@ if (pseudo){
     socket.emit("reload");
     });
 }
-else{
-    btn.style.display = "none";
-}
 
