@@ -5,7 +5,7 @@ link.rel = 'stylesheet';
 let powerBase =  5;
 let powerRaid = 3;
 let hourRaid = 21;
-let delay = 5;
+let delay = 1;
 let delayRaid = 10;
 
 //Pour la bdd

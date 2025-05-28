@@ -7,7 +7,6 @@ let io;
 let powerBase = 5;
 let powerRaid = 3;
 let gridSize = 40;
-let delay = 5;
 
 let user = {pseudo: null,id:null, power: null, time : null, id:null};
 // Database connection & creation
@@ -28,6 +27,7 @@ function setSocketIo(socketIo) {
   io.on('connection', (socket) => {
 
     let delayRaid = 10;
+    let delay = 1;
     let powerBase = 5;
     let dateRaid = 21;
 
@@ -105,6 +105,7 @@ router.get('/', function(req, res, next) {
 
   // Date for raid
   let dateRaid = 21;
+  let delay = 1;
 
   let d = new Date();
   let raid = d.getHours()+2 == dateRaid? "en cours" : d.getHours() < dateRaid ? "auj à 21h" : "demain à 21h";
