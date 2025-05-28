@@ -61,7 +61,7 @@ body{
     max-width: 100dvw;
     max-height: 100dvh;
     object-fit: cover;
-    border-radius: 50px;
+    border-radius: 80px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 

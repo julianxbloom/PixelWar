@@ -24,6 +24,7 @@ con.connect(function(err) {
     power INT DEFAULT 5,
     time VARCHAR(100) DEFAULT 'none',
     popup TEXT,
+    admin BOOLEAN DEFAULT FALSE,
     PRIMARY KEY(id)
   )`;
   con.query(user_creation, function(err, result) {

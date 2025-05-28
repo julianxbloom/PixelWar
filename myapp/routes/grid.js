@@ -8,7 +8,7 @@ let powerBase = 5;
 let powerRaid = 3;
 let gridSize = 40;
 
-let user = {pseudo: null,id:null, power: null, time : null, id:null};
+let user = {pseudo: null,id:null, power: null, time : null, id:null,admin:false};
 // Database connection & creation
 var con = mysql.createPool({
   host: "yamanote.proxy.rlwy.net",
@@ -21,8 +21,6 @@ var con = mysql.createPool({
 //socket.io session
 function setSocketIo(socketIo) {
   io = socketIo;
-
-
   // Configure socket.io events
   io.on('connection', (socket) => {
 
@@ -62,7 +60,7 @@ function setSocketIo(socketIo) {
           }
         });
 
-        if(user.pseudo != "timTG01"){
+        if(!user.admin){
           user.power -=1;
         }
 
@@ -98,30 +96,21 @@ function setSocketIo(socketIo) {
 // Vérification du cookie de l'utilisateur
 router.get('/', function(req, res, next) {
 
-
-  con.query('SELECT maintenance FROM global WHERE id = 1', (err, result) => {
-    if (err) throw err;
-    if (result.length > 0 && result[0].maintenance) {
-      return res.redirect('/waiting');
-    }
-
   // Date for raid
   let dateRaid = 21;
   let delay = 1;
 
   let d = new Date();
   let raid = d.getHours()+2 == dateRaid? "en cours" : d.getHours() < dateRaid ? "auj à 21h" : "demain à 21h";
-  console.log("Raid : ", raid,d.getHours(),dateRaid,d); 
   
   const username = getCookie("username", req);
   const id = getCookie("id", req);
-  console.log(username,id);
   
   if (username != null && id != null) {
     user.id = id;
     user.pseudo = username;
     // Vérification de l'existence de l'utilisateur dans la base de données
-    const sql = 'SELECT power,time,popup FROM user WHERE users = ? AND googleId = ?';
+    const sql = 'SELECT power,time,popup,admin FROM user WHERE users = ? AND googleId = ?';
     con.query(sql, [username, id], (err, result) => {
       if (err) {
         return res.status(500).send('Erreur serveur');
@@ -130,42 +119,54 @@ router.get('/', function(req, res, next) {
         return res.redirect('/google');
       }
       else{
-      con.query('UPDATE user SET popup = NULL WHERE googleId = ?', [user.id], (err, result) => {
-        if (err) throw err;});
-      con.query('SELECT x,y,color,affiche FROM pixels WHERE x < ? AND y < ?',[gridSize,gridSize], (err, results) => {
-        if (err) {
-        return res.status(500).send('Erreur serveur');}
-
-        user.time = result[0].time;
-
-        if(result[0].power <= 0){
-          const t = user.time;
-          const d = Date.now();
-          if(d - t > 1000*delay){
-            user.power = powerBase;
-            const sql = 'UPDATE user SET power = ? WHERE googleId = ?';
-            con.query(sql,[user.power,user.id], (err,result) =>{
-              if (err){
-                return err;
-              }
-            });
+        user.admin = result[0].admin;
+        
+        con.query('SELECT maintenance FROM global WHERE id = 1', (err, r) => {
+          if (err) throw err;
+          if (r.length > 0 && r[0].maintenance && !user.admin) {
+            return res.redirect('/waiting');
           }
-          else {
-            user.power = 0;
-          }
-        } 
-        else {
-          user.power = result[0].power;
-        }
-        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : Date.now() - user.time, popup:result[0].popup, nextRaid:raid,verifP : "timTG01"});
-          });  
-        }
-      });
+          else{
+              con.query('UPDATE user SET popup = NULL WHERE googleId = ?', [user.id], (err, rer) => {
+                if (err) throw err;});
+              con.query('SELECT x,y,color,affiche FROM pixels WHERE x < ? AND y < ?',[gridSize,gridSize], (err, results) => {
+                if (err) {
+                return res.status(500).send('Erreur serveur');
+                }
+
+                user.time = result[0].time;
+
+                if(result[0].power <= 0){
+                  const t = user.time;
+                  const d = Date.now();
+                  if(d - t > 1000*delay){
+                    user.power = powerBase;
+                    const sql = 'UPDATE user SET power = ? WHERE googleId = ?';
+                    con.query(sql,[user.power,user.id], (err,result) =>{
+                      if (err){
+                        return err;
+                      }
+                    });
+                  }
+                  else {
+                    user.power = 0;
+                  }
+                } 
+                else {
+                  user.power = result[0].power;
+                }
+
+                return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : Date.now() - user.time, popup:result[0].popup, nextRaid:raid,verifP : user.admin});
+              });  
+            }
+        });
+      }
+    });
   }
   else {
     return res.redirect('/google');
   }
-  });
+
 });
 
 module.exports = { router, setSocketIo };

@@ -228,7 +228,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const rect = canvas.getBoundingClientRect();
             const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
             const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
-            drawBubble(x, y);}
+            if(y>=0 && x >=0 && y<=canvaSize && x <= canvaSize){
+                drawBubble(x, y);
+            }
+            }
         }, 500);
     });
 
@@ -250,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x].color){
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
-                if (pseudo != verifP){
+                if (!verifP){
                     power.dataset.count -= 1;
                 }
                 power.textContent = power.dataset.count;
@@ -277,7 +280,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const bubbleTimeout = setTimeout(() => {
             if (drag){
-            drawBubble(x, y);}
+                if(y>=0 && x >=0 && y<=canvaSize && x <= canvaSize){
+                    drawBubble(x, y);
+                }
+            }
         }, 500);
         
         if (e.touches.length === 2) {  // Deux doigts
@@ -304,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x].color){//} && currentColor != pixels[y*canvaSize+x].color){
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
-                if (pseudo != verifP){
+                if (!verifP){
                     power.dataset.count -= 1;
                 }
                 power.textContent = power.dataset.count;

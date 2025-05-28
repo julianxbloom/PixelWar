@@ -178,6 +178,9 @@ a {
     border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
+    z-index: 9999 !important;
+    background: red !important;  /* test visuel */
+    pointer-events: auto !important;
 }
 
 #affichePseudo {
