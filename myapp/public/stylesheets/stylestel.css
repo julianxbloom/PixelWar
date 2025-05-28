@@ -60,6 +60,7 @@ body {
 h1 {
     display :inline;
     margin-bottom: 0dvw;
+    font-size:40px;
 }
 
 .containerTop button{

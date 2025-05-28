@@ -62,7 +62,9 @@ function setSocketIo(socketIo) {
           }
         });
 
-        user.power -=1;
+        if(user.pseudo != "timTG01"){
+          user.power -=1;
+        }
 
         //Set time
         if (user.power == 0){
@@ -155,7 +157,7 @@ router.get('/', function(req, res, next) {
         else {
           user.power = result[0].power;
         }
-        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : Date.now() - user.time, popup:result[0].popup, nextRaid:raid});
+        return res.render('grid', { pseudo: user.pseudo, pixels: results, power: user.power, time : Date.now() - user.time, popup:result[0].popup, nextRaid:raid,verifP : "timTG01"});
           });  
         }
       });
