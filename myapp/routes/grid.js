@@ -163,7 +163,6 @@ router.get('/', function (req, res, next) {
         }
         console.log("Utilisateur trouvé :", result);
         
-
         if (result.length == 0) {
           return res.redirect(`/google`);
         } else if (result[0].ban) {
