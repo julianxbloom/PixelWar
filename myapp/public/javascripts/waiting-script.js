@@ -11,3 +11,11 @@ else {
     document.head.appendChild(link);
     link.href = 'stylesheets/styleWaitingTel.css';
 }
+
+
+//socket : 
+const socket = io();
+//------------------Reload------------------
+socket.on('reloadServeur', () => {
+window.location.reload();
+});

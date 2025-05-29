@@ -10,10 +10,18 @@
     const pixelsBdd = <%- JSON.stringify(pixels) %>;
     const popup = <%- JSON.stringify(popup) %>;
     const pseudo = <%- JSON.stringify(pseudo) %>;
+    const verifP = <%- JSON.stringify(verifP) %>;
+    const canvaSize = <%- JSON.stringify(gridSize) %>;
+    const powerRaid = <%- JSON.stringify(powerRaid) %>;
+    const powerBase = <%- JSON.stringify(powerBase) %>;
+    const hourRaid = <%- JSON.stringify(hourRaid) %>;
+    const delay = <%- JSON.stringify(delay) %>;
+    const delayRaid = <%- JSON.stringify(delayRaid) %>;
     </script>
 
 </head>
 <body>
+    <a href="/utils?pseudo=<%= encodeURIComponent(pseudo) %>">Crédit</a>
     <div class="background", id='bgGoogle'></div>
     <div class = "containerTop">
         <div class="containerTopTittle">
@@ -37,8 +45,9 @@
                 <div class=containerPower data-count = <%= power %> data-time = <%= time%> id ="containerPower"></div>
             </div>
         </div>  
-        <a href="/utils?pseudo=<%= encodeURIComponent(pseudo) %>">Crédit</a>
+        
     </div>
+    
     <script src="javascripts/grid-script.js"></script>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     

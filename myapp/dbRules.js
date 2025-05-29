@@ -11,30 +11,29 @@ var con = mysql.createConnection({
 
 con.connect(function(err) {
   if (err) throw err;
-  var drop_user = `DROP TABLE IF EXISTS user`;
+  var drop_user = `DROP TABLE IF EXISTS rules`;
   con.query(drop_user, function(err, result) {
     if (err) throw err;
     console.log("Table user dropped!");
   });
   console.log("Connected!");
-  var user_creation = `CREATE TABLE IF NOT EXISTS user(
+  var user_creation = `CREATE TABLE IF NOT EXISTS rules(
     id INT AUTO_INCREMENT,
-    googleId VARCHAR(100) NOT NULL,
-    users VARCHAR(100) DEFAULT 'nobody',
-    power INT DEFAULT 5,
-    time VARCHAR(100) DEFAULT 'none',
-    popup TEXT,
-    admin BOOLEAN DEFAULT FALSE,
-    ban BOOLEAN DEFAULT FALSE,
+    timeRaid INT,
+    powerBase INT,
+    powerRaid INT,
+    delayBase INT,
+    delayRaid INT,
+    gridSize INT,
     PRIMARY KEY(id)
   )`;
   con.query(user_creation, function(err, result) {
     if (err) throw err;
     console.log("Table user created!");
-    showTable("user");
+    showTable("rules");
   });
 
-  con.query("SELECT * FROM user", function(err, result) {
+  con.query("SELECT * FROM rules", function(err, result) {
     if (err) throw err;
     console.log(result);
   });

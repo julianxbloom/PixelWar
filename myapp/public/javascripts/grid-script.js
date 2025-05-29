@@ -2,12 +2,6 @@ var link = document.createElement("link");
 link.type = 'text/css';
 link.rel = 'stylesheet';
 
-let powerBase =  7;
-let powerRaid = 3;
-let hourRaid = 21;
-let delay = 5;
-let delayRaid = 60*5;
-
 //Pour la bdd
 
 if (screen.width > 600)
@@ -66,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
 
-    let canvaSize = 40;
     let pixelSize = 10;
     let startTime = Date.now();
 
@@ -83,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "rgb(255, 0, 0)",     // #FF0000
         "rgb(128, 0, 0)",     // #800000
         "rgb(255, 255, 0)",   // #FFFF00
-        "rgb(186, 156, 69)",   // #008080
+        "rgb(255, 174, 0)",   // #008080
         "rgb(118, 88, 0)",   // #808000
         "rgb(0, 255, 0)",     // #00FF00
         "rgb(0, 128, 0)",     // #008000
@@ -102,18 +95,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let bubbleX = 0;
     let bubbleY = 0;
     let dragStartX, dragStartY;
-
     const pixels = {};
-    Object.values(pixelsBdd).forEach(({x,y,color,affiche}) => {
-        
-        pixels[canvaSize*y+x] = {
+
+    function updateGrid(px){
+        Object.values(px).forEach(({x,y,color,affiche}) => {
             
-            color: color, // ou la couleur par défaut
-            x: x*pixelSize,
-            y: y*pixelSize,
-            affiche : affiche //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
-        };
-    });
+            pixels[canvaSize*y+x] = {
+                
+                color: color, // ou la couleur par défaut
+                x: x*pixelSize,
+                y: y*pixelSize,
+                affiche : affiche //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
+            };
+        });
+    }
+
+    updateGrid(pixelsBdd)
 
     // Resize du canvas pour qu'il remplisse la fenêtre
     function resizeCanvas() {
@@ -128,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
         date = new Date();
         pixels[y*canvaSize+x].affiche = affiche;//pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
-        
         draw();
     }
     
@@ -139,9 +135,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //------------------Reload------------------
     socket.on('reloadServeur', () => {
-    window.location.reload();
+        window.location.reload();
     });
-    
+
+    //------------------Refresh------------------
+    socket.on('connect', () => {
+        socket.emit('requestSync');
+    });
+
+    socket.on('syncPixels', (px) => {
+        updateGrid(px);
+        draw();
+    });
     
     document.addEventListener('wheel', (e) =>{
         //alert('DeltaY:', e.deltaY);
@@ -218,6 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('mousedown', (e) =>{
         if (e.target.closest('#color-grid')) return;
+        if (e.target.closest('a')) {
+            // C'est un clic sur un lien ⇒ laisser passer
+            return;
+        }
 
         mooveGridBegin(e);
         startTime = Date.now();
@@ -228,7 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const rect = canvas.getBoundingClientRect();
             const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
             const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
-            drawBubble(x, y);}
+            if(y>=0 && x >=0 && y<=canvaSize && x <= canvaSize){
+                drawBubble(x, y);
+            }
+            }
         }, 500);
     });
 
@@ -250,10 +262,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x].color){
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
-                power.dataset.count -= 1;
+                if (!verifP){
+                    power.dataset.count -= 1;
+                }
                 power.textContent = power.dataset.count;
                 if (power.dataset.count < 1){
-                    startCountdown(delay);
+                    startCountdown(new Date().getHours() == hourRaid ? delayRaid : delay);
                 }
             }
         }
@@ -263,6 +277,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', (e) => {
 
         if (e.target.closest('#color-grid')) return;
+
         
         e.preventDefault();
          
@@ -275,7 +290,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const bubbleTimeout = setTimeout(() => {
             if (drag){
-            drawBubble(x, y);}
+                if(y>=0 && x >=0 && y<=canvaSize && x <= canvaSize){
+                    drawBubble(x, y);
+                }
+            }
         }, 500);
         
         if (e.touches.length === 2) {  // Deux doigts
@@ -299,10 +317,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const y = Math.floor((e.changedTouches[0].clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
         if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
-            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0){//} && currentColor != pixels[y*canvaSize+x].color){
+            if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x].color){//} && currentColor != pixels[y*canvaSize+x].color){
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
-                power.dataset.count -= 1;
+                if (!verifP){
+                    power.dataset.count -= 1;
+                }
                 power.textContent = power.dataset.count;
                 if (power.dataset.count < 1){
                     startCountdown(delay);
@@ -388,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     sec = 59;
                     
                 } else {
-                    power.dataset.count = new Date().getHours==hourRaid?powerRaid:powerBase;
+                    power.dataset.count = new Date().getHours()==hourRaid?powerRaid:powerBase;
                     power.textContent = power.dataset.count;
                     power.style.transform = rotate ? "rotateY(0deg)":"rotateY(360deg)";
                     rotate = !rotate;

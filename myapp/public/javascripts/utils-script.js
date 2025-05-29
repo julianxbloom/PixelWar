@@ -7,7 +7,7 @@ socket.on('reloadServeur', () => {
 
 btn = document.getElementById('BtnReload');
 
-if (pseudo){
+if (admin){
     btn.style.display = "flex";
     btn.addEventListener('click', function() {
     socket.emit("reload");
