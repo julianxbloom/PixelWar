@@ -96,17 +96,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let bubbleY = 0;
     let dragStartX, dragStartY;
 
-    const pixels = {};
-    Object.values(pixelsBdd).forEach(({x,y,color,affiche}) => {
-        
-        pixels[canvaSize*y+x] = {
+    function updateGrid(pixels){
+        const pixels = {};
+        Object.values(pixels).forEach(({x,y,color,affiche}) => {
             
-            color: color, // ou la couleur par défaut
-            x: x*pixelSize,
-            y: y*pixelSize,
-            affiche : affiche //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
-        };
-    });
+            pixels[canvaSize*y+x] = {
+                
+                color: color, // ou la couleur par défaut
+                x: x*pixelSize,
+                y: y*pixelSize,
+                affiche : affiche //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
+            };
+        });
+    }
+
+    updateGrid(pixelsBdd)
 
     // Resize du canvas pour qu'il remplisse la fenêtre
     function resizeCanvas() {
@@ -121,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
         date = new Date();
         pixels[y*canvaSize+x].affiche = affiche;//pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
-        
         draw();
     }
     
@@ -135,12 +138,15 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.reload();
     });
 
-    //------------------Reload------------------
+    //------------------Refresh------------------
     socket.on('connect', () => {
-        window.location.reload();
+        socket.emit('requestSync');
     });
 
-    
+
+    socket.on('syncPixels', (pixels) => {
+        updateGrid(pixels);
+    });
     
     document.addEventListener('wheel', (e) =>{
         //alert('DeltaY:', e.deltaY);

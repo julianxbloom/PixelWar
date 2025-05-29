@@ -42,6 +42,15 @@ function setSocketIo(socketIo) {
       }
     });
 
+    socket.on('requestSync', () => {
+        con.query('SELECT x,y,color,affiche FROM pixels WHERE x < ? AND y < ?', [gridSize, gridSize], (err, results) => {
+            if (err) throw err;
+            if (!err) {
+                socket.emit('syncPixels', results);
+            }
+        });
+    });
+
     socket.on('power', (data) => {
       console.log("Événement power reçu avec data :", data);
 
