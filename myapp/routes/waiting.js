@@ -27,8 +27,8 @@ router.get('/', function(req, res, next) {
               return res.redirect('/')
             }
             else{
-              const timeRemain = result[0].dureeBan - (Date.now()-result[0].time);
-              return res.render('waiting', { title: `Ban : ${Math.floor(timeRemain/1000)} secondes`, text: result[0].motif});
+              const timeRemain = result[0].time>Date.now() ? "Votre ban va être défini":`Ban : ${Math.floor((result[0].dureeBan - (Date.now()-result[0].time))/1000)} secondes`;
+              return res.render('waiting', { title: timeRemain, text: result[0].motif});
             }
           } 
           else {

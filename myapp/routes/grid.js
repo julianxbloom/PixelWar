@@ -172,7 +172,7 @@ router.get('/', function (req, res, next) {
               console.error("Erreur SELECT ban :", err);
               throw err;
             }
-            if (Date.now() - resul[0].time > resul[0].dureeBan || admin) {
+            if (Date.now() - resul[0].time > resul[0].dureeBan || result[0].admin) {
               con.query('UPDATE user SET ban = FALSE WHERE users = ?', [user.pseudo], (err, m) => {
                 if (err) throw err;
                 console.log("Ban levé");

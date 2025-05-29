@@ -9,7 +9,9 @@ var con = mysql.createConnection({
   password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
 });
 
-/*con.connect(function(err) {
+console.log(Date.now());
+
+con.connect(function(err) {
   if (err) throw err;
   var drop_user = `DROP TABLE IF EXISTS ban`;
   con.query(drop_user, function(err, result) {
@@ -19,7 +21,7 @@ var con = mysql.createConnection({
   console.log("Connected!");
   var user_creation = `CREATE TABLE IF NOT EXISTS ban(
     users VARCHAR(100) ,
-    time BIGINT,
+    time BIGINT DEFAULT 9999999999999,
     afficheBan TEXT,
     motif TEXT,
     dureeban INT,
@@ -34,7 +36,7 @@ var con = mysql.createConnection({
     if (err) throw err;
     console.log(result);
   });
-});*/
+});
 
 function showTable(name){
   con.query(`SELECT * FROM ${name}`, function(err, result) {
@@ -65,4 +67,4 @@ function ban(user,duree,motif){
     });
 }
 
-ban("MerlinTG04",60*60*1000,"Cheh lol ");
+//ban("MerlinTG04",60*60*1000,"Cheh lol ");
