@@ -145,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('syncPixels', (px) => {
         updateGrid(px);
+        draw();
     });
     
     document.addEventListener('wheel', (e) =>{
