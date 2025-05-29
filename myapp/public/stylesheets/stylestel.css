@@ -11,7 +11,7 @@ body {
     user-select: none;
     -webkit-user-select: none; /* Safari/iOS */
     -ms-user-select: none;  
-    /*touch-action: manipulation;*/
+    touch-action: manipulation;
 }
 
 .background {

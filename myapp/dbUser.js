@@ -25,6 +25,7 @@ con.connect(function(err) {
     time VARCHAR(100) DEFAULT 'none',
     popup TEXT,
     admin BOOLEAN DEFAULT FALSE,
+    ban BOOLEAN DEFAULT FALSE,
     PRIMARY KEY(id)
   )`;
   con.query(user_creation, function(err, result) {

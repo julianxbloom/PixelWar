@@ -218,6 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.addEventListener('mousedown', (e) =>{
         if (e.target.closest('#color-grid')) return;
+        if (e.target.closest('a')) {
+            // C'est un clic sur un lien ⇒ laisser passer
+            return;
+        }
 
         mooveGridBegin(e);
         startTime = Date.now();
@@ -268,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('touchstart', (e) => {
 
         if (e.target.closest('#color-grid')) return;
+
         
         e.preventDefault();
          

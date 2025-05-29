@@ -110,13 +110,29 @@ router.get('/', function(req, res, next) {
     user.id = id;
     user.pseudo = username;
     // Vérification de l'existence de l'utilisateur dans la base de données
-    const sql = 'SELECT power,time,popup,admin FROM user WHERE users = ? AND googleId = ?';
+    const sql = 'SELECT power,time,popup,admin,ban FROM user WHERE users = ? AND googleId = ?';
     con.query(sql, [username, id], (err, result) => {
       if (err) {
         return res.status(500).send('Erreur serveur');
       }
-      if (result.length == 0) {
-        return res.redirect('/google');
+      if (result.length == 0 ) {
+        return res.redirect(`/google`);
+      }
+
+      else if(result[0].ban){
+        con.query('SELECT time,dureeBan FROM ban WHERE users = ?',[user.pseudo],(err,resul)=>{
+          if (err) throw err;
+          if(Date.now()-resul[0].time > resul[0].dureeBan || admin){
+            con.query('UPDATE user SET ban = FALSE WHERE users = ?',[user.pseudo],(err,resul)=>{
+              if(err) throw err;
+              res.redirect('/');
+            });
+          }
+          else{
+            return res.redirect(`/waiting?pseudo=${user.pseudo}`);
+          }
+        });
+        
       }
       else{
         user.admin = result[0].admin;
@@ -124,7 +140,7 @@ router.get('/', function(req, res, next) {
         con.query('SELECT maintenance FROM global WHERE id = 1', (err, r) => {
           if (err) throw err;
           if (r.length > 0 && r[0].maintenance && !user.admin) {
-            return res.redirect('/waiting');
+            return res.redirect(`/waiting?pseudo=${user.pseudo}`);
           }
           else{
               con.query('UPDATE user SET popup = NULL WHERE googleId = ?', [user.id], (err, rer) => {

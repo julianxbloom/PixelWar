@@ -1,51 +1,62 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const path = require('path');
 
-(async () => {
+// Dossier pour sauvegarder les images
+const imageDir = path.join(__dirname, 'images');
+if (!fs.existsSync(imageDir)) {
+  fs.mkdirSync(imageDir);
+}
+
+async function takeScreenshot() {
   const browser = await puppeteer.launch({ headless: "new" });
   const page = await browser.newPage();
 
-  // Exemple de cookie à définir
-  const cookies = [{
-    name: 'id',
-    value: '113937883500129231761',
-    domain: 'pixelwar.up.railway.app', // important, le domaine doit correspondre au site
-    path: '/',
-    httpOnly: false,
-    secure: false,
-  },
-  {
-    name: 'username',
-    value: 'gTG01',
-    domain: 'pixelwar.up.railway.app',
-    path: '/',
-    httpOnly: false,
-    secure: false,
-  },
+  // Définir les cookies
+  const cookies = [
+    {
+      name: 'id',
+      value: '113937883500129231761',
+      domain: 'pixelwar.up.railway.app',
+      path: '/',
+      httpOnly: false,
+      secure: false,
+    },
+    {
+      name: 'username',
+      value: 'timTG01',
+      domain: 'pixelwar.up.railway.app',
+      path: '/',
+      httpOnly: false,
+      secure: false,
+    },
   ];
 
-  // Définit les cookies AVANT d'aller sur la page
   await page.setCookie(...cookies);
 
-  // Maintenant on charge la page, les cookies seront pris en compte
-  await page.goto('https://pixelwarf1.up.railway.app/', { waitUntil: 'networkidle2' });
+  // Accéder à la page
+  await page.goto('https://pixelwar.up.railway.app/', { waitUntil: 'networkidle2' });
 
-  // Ton code pour récupérer le canvas etc.
+  // Attendre le canvas
   await page.waitForSelector('canvas', { timeout: 10000 });
 
-  // Récupérer la dataURL PNG du canvas
+  // Extraire l’image
   const dataUrl = await page.$eval('canvas', canvas => canvas.toDataURL('image/png'));
-
-  // Enlever "data:image/png;base64,"
   const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
-
-  // Convertir en buffer
   const buffer = Buffer.from(base64Data, 'base64');
 
-  // Écrire dans un fichier PNG
-  fs.writeFileSync(`pixelwarGrid-${Date.now()}.png`, buffer);
+  // Nom de fichier avec timestamp
+  const now = new Date();
+  const filePath = path.join(imageDir, `pixelwarGrid-${now.getDay()}d-${now.getHours()}h-${now.getMinutes()}m.png`);
+  fs.writeFileSync(filePath, buffer);
 
-  console.log('Image PNG enregistrée en canvas_image.png');
+  console.log(`✅ Screenshot enregistré : ${filePath}`);
 
   await browser.close();
-})();
+}
+
+// Exécuter immédiatement
+takeScreenshot();
+
+// Répéter toutes les 10 minutes
+setInterval(takeScreenshot, 10 * 60 * 1000); // 600 000 ms
