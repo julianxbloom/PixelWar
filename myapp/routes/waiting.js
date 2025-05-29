@@ -14,10 +14,10 @@ var con = mysql.createPool({
 /* GET home page. */
 router.get('/', function(req, res, next) {
     pseudo = req.query.pseudo;
-    con.query('SELECT maintenance, mtnTittle,mtnText FROM global WHERE id = 1', (err, result) => {
+    con.query('SELECT maintenance, mtnTittle,mtnText FROM global WHERE id = 1', (err, resu) => {
         if (err) throw err;
-        if (result.length > 0 && result[0].maintenance) {
-        return res.render('waiting', { title: result[0].mtnTittle, text: result[0].mtnText});
+        if (resu.length > 0 && resu[0].maintenance) {
+        return res.render('waiting', { title: resu[0].mtnTittle, text: resu[0].mtnText});
         } 
       else{
         con.query('SELECT afficheBan,motif,time,dureeBan FROM ban WHERE users = ?',[pseudo], (err, result) => {
