@@ -96,9 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let bubbleY = 0;
     let dragStartX, dragStartY;
 
-    function updateGrid(pixels){
+    function updateGrid(px){
         const pixels = {};
-        Object.values(pixels).forEach(({x,y,color,affiche}) => {
+        Object.values(px).forEach(({x,y,color,affiche}) => {
             
             pixels[canvaSize*y+x] = {
                 
@@ -143,9 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('requestSync');
     });
 
-
-    socket.on('syncPixels', (pixels) => {
-        updateGrid(pixels);
+    socket.on('syncPixels', (px) => {
+        updateGrid(px);
     });
     
     document.addEventListener('wheel', (e) =>{
