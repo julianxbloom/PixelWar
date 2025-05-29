@@ -65,4 +65,4 @@ function ban(user,duree,motif){
     });
 }
 
-ban("timTG01",60*5*1000,"Cheh");
+ban("MerlinTG04",60*60*1000,"Cheh lol ");

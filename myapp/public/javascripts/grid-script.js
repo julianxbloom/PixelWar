@@ -2,12 +2,6 @@ var link = document.createElement("link");
 link.type = 'text/css';
 link.rel = 'stylesheet';
 
-let powerBase =  5;
-let powerRaid = 3;
-let hourRaid = 21;
-let delay = 1;
-let delayRaid = 10;
-
 //Pour la bdd
 
 if (screen.width > 600)
@@ -66,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
 
-    let canvaSize = 40;
     let pixelSize = 10;
     let startTime = Date.now();
 
