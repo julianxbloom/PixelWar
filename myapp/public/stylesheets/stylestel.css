@@ -168,6 +168,7 @@ button {
 }
 
 a {
+    display : none; /*Arrive pas a le faire marche = le met en none pour le moment*/
     position: fixed;
     top: 10px;
     left: 10px;
