@@ -95,9 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let bubbleX = 0;
     let bubbleY = 0;
     let dragStartX, dragStartY;
+    const pixels = {};
 
     function updateGrid(px){
-        const pixels = {};
         Object.values(px).forEach(({x,y,color,affiche}) => {
             
             pixels[canvaSize*y+x] = {
