@@ -132,8 +132,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //------------------Reload------------------
     socket.on('reloadServeur', () => {
-    window.location.reload();
+        window.location.reload();
     });
+
+    //------------------Reload------------------
+    socket.on('connect', () => {
+        window.location.reload();
+    });
+
     
     
     document.addEventListener('wheel', (e) =>{
