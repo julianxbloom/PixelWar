@@ -49,7 +49,7 @@ body{
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 600px) and (hover: hover) and (pointer: fine) {
     .nextBtn:hover {
         background: #eeeeee;
         transform: translateY(-8px) scale(1.04);
