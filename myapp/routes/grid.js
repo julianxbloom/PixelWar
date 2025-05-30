@@ -192,6 +192,7 @@ router.get('/', function (req, res, next) {
               console.error("Erreur SELECT maintenance :", err);
               throw err;
             }
+            console.log("mainten  nce : ",user.admin);
             if (r.length > 0 && r[0].maintenance && !user.admin) {
               return res.redirect(`/waiting?pseudo=${user.pseudo}`);
             } else {

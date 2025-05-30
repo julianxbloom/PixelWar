@@ -15,7 +15,12 @@ else {
 
 //socket : 
 const socket = io();
+
 //------------------Reload------------------
 socket.on('reloadServeur', () => {
-window.location.reload();
+    window.location.reload();
+});
+
+window.addEventListener("focus",()=>{
+    window.location.reload();
 });
