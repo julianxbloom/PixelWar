@@ -20,21 +20,30 @@ router.get('/', function(req, res, next) {
         return res.render('waiting', { title: resu[0].mtnTittle, text: resu[0].mtnText});
         } 
       else{
-        con.query('SELECT afficheBan,motif,time,dureeBan FROM ban WHERE users = ?',[pseudo], (err, result) => {
+        con.query('SELECT ban FROM user WHERE users = ?',[pseudo], (err,res)=>{
           if (err) throw err;
-          if (result.length > 0) {
-            if(Date.now()-result[0].time > result[0].dureeBan){
-              return res.redirect('/')
-            }
-            else{
-              const timeRemain = result[0].time>Date.now() ? "Votre ban va être défini":`Ban : ${Math.floor((result[0].dureeBan - (Date.now()-result[0].time))/1000)} secondes`;
-              return res.render('waiting', { title: timeRemain, text: result[0].motif});
-            }
-          } 
-          else {
+          if (res.length > 0) {
+            con.query('SELECT afficheBan,motif,time,dureeBan FROM ban WHERE users = ?',[pseudo], (err, result) => {
+              if (err) throw err;
+              if (result.length > 0) {
+                if(Date.now()-result[0].time > result[0].dureeBan){
+                  return res.redirect('/')
+                }
+                else{
+                  const timeRemain = result[0].time>Date.now() ? "Votre ban va être défini":`Ban : ${Math.floor((result[0].dureeBan - (Date.now()-result[0].time))/1000)} secondes`;
+                  return res.render('waiting', { title: timeRemain, text: result[0].motif});
+                }
+              } 
+              else {
+                return res.redirect('/');
+              }
+            });
+          }
+          else{
             return res.redirect('/');
           }
-        });
+        })
+
       }
   });
 

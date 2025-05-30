@@ -5,7 +5,7 @@ const { getCookie } = require('../public/javascripts/cookieUtils');
 let dateRaid, delayRaid, delay, powerBase, powerRaid, gridSize;
 let io;
 
-let user = { pseudo: null, id: null, power: null, time: null, id: null, admin: false };
+let user = { pseudo: null, id: null, power: null, time: null, id: null, admin: false, nbrColor : 0 };
 
 var con = mysql.createPool({
   host: "yamanote.proxy.rlwy.net",
@@ -74,8 +74,8 @@ function setSocketIo(socketIo) {
       }
 
       if (user.power > 0) {
-        sql = 'UPDATE user SET power = ? WHERE googleId = ?'
-        con.query(sql, [user.power - 1, user.id], (err, result) => {
+        sql = 'UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?'
+        con.query(sql, [user.power - 1,user.nbrColor+1, user.id], (err, result) => {
           if (err) {
             console.error('Erreur lors de la mise à jour du power :', err);
             return;
@@ -85,6 +85,7 @@ function setSocketIo(socketIo) {
 
         if (!user.admin) {
           user.power -= 1;
+          user.nbrColor += 1;
         }
 
         if (user.power == 0) {
@@ -155,7 +156,7 @@ router.get('/', function (req, res, next) {
       user.id = id;
       user.pseudo = username;
 
-      const sql = 'SELECT power,time,popup,admin,ban FROM user WHERE users = ? AND googleId = ?';
+      const sql = 'SELECT power,time,popup,admin,ban, nbrColor FROM user WHERE users = ? AND googleId = ?';
       con.query(sql, [username, id], (err, result) => {
         if (err) {
           console.error("Erreur SELECT user :", err);
@@ -185,6 +186,7 @@ router.get('/', function (req, res, next) {
         } else {
           const popup = result[0].popup;
           user.admin = result[0].admin;
+          user.nbrColor = result[0].nbrColor;
           con.query('SELECT maintenance FROM global WHERE id = 1', (err, r) => {
             if (err) {
               console.error("Erreur SELECT maintenance :", err);

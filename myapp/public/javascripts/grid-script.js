@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
         "rgb(255, 0, 0)",     // #FF0000
         "rgb(128, 0, 0)",     // #800000
         "rgb(255, 255, 0)",   // #FFFF00
-        "rgb(255, 174, 0)",   // #008080
-        "rgb(118, 88, 0)",   // #808000
+        "rgb(255, 128, 0)",   // #008080
+        "rgb(128, 64, 0)",   // #808000
         "rgb(0, 255, 0)",     // #00FF00
         "rgb(0, 128, 0)",     // #008000
         "rgb(0, 255, 255)",   // #00FFFF
@@ -135,6 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //------------------Reload------------------
     socket.on('reloadServeur', () => {
+        window.location.reload();
+    });
+
+    window.addEventListener("focus",()=>{
         window.location.reload();
     });
 

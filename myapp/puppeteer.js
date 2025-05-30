@@ -46,8 +46,7 @@ async function takeScreenshot() {
   const buffer = Buffer.from(base64Data, 'base64');
 
   // Nom de fichier avec timestamp
-  const now = new Date();
-  const filePath = path.join(imageDir, `pixelwarGrid-${now.getDay()}d-${now.getHours()}h-${now.getMinutes()}m.png`);
+  const filePath = path.join(imageDir, `pixelwarGrid-${Date.now()}.png`);
   fs.writeFileSync(filePath, buffer);
 
   console.log(`✅ Screenshot enregistré : ${filePath}`);
