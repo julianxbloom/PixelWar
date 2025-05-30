@@ -16,10 +16,10 @@ router.get('/', function(req, res, next) {
     pseudo = req.query.pseudo;
     admin = false;
 
-    con.query('SELECT admin FROM user WHERE user = ?',[pseudo],(err,r)=>{
+    con.query('SELECT admin FROM user WHERE users = ?',[pseudo],(err,r)=>{
       if (err) throw err;
       if (r.length > 0){
-        if(admin){
+        if(r[0].admin){
           return res.redirect('/');
         }
         else{
