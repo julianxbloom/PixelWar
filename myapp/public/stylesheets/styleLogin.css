@@ -49,10 +49,12 @@ body{
     }
 }
 
-.nextBtn:hover {
-    background: #eeeeee;
-    transform: translateY(-8px) scale(1.04);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+@media (max-width: 600px) {
+    .nextBtn:hover {
+        background: #eeeeee;
+        transform: translateY(-8px) scale(1.04);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
 }
 
 .tutoImg{
