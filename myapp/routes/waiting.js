@@ -13,7 +13,14 @@ var con = mysql.createPool({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
     pseudo = req.query.pseudo;
+
+    if (!pseudo || pseudo.trim() === "") {
+      return res.redirect('/'); // Redirige si pseudo est absent ou vide
+    }
+    else {
+
     admin = false;
 
     con.query('SELECT admin FROM user WHERE users = ?',[pseudo],(err,r)=>{
@@ -59,8 +66,11 @@ router.get('/', function(req, res, next) {
 
       }
     }
+    else{
+      return res.render('waiting', { title: "Petit probleme", text: "Il semble que vous n'avez pas bien terminé de configurer votre compte. Retournez sur la page principale."});
+    }
   });
-
+  }
 });
 
 module.exports = router;
