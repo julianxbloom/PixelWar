@@ -182,10 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             color.addEventListener('click', (e) => {
                 // Set the border style
-                console.log("Color clicked:", color.style.background);
                 Choosecolor.style.border = "0vh solid black";
                 Choosecolor = color;
-                console.log(color.style.background=="rgb(0, 0, 0)");
                 Choosecolor.style.border = color.style.background=="rgb(0, 0, 0)"? "0.7vh solid white":"0.7vh solid black";
 
                 //Choosecolor.style.border = "0.7vh solid black";
