@@ -52,15 +52,15 @@ router.post('/', (req, res) => {
     }
     else{
 
-    con.query("SELECT googleId,users FROM user WHERE googleId = ?", [id], function(err, result) {
+    con.query("SELECT googleId,users FROM user WHERE googleId = ?", [id], function(err, re) {
     if (err) throw err;
-    if (result.length >0){
-      if (result[0].users != null && result[0].users == pseudo){
+    if (re.length >0){
+      if (re[0].users != null && re[0].users == pseudo){
         res.cookie("username",pseudo,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
         return res.redirect('/');
       }
       else {
-        con.query('UPDATE user SET users=? WHERE googleId = ?', [pseudo,id], function(err,result) {
+        con.query('UPDATE user SET users=? WHERE googleId = ?', [pseudo,id], function(err,m) {
           if (err) throw err;
           res.cookie("username",pseudo,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
           return res.redirect('/');

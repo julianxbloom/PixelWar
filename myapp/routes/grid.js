@@ -70,7 +70,7 @@ function setSocketIo(socketIo) {
 
       if (user.power > 0) {
         sql = 'UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?'
-        con.query(sql, [user.power - 1,user.nbrColor+1, user.id], (err, result) => {
+        con.query(sql, [user.power - 1,user.nbrColor+1, user.id], (err, m) => {
           if (err) {
             console.error('Erreur lors de la mise à jour du power :', err);
             return;
@@ -85,7 +85,7 @@ function setSocketIo(socketIo) {
         if (user.power == 0) {
           user.time = Date.now();
           sql = 'UPDATE user SET time = ? WHERE googleId = ?'
-          con.query(sql, [Date.now(), user.id], (err, result) => {
+          con.query(sql, [Date.now(), user.id], (err, m) => {
             if (err) {
               console.error('Erreur lors de la mise à jour du time :', err);
               return;
@@ -97,7 +97,7 @@ function setSocketIo(socketIo) {
 
         sql = 'UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?';
         const values = [data.color, data.affiche, data.x, data.y];
-        con.query(sql, values, (err, result) => {
+        con.query(sql, values, (err, m) => {
           if (err) {
             console.error('Erreur lors de la mise à jour du pixel :', err);
             return;
