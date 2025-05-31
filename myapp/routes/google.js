@@ -23,7 +23,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    console.log("Google login attempt");
     const { id_token } = req.body;
     try {
       const ticket = await client.verifyIdToken({
@@ -36,21 +35,17 @@ router.post('/', async (req, res) => {
       // Vérifie si l'utilisateur existe déjà
       con.query('SELECT * FROM user WHERE googleId = ?', [googleId], (err, result) => {
         if (err) {
-          console.log("Erreur de connexion à la base de données",err);
           return res.json({ success: false })};
         if (result.length == 0) {
           // Crée un nouvel utilisateur
           con.query('INSERT INTO user (googleId,users, power, time,popup) VALUES (?, ?, ?, ?,?)', [googleId,null, 7, null,null], (err2) => {
             if (err2) {
-              console.log("Erreur de connexion à la base de données", err2);
               return res.json({ success: false })};
-            console.log("1er cas");
             res.cookie("id", googleId, { path: '/', maxAge: 7*24*60*60*1000, httpOnly: false });
             return res.json({ success: true });
           });
         } else {
           // Utilisateur déjà existant
-          console.log("2e cas");
           res.cookie("id", googleId, { path: '/', maxAge: 7*24*60*60*1000, httpOnly: false });
           return res.json({ success: true });
         }

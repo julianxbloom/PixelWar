@@ -18,14 +18,12 @@ var con = mysql.createPool({
 function setSocketIo(socketIo) {
   io = socketIo;
   io.on('connection', (socket) => {
-    console.log("Nouvelle connexion socket");
 
     con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
       if (err) {
         console.error("Erreur SELECT rules :", err);
         throw err;
       }
-      console.log("Règles récupérées :", ruleRe);
       if (ruleRe.length > 0) {
         let r = ruleRe[0];
         delayRaid = r.delayRaid;
@@ -52,7 +50,6 @@ function setSocketIo(socketIo) {
     });
 
     socket.on('power', (data) => {
-      console.log("Événement power reçu avec data :", data);
 
       if (user.power <= 0) {
         const t = user.time;
@@ -61,14 +58,12 @@ function setSocketIo(socketIo) {
 
         if (d - t > time) {
           user.power = new Date().getHours() + 2 == dateRaid ? powerRaid : powerBase;
-          console.log("Power restauré :", user.power);
           sql = 'UPDATE user SET power = ? WHERE googleId = ?';
           con.query(sql, [user.power, user.id], (err, result) => {
             if (err) {
               console.error("Erreur UPDATE power :", err);
               return err;
             }
-            console.log("Power mis à jour dans la BDD");
           });
         }
       }
@@ -80,7 +75,6 @@ function setSocketIo(socketIo) {
             console.error('Erreur lors de la mise à jour du power :', err);
             return;
           }
-          console.log("Power diminué de 1 en BDD");
         });
 
         if (!user.admin) {
@@ -96,12 +90,10 @@ function setSocketIo(socketIo) {
               console.error('Erreur lors de la mise à jour du time :', err);
               return;
             }
-            console.log("Temps mis à jour en BDD");
           });
         }
 
         io.emit('pixelUpdate', { x: data.x, y: data.y, color: data.color, affiche: data.affiche });
-        console.log("pixelUpdate émis via socket");
 
         sql = 'UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?';
         const values = [data.color, data.affiche, data.x, data.y];
@@ -110,7 +102,6 @@ function setSocketIo(socketIo) {
             console.error('Erreur lors de la mise à jour du pixel :', err);
             return;
           }
-          console.log("Pixel mis à jour dans la BDD");
         });
       }
     });
@@ -118,7 +109,6 @@ function setSocketIo(socketIo) {
 }
 
 router.get('/', function (req, res, next) {
-  console.log("GET / reçu");
 
   con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
     if (err) {
@@ -126,7 +116,6 @@ router.get('/', function (req, res, next) {
       throw err;
     }
 
-    console.log("Règles chargées (GET /):", ruleRe);
     if (ruleRe.length > 0) {
       let r = ruleRe[0];
       dateRaid = r.timeRaid;
@@ -145,12 +134,10 @@ router.get('/', function (req, res, next) {
     }
 
     let d = new Date();
-    console.log(dateRaid,d.getHours() + 2);
     let raid = d.getHours() + 2 == dateRaid ? "en cours" : d.getHours() < dateRaid ? "auj à 21h" : "demain à 21h";
 
     const username = getCookie("username", req);
     const id = getCookie("id", req);
-    console.log("Cookies reçus :", username, id);
 
     if (username != null && id != null) {
       user.id = id;
@@ -162,12 +149,10 @@ router.get('/', function (req, res, next) {
           console.error("Erreur SELECT user :", err);
           return res.status(500).send('Erreur serveur');
         }
-        console.log("Utilisateur trouvé :", result);
         
         if (result.length == 0) {
           return res.redirect(`/google`);
         } else if (result[0].ban) {
-          console.log("Utilisateur banni");
           con.query('SELECT time,dureeBan FROM ban WHERE users = ?', [user.pseudo], (err, resul) => {
             if (err) {
               console.error("Erreur SELECT ban :", err);
@@ -176,7 +161,6 @@ router.get('/', function (req, res, next) {
             if (Date.now() - resul[0].time > resul[0].dureeBan || result[0].admin) {
               con.query('UPDATE user SET ban = FALSE WHERE users = ?', [user.pseudo], (err, m) => {
                 if (err) throw err;
-                console.log("Ban levé");
                 res.redirect('/');
               });
             } else {
@@ -192,7 +176,6 @@ router.get('/', function (req, res, next) {
               console.error("Erreur SELECT maintenance :", err);
               throw err;
             }
-            console.log("mainten  nce : ",user.admin);
             if (r.length > 0 && r[0].maintenance && !user.admin) {
               return res.redirect(`/waiting?pseudo=${user.pseudo}`);
             } else {
@@ -209,7 +192,6 @@ router.get('/', function (req, res, next) {
                   return res.status(500).send('Erreur serveur');
                 }
 
-                console.log("Pixels récupérés :", results.length);
                 user.time = result[0].time;
 
                 if (result[0].power <= 0) {
@@ -223,7 +205,6 @@ router.get('/', function (req, res, next) {
                         console.error("Erreur UPDATE power 0 -> base :", err);
                         return err;
                       }
-                      console.log("Power restauré à base");
                     });
                   } else {
                     user.power = 0;
@@ -232,7 +213,6 @@ router.get('/', function (req, res, next) {
                   user.power = result[0].power;
                 }
 
-                console.log("Render de la grille",delay,popup);
                 return res.render('grid', {
                   pseudo: user.pseudo,
                   pixels: results,
@@ -254,7 +234,6 @@ router.get('/', function (req, res, next) {
         }
       });
     } else {
-      console.log("Redirection vers /google car pas de cookie");
       return res.redirect('/google');
     }
   });

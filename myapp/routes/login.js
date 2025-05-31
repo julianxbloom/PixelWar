@@ -14,7 +14,6 @@ var con = mysql.createPool({
 });
 
 router.get('/', (req, res) => {
-  console.log("Login page request");
   if (getCookie("id", req) != null){
     const id = getCookie("id", req);
     con.query("SELECT users FROM user WHERE googleId = ?", [id], function(err, result) {
@@ -31,7 +30,6 @@ router.get('/', (req, res) => {
     });
   }
   else {
-    console.log("Redirect");
     return res.redirect('/google');
   }
 });
