@@ -6,6 +6,7 @@ let dateRaid, delayRaid, delay, powerBase, powerRaid, gridSize;
 let io;
 
 let user = { pseudo: null, id: null, power: null, time: null, id: null, admin: false, nbrColor : 0 };
+let admin = false
 
 var con = mysql.createPool({
   host: "yamanote.proxy.rlwy.net",
@@ -105,6 +106,12 @@ function setSocketIo(socketIo) {
         });
       }
     });
+    
+    if (admin){
+        socket.on('reload', () => {
+            io.emit('reloadServeur');
+        });
+    }
   });
 }
 
@@ -213,8 +220,19 @@ router.get('/', function (req, res, next) {
                   user.power = result[0].power;
                 }
 
+              con.query('SELECT admin FROM user WHERE users = ?', [req.query.pseudo], (err, result) => {
+                if (err) {
+                  return res.status(500).send('Erreur serveur');
+                }
+                if (result.length > 0){
+                  admin = result[0].admin;
+                  return res.render('utils', {admin:admin}); // Passe-la à la vue si besoin
+                }
+              });
+
                 return res.render('grid', {
                   pseudo: user.pseudo,
+                  admin: admin,
                   pixels: results,
                   power: user.power,
                   time: Date.now() - user.time,
