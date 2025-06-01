@@ -142,7 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (admin){
         console.log("Btn doit apparaitre !");
         btn.style.display = "flex";
-        btn.addEventListener('click', function() {
+        btn.addEventListener('touchstart', function() {
+            socket.emit("reload");
+        });
+        btn.addEventListener('mousedown', function() {
             socket.emit("reload");
         });
     }
