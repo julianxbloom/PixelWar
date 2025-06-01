@@ -107,7 +107,7 @@ function setSocketIo(socketIo) {
       }
     });
     
-    if (admin){
+    if (user.admin){
         socket.on('reload', () => {
             io.emit('reloadServeur');
         });
@@ -232,13 +232,12 @@ router.get('/', function (req, res, next) {
 
                 return res.render('grid', {
                   pseudo: user.pseudo,
-                  admin: admin,
+                  admin: user.admin,
                   pixels: results,
                   power: user.power,
                   time: Date.now() - user.time,
                   popup: popup,
                   nextRaid: raid,
-                  verifP: user.admin,
                   gridSize: gridSize,
                   powerBase: powerBase,
                   powerRaid: powerRaid,

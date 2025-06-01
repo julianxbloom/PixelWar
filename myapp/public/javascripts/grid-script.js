@@ -140,11 +140,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btn = document.getElementById('BtnReload');
     if (admin){
+        console.log("Btn doit apparaitre !");
         btn.style.display = "flex";
         btn.addEventListener('click', function() {
-        socket.emit("reload");
+            socket.emit("reload");
         });
-}
+    }
 
 
     window.addEventListener("focus",()=>{
@@ -273,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x].color){
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
-                if (!verifP){
+                if (!admin){
                     power.dataset.count -= 1;
                 }
                 power.textContent = power.dataset.count;
@@ -331,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x].color){//} && currentColor != pixels[y*canvaSize+x].color){
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
-                if (!verifP){
+                if (!admin){
                     power.dataset.count -= 1;
                 }
                 power.textContent = power.dataset.count;
