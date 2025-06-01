@@ -60,6 +60,9 @@ router.post('/', (req, res) => {
         return res.redirect('/');
       }
       else {
+        con.query("INSERT INTO ban (users,motif) VALUES (?,?)",[pseudo,"nous reglons votre cas"],function(e,m) {
+          if (e) throw e;
+        });
         con.query('UPDATE user SET users=? WHERE googleId = ?', [pseudo,id], function(err,m) {
           if (err) throw err;
           res.cookie("username",pseudo,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
