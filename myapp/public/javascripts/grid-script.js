@@ -138,6 +138,15 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.reload();
     });
 
+    btn = document.getElementById('BtnReload');
+    if (admin){
+        btn.style.display = "flex";
+        btn.addEventListener('click', function() {
+        socket.emit("reload");
+        });
+}
+
+
     window.addEventListener("focus",()=>{
         window.location.reload();
     });

@@ -25,7 +25,7 @@
     <div class="background", id='bgGoogle'></div>
     <div class = "containerTop">
         <div class="containerTopTittle">
-            <h1>Prochain raid :</h1>
+            <h1 style="margin-top: 7px;">Prochain raid :</h1>
             <h2 id="nextRaid"> <%= nextRaid %></h2>
         </div>
 
@@ -47,6 +47,12 @@
         </div>  
         
     </div>
+
+    <script>
+        admin = <%- JSON.stringify(admin) %>;
+    </script>
+    <button id="BtnReload" style="display:none">Button Admin</button>
+
     
     <script src="javascripts/grid-script.js"></script>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
