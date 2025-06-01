@@ -39,7 +39,7 @@ router.get('/', function(req, res, next) {
           else{
             con.query('SELECT ban FROM user WHERE users = ?',[pseudo], (err,u)=>{
               if (err) throw err;
-              if (u.length > 0) {
+              if (u.length > 0 && ban) {
                 con.query('SELECT afficheBan,motif,time,dureeBan FROM ban WHERE users = ?',[pseudo], (err, result) => {
                   if (err) throw err;
                   if (result.length > 0) {
