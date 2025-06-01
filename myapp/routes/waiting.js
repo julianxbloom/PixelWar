@@ -47,7 +47,7 @@ router.get('/', function(req, res, next) {
                       return res.redirect('/');
                     }
                     else{
-                      const timeRemain = result[0].time>Date.now() ? "Votre ban va être défini":`Ban : ${Math.floor((result[0].dureeBan - (Date.now()-result[0].time))/1000)} secondes`;
+                      const timeRemain = result[0].time>Date.now() ? "Vous êtes banni":`Ban : ${Math.floor((result[0].dureeBan - (Date.now()-result[0].time))/1000)} secondes`;
                       return res.render('waiting', { title: timeRemain, text: result[0].motif});
                     }
                   } 
