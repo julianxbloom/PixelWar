@@ -83,7 +83,7 @@ h1 {
     transform: translate(-50%,-150%);
     background-color: #8f2121;
     color: white;
-    font-size:20px;/*Size of the text*/
+    font-size:30px;/*Size of the text*/
     padding: 0 2vw;
     border-radius: 8px;
     z-index: 2;

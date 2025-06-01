@@ -383,7 +383,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const rect = canvas.getBoundingClientRect();
         const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
         const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
-        drawBubble(x,y);
+        if(y>=0 && x >=0 && y<=canvaSize && x <= canvaSize){
+            drawBubble(x, y);
+        }
     });
 
     document.addEventListener('dblclick', function(event) { //Previens le zoom quand clique 2x

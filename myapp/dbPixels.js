@@ -1,7 +1,7 @@
 var mysql = require('mysql2');
 
 
-const canvaSize = 150;
+const canvaSize = 200;
 
 // Database connection & creation
 var con = mysql.createConnection({
