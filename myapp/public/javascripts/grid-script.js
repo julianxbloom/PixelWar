@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 power.textContent = power.dataset.count;
                 if (power.dataset.count < 1){
-                    startCountdown(delay);
+                    startCountdown(new Date().getHours() == hourRaid ? delayRaid : delay);
                 }
             }
         }
