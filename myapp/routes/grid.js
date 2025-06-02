@@ -123,6 +123,8 @@ router.get('/', function (req, res, next) {
       throw err;
     }
 
+    
+
     if (ruleRe.length > 0) {
       let r = ruleRe[0];
       dateRaid = r.timeRaid;
@@ -139,9 +141,10 @@ router.get('/', function (req, res, next) {
       powerRaid = 3;
       gridSize = 50;
     }
+    
 
     let d = new Date();
-    let raid = d.getHours() + 2 == dateRaid ? "en cours" : d.getHours() < dateRaid ? "auj à 21h" : "demain à 21h";
+    let raid = d.getHours() + 2 == dateRaid ? "en cours" : d.getHours() +2< dateRaid ? "auj à 21h" : "demain à 21h";
 
     const username = getCookie("username", req);
     const id = getCookie("id", req);
@@ -204,7 +207,7 @@ router.get('/', function (req, res, next) {
                 if (result[0].power <= 0) {
                   const t = user.time;
                   const d = Date.now();
-                  if (d - t > 1000 * delay) {
+                  if (d - t > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)) {
                     user.power = powerBase;
                     const sql = 'UPDATE user SET power = ? WHERE googleId = ?';
                     con.query(sql, [user.power, user.id], (err, m) => {

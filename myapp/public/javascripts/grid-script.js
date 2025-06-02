@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var rotate = false;
 
     if (power.dataset.count <= 0){
-        startCountdown((new Date().getHours == hourRaid? delayRaid:delay)-Math.round(power.dataset.time/1000));
+        startCountdown((new Date().getHours() == hourRaid? delayRaid:delay)-Math.round(power.dataset.time/1000));
     }
     
 
@@ -424,6 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (min > 0) {
                     min--;
                     sec = 59;
+                    power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;
                     
                 } else {
                     power.dataset.count = new Date().getHours()==hourRaid?powerRaid:powerBase;
