@@ -27,20 +27,20 @@ async function takeScreenshot() {
     {
       name: 'username',
       value: 'timTG01',
-      domain: 'pixelwar.up.railway.app',
+      domain: 'pixelchallenge.up.railway.app',
       path: '/',
     }
   ];
 
   await page.setCookie(...cookies);
-  await page.goto('https://pixelwar.up.railway.app/', { waitUntil: 'networkidle2' });
+  await page.goto('https://pixelchallenge.up.railway.app/', { waitUntil: 'networkidle2' });
   await page.waitForSelector('canvas', { timeout: 10000 });
 
   const dataUrl = await page.$eval('canvas', canvas => canvas.toDataURL('image/png'));
   const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
   const buffer = Buffer.from(base64Data, 'base64');
 
-  const filePath = path.join(imageDir, `pixelwarGrid-${Date.now()}.png`);
+  const filePath = path.join(imageDir, `pixelchallengeGrid-${Date.now()}.png`);
   fs.writeFileSync(filePath, buffer);
 
   console.log(`✅ Screenshot enregistré : ${filePath}`);
