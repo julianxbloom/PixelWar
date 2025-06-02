@@ -21,7 +21,7 @@ async function takeScreenshot() {
     {
       name: 'id',
       value: '113937883500129231761',
-      domain: 'pixelwar.up.railway.app',
+      domain: 'pixelchallenge.up.railway.app',
       path: '/',
     },
     {
@@ -34,6 +34,13 @@ async function takeScreenshot() {
 
   await page.setCookie(...cookies);
   await page.goto('https://pixelchallenge.up.railway.app/', { waitUntil: 'networkidle2' });
+
+  /*const filePath = path.join(imageDir, `pixelchallengeGrid-${Date.now()}.png`);
+
+  await page.screenshot({ path: filePath }); // capture l'écran entier visible
+
+  console.log(`✅ Screenshot enregistré : ${filePath}`);*/
+
   await page.waitForSelector('canvas', { timeout: 10000 });
 
   const dataUrl = await page.$eval('canvas', canvas => canvas.toDataURL('image/png'));

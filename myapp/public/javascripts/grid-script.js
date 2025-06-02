@@ -264,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('mouseup', (e) => {
+        console.log(hourRaid,delayRaid,delay, new Date().getHours());
         mooveGridEnd(e);
         bubble.style.opacity = 0;
 
