@@ -163,7 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('powerUpdate', (data) => {
-        power.dataset.count = data.power;
+        window.location.reload();
+        /*power.dataset.count = data.power;
         power.textContent = power.dataset.count;
         power.dataset.time = data.time;
         console.log(power.dataset.count, power.dataset.time);
@@ -173,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (power.dataset.count <= 0){
             startCountdown((new Date().getHours() == hourRaid? delayRaid:delay)-Math.round(power.dataset.time/1000));
-        }
+        }*/
     });
 
     socket.on('syncPixels', (px) => {
