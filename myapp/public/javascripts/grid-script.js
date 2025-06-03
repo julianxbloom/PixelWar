@@ -153,8 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     window.addEventListener("focus",()=>{
-        socket.emit('requestSync');
-        socket.emit('requestPower');
+        window.location.reload();
+        //socket.emit('requestSync');
+        //socket.emit('requestPower');
     });
 
     //------------------Refresh------------------
@@ -163,8 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('powerUpdate', (data) => {
-        window.location.reload();
-        /*power.dataset.count = data.power;
+        power.dataset.count = data.power;
         power.textContent = power.dataset.count;
         power.dataset.time = data.time;
         console.log(power.dataset.count, power.dataset.time);
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (power.dataset.count <= 0){
             startCountdown((new Date().getHours() == hourRaid? delayRaid:delay)-Math.round(power.dataset.time/1000));
-        }*/
+        }
     });
 
     socket.on('syncPixels', (px) => {
