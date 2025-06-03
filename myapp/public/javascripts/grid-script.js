@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let zoomLevel = 1; // Niveau de zoom initial (1 = taille normale)
 
     let drag = false;
+    let countdown;
 
     let currentColor = "rgb(255, 255, 255)";
     let Lcolors = [
@@ -152,12 +153,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     window.addEventListener("focus",()=>{
-        window.location.reload();
+        socket.emit('requestSync');
+        socket.emit('requestPower');
     });
 
     //------------------Refresh------------------
     socket.on('connect', () => {
         socket.emit('requestSync');
+    });
+
+    socket.on('powerUpdate', (data) => {
+        power.dataset.count = data.power;
+        power.textContent = power.dataset.count;
+        power.dataset.time = data.time;
+        console.log(power.dataset.count, power.dataset.time);
+        
+        if (typeof countdown !== "undefined") {
+            clearInterval(countdown);
+        }
+        if (power.dataset.count <= 0){
+            startCountdown((new Date().getHours() == hourRaid? delayRaid:delay)-Math.round(power.dataset.time/1000));
+        }
     });
 
     socket.on('syncPixels', (px) => {
@@ -414,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sec = sec%60;
         power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;//Celui de base
 
-        const countdown = setInterval(() => {
+        countdown = setInterval(() => {
             sec--;
             if (sec > -1){
             power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;

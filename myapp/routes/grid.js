@@ -50,6 +50,39 @@ function setSocketIo(socketIo) {
         });
     });
 
+    socket.on('requestPower', (data) => {
+      const sql = 'SELECT power, time FROM user WHERE googleId = ?';
+      con.query(sql, [user.id], (err, result) => {
+        if (err) {
+          console.error("Erreur SELECT user :", err);
+          return;
+        }
+        if (result.length > 0) {
+          if (result[0].power <= 0){
+            if (Date().now - result[0].time > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)){
+              user.power = new Date().getHours() + 2 == dateRaid ? powerRaid : powerBase;
+              sql = 'UPDATE user SET power = ? WHERE googleId = ?';
+              con.query(sql, [user.power, user.id], (err, m) => {
+                if (err) {
+                  console.error("Erreur UPDATE power :", err);
+                  return err;
+                }
+              });
+            }    
+            else {
+              user.power = 0;
+            }        
+          }
+          else {
+            user.power = result[0].power;
+          }
+          user.time = result[0].time;
+          socket.emit('powerUpdate', { power: user.power, time: Date.now() - user.time});
+        }
+      });
+      }
+    );
+
     socket.on('power', (data) => {
 
       if (user.power <= 0) {
