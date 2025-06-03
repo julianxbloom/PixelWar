@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sec = sec%60;
         power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;//Celui de base
 
-        countdown = setInterval(() => {
+        let countdown = setInterval(() => {
             sec--;
             if (sec > -1){
             power.textContent = `${min}:${sec<10 ? 0 : ""}${sec}`;
