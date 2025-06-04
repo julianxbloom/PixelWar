@@ -28,8 +28,9 @@ function setSocketIo(socketIo) {
 
     let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
     user.pseudo = cookies.username;
-    user.id = cookies.id
-    user.power = cookies.power
+    user.id = cookies.id;
+    user.power = cookies.power;
+    user.admin = cookies.admin;
 
     con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
       if (err) {
@@ -293,6 +294,7 @@ router.get('/', function (req, res, next) {
                 }
               });
                 res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
+                res.cookie("admin",user.admin,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
                 return res.render('grid', {
                   pseudo: user.pseudo,
                   admin: user.admin,
