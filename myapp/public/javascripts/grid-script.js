@@ -163,6 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('requestSync');
     });
 
+    socket.on('powerCookie', ({ power }) => {
+    document.cookie = `power=${power}; path=/; max-age=${7*24*60*60*1000}`; // 2 minutes
+    });
+
     socket.on('powerUpdate', (data) => {
         power.dataset.count = data.power;
         power.textContent = power.dataset.count;
