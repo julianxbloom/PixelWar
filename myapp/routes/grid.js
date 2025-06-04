@@ -241,7 +241,7 @@ router.get('/', function (req, res, next) {
                   const t = user.time;
                   const d = Date.now();
                   if (d - t > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)) {
-                    user.power = powerBase;
+                    user.power = new Date().getHours() +2 == dateRaid ?powerRaid : powerBase;
                     const sql = 'UPDATE user SET power = ? WHERE googleId = ?';
                     con.query(sql, [user.power, user.id], (err, m) => {
                       if (err) {
