@@ -88,7 +88,7 @@ function setSocketIo(socketIo) {
       if (user.power <= 0) {
         const t = user.time;
         const d = Date.now();
-        const time = new Date().getHours() + 2 == dateRaid ? 1000 * delayRaid : 1000 * delay;
+        const time = (new Date().getHours() + 2 == dateRaid ? 1000 * delayRaid : 1000 * delay);
 
         if (d - t > time) {
           user.power = new Date().getHours() + 2 == dateRaid ? powerRaid : powerBase;
