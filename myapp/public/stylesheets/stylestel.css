@@ -134,6 +134,7 @@ h1 {
     display: flex;
     position: relative;
     height: 40px;
+    min-width: 40px;
     left: 0px;
     margin: 0% auto;
     border-radius: 90px;
