@@ -157,7 +157,8 @@ function setSocketIo(socketIo) {
             }
           });
         }
-
+        
+        res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
 
         io.emit('pixelUpdate', { x: data.x, y: data.y, color: data.color, affiche: data.affiche });
 
