@@ -5,9 +5,6 @@ const { getCookie } = require('../public/javascripts/cookieUtils');
 let dateRaid, delayRaid, delay, powerBase, powerRaid, gridSize;
 let io;
 
-let user = { pseudo: null, id: null, power: null, time: null, id: null, admin: false, nbrColor : 0 };
-let admin = false
-
 var con = mysql.createPool({
   host: "yamanote.proxy.rlwy.net",
   port: "30831",
@@ -20,6 +17,20 @@ function setSocketIo(socketIo) {
   io = socketIo;
   io.on('connection', (socket) => {
 
+    const rawCookies = socket.handshake.headers.cookie;
+
+    // Parser le cookie manuellement
+    const cookies = {};
+    rawCookies?.split(';').forEach(cookie => {
+      const [name, value] = cookie.trim().split('=');
+      cookies[name] = decodeURIComponent(value);
+    });
+
+    let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
+    user.pseudo = cookies.username;
+    user.id = cookies.id
+    user.power = cookies.power
+
     con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
       if (err) {
         console.error("Erreur SELECT rules :", err);
@@ -30,7 +41,7 @@ function setSocketIo(socketIo) {
         delayRaid = r.delayRaid;
         powerBase = r.powerBase;
         powerRaid = r.powerRaid;
-        dateRaid = r.delayRaid;
+        dateRaid = 16;//r.delayRaid;
         delay = r.delayBase;
       } else {
         delayRaid = 5;
@@ -40,6 +51,8 @@ function setSocketIo(socketIo) {
         delay = 20;
       }
     });
+
+    //con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
 
     socket.on('requestSync', () => {
         con.query('SELECT x,y,color,affiche FROM pixels WHERE x < ? AND y < ?', [gridSize, gridSize], (err, results) => {
@@ -59,7 +72,7 @@ function setSocketIo(socketIo) {
         }
         if (result.length > 0) {
           if (result[0].power <= 0){
-            if (Date().now - result[0].time > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)){
+            if (Date.now() - result[0].time > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)){
               user.power = new Date().getHours() + 2 == dateRaid ? powerRaid : powerBase;
               sql = 'UPDATE user SET power = ? WHERE googleId = ?';
               con.query(sql, [user.power, user.id], (err, m) => {
@@ -172,7 +185,7 @@ router.get('/', function (req, res, next) {
 
     if (ruleRe.length > 0) {
       let r = ruleRe[0];
-      dateRaid = r.timeRaid;
+      dateRaid = 16;//r.timeRaid;
       delayRaid = r.delayRaid;
       delay = r.delayBase;
       powerBase = r.powerBase;
@@ -187,7 +200,7 @@ router.get('/', function (req, res, next) {
       gridSize = 50;
     }
     
-
+    let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
     let d = new Date();
     let raid = d.getHours() + 2 == dateRaid ? "en cours" : d.getHours() +2< dateRaid ? "auj à 21h" : "demain à 21h";
 
@@ -278,7 +291,7 @@ router.get('/', function (req, res, next) {
                   return res.render('utils', {admin:admin}); // Passe-la à la vue si besoin
                 }
               });
-
+                res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
                 return res.render('grid', {
                   pseudo: user.pseudo,
                   admin: user.admin,
