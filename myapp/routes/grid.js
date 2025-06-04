@@ -84,16 +84,30 @@ function setSocketIo(socketIo) {
     );
 
     socket.on('power', (data) => {
-
+      console.log(new Date().getHours(),"H");
       if (user.power <= 0) {
+        const sql = 'SELECT time FROM user WHERE googleId = ?';
+        con.query(sql, [user.id], (err, result) => {
+          if (err) {
+            console.error("Erreur SELECT user :", err);
+            return;
+          }
+          if (result.length > 0) {
+            user.time = result[0].time;
+            console.log("reimporte");
+          }
+        });
+        
         const t = user.time;
         const d = Date.now();
-        const time = (new Date().getHours() + 2 == dateRaid ? 1000 * delayRaid : 1000 * delay);
-
-        if (d - t > time) {
-          user.power = new Date().getHours() + 2 == dateRaid ? powerRaid : powerBase;
-          sql = 'UPDATE user SET power = ? WHERE googleId = ?';
-          con.query(sql, [user.power, user.id], (err, result) => {
+        /*console.log(user.time,d);
+        console.log(new Date().getHours(),"H");
+        console.log("sous",d-t,(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay),(d-t)-(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay));
+*/
+        if (d - t > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)) {
+          console.log("donne");
+          user.power = new Date().getHours() +2 == dateRaid ?powerRaid : powerBase;
+          con.query('UPDATE user SET power = ? WHERE googleId = ?', [user.power, user.id], (err, result) => {
             if (err) {
               console.error("Erreur UPDATE power :", err);
               return err;
@@ -155,8 +169,6 @@ router.get('/', function (req, res, next) {
       console.error("Erreur SELECT rules (GET /):", err);
       throw err;
     }
-
-    
 
     if (ruleRe.length > 0) {
       let r = ruleRe[0];
@@ -240,6 +252,7 @@ router.get('/', function (req, res, next) {
                 if (result[0].power <= 0) {
                   const t = user.time;
                   const d = Date.now();
+                  console.log("reload",t,d,(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay),(d-t)-(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay))
                   if (d - t > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)) {
                     user.power = new Date().getHours() +2 == dateRaid ?powerRaid : powerBase;
                     const sql = 'UPDATE user SET power = ? WHERE googleId = ?';
