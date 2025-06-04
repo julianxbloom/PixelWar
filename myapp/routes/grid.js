@@ -144,7 +144,7 @@ function setSocketIo(socketIo) {
         if (!user.admin) {
           user.power -= 1;
           user.nbrColor += 1;
-          res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
+          //res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
         }
 
         if (user.power == 0) {
@@ -158,7 +158,7 @@ function setSocketIo(socketIo) {
           });
         }
         
-        res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
+        //res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
 
         io.emit('pixelUpdate', { x: data.x, y: data.y, color: data.color, affiche: data.affiche });
 
@@ -252,7 +252,7 @@ router.get('/', function (req, res, next) {
             }
             if (r.length > 0 && r[0].maintenance && !user.admin) {
               return res.redirect(`/waiting?pseudo=${user.pseudo}`);
-            } else {
+            /*if (r.length > 0){ //}} */}else {
               con.query('UPDATE user SET popup = NULL WHERE googleId = ?', [user.id], (err, rer) => {
                 if (err) {
                   console.error("Erreur UPDATE popup :", err);
