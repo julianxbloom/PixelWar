@@ -142,6 +142,7 @@ function setSocketIo(socketIo) {
         if (!user.admin) {
           user.power -= 1;
           user.nbrColor += 1;
+          res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
         }
 
         if (user.power == 0) {
