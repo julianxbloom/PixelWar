@@ -75,7 +75,6 @@ function setSocketIo(socketIo) {
           if (result[0].power <= 0){
             if (Date.now() - result[0].time > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)){
               user.power = new Date().getHours() + 2 == dateRaid ? powerRaid : powerBase;
-              res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
               sql = 'UPDATE user SET power = ? WHERE googleId = ?';
               con.query(sql, [user.power, user.id], (err, m) => {
                 if (err) {
@@ -90,7 +89,9 @@ function setSocketIo(socketIo) {
           }
           else {
             user.power = result[0].power;
+            
           }
+          res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
           user.time = result[0].time;
           socket.emit('powerUpdate', { power: user.power, time: Date.now() - user.time});
         }
