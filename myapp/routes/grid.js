@@ -41,7 +41,7 @@ function setSocketIo(socketIo) {
         delayRaid = r.delayRaid;
         powerBase = r.powerBase;
         powerRaid = r.powerRaid;
-        dateRaid = 16;//r.delayRaid;
+        dateRaid = r.delayRaid;
         delay = r.delayBase;
       } else {
         delayRaid = 5;
@@ -154,6 +154,7 @@ function setSocketIo(socketIo) {
           });
         }
 
+
         io.emit('pixelUpdate', { x: data.x, y: data.y, color: data.color, affiche: data.affiche });
 
         sql = 'UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?';
@@ -185,7 +186,7 @@ router.get('/', function (req, res, next) {
 
     if (ruleRe.length > 0) {
       let r = ruleRe[0];
-      dateRaid = 16;//r.timeRaid;
+      dateRaid = r.timeRaid;
       delayRaid = r.delayRaid;
       delay = r.delayBase;
       powerBase = r.powerBase;
