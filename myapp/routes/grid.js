@@ -147,6 +147,18 @@ function setSocketIo(socketIo) {
             return;
           }
         });
+
+
+        //Updtae le nombre de cases colorié par la personne
+        con.query('SELECT nbrColor FROM user WHERE googleId = ?',[user.id],(err,rep)=> {
+          if (err) throw err;
+          if (rep.length > 0){
+            con.query('UPDATE user SET nbrColor = ? WHERE googleId = ?',[rep[0].nbrColor+1,user.id] ,(err,m) =>{
+              if (err) throw err;
+            });
+          }
+        });
+
         if (!user.admin) {
           console.log("-1 au power");
           user.power -= 1;
