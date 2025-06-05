@@ -140,14 +140,6 @@ function setSocketIo(socketIo) {
       }
 
       if (user.power > 0) {
-        sql = 'UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?'
-        con.query(sql, [user.power - 1,user.nbrColor+1, user.id], (err, m) => {
-          if (err) {
-            console.error('Erreur lors de la mise à jour du power :', err);
-            return;
-          }
-        });
-
 
         //Updtae le nombre de cases colorié par la personne
         con.query('SELECT nbrColor FROM user WHERE googleId = ?',[user.id],(err,rep)=> {
