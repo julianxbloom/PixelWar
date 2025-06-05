@@ -342,7 +342,7 @@ router.get('/', function (req, res, next) {
               throw err;
             }
             if (r.length > 0 && r[0].maintenance && !user.admin) {
-              return res.redirect(`/waiting?pseudo=${user.pseudo}`);*/
+              return res.redirect(`/waiting?pseudo=${user.pseudo}`);
             /*if (r.length > 0){ //}} */}else {
               con.query('UPDATE user SET popup = NULL WHERE googleId = ?', [user.id], (err, rer) => {
                 if (err) {
