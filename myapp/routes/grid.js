@@ -138,7 +138,7 @@ function setSocketIo(socketIo) {
             }
           });
         }
-      }
+      } //
 
       con.query('SELECT power FROM user WHERE googleId = ?', [user.id], (err, result) => {
         if (err) {
