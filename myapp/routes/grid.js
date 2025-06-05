@@ -145,7 +145,7 @@ function setSocketIo(socketIo) {
         con.query('SELECT nbrColor FROM user WHERE googleId = ?',[user.id],(err,rep)=> {
           if (err) throw err;
           if (rep.length > 0){
-            con.query('UPDATE user SET nbrColor = ? WHERE googleId = ?',[rep[0].nbrColor+1,user.id] ,(err,m) =>{
+            con.query('UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?',[user.power-1,rep[0].nbrColor+1,user.id] ,(err,m) =>{
               if (err) throw err;
             });
           }
@@ -156,7 +156,6 @@ function setSocketIo(socketIo) {
           user.power -= 1;
           user.nbrColor += 1;
           //Emit le cookie pour qu'il soit update
-          socket.emit('powerCookie', { power: user.power});
           console.log(user.power,"chg power 2")
         }
 
@@ -171,6 +170,7 @@ function setSocketIo(socketIo) {
           });
         }
         
+        //emit cookie pour qu'il soit update
         socket.emit('powerCookie', { power: user.power});
         console.log(user.power,"chg power end");
         io.emit("pixelUpdate",{x:data.x,y:data.y,color:data.color,affiche:data.affiche});
