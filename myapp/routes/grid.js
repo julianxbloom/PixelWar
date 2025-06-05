@@ -155,7 +155,7 @@ function setSocketIo(socketIo) {
               });
             }
           });
-          
+
           //Emit le cookie pour qu'il soit update
           console.log(user.power,"chg power 2")
         }
