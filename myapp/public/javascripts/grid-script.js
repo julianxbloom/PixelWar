@@ -2,6 +2,7 @@ var link = document.createElement("link");
 link.type = 'text/css';
 link.rel = 'stylesheet';
 
+
 //Pour la bdd
 
 if (screen.width > 600)
