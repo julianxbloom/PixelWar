@@ -140,8 +140,7 @@ function setSocketIo(socketIo) {
         }
       }
 
-      const sql = 'SELECT power FROM user WHERE googleId = ?';
-      con.query(sql, [user.id], (err, result) => {
+      con.query('SELECT power FROM user WHERE googleId = ?', [user.id], (err, result) => {
         if (err) {
           console.error("Erreur SELECT user :", err);
           return;
