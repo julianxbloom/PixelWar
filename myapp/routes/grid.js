@@ -51,7 +51,7 @@ function setSocketIo(socketIo) {
         powerRaid = 3;
         dateRaid = 21;
         delay = 20;
-      }
+      }//
     });
 
     //con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
@@ -65,7 +65,7 @@ function setSocketIo(socketIo) {
         });
     });
 
-    socket.on('requestPower', (data) => {
+    /*socket.on('requestPower', (data) => {
       const sql = 'SELECT power, time FROM user WHERE googleId = ?';
       con.query(sql, [user.id], (err, result) => {
         if (err) {
@@ -101,10 +101,20 @@ function setSocketIo(socketIo) {
         }
       });
       }
-    );
-
+    );*/
+/*
     socket.on('power', (data) => {
       console.log(user.power,"power");
+      con.query('SELECT power FROM user WHERE googleId = ?', [user.id], (err, result) => {
+        if (err) {
+          console.error("Erreur SELECT user :", err);
+          return;
+        }
+        if (result.length > 0) {
+          user.power = result[0].power;
+          console.log(user.power,"user power");
+        }
+      });
       if (user.power <= 0) {
         const sql = 'SELECT time FROM user WHERE googleId = ?';
         con.query(sql, [user.id], (err, result) => {
@@ -127,7 +137,7 @@ function setSocketIo(socketIo) {
         /*console.log(user.time,d);
         console.log(new Date().getHours(),"H");
         console.log("sous",d-t,(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay),(d-t)-(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay));
-*/
+
         if (d - t > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)) {
           console.log("donne");
           user.power = new Date().getHours() +2 == dateRaid ?powerRaid : powerBase;
@@ -139,17 +149,6 @@ function setSocketIo(socketIo) {
           });
         }
       } //
-
-      con.query('SELECT power FROM user WHERE googleId = ?', [user.id], (err, result) => {
-        if (err) {
-          console.error("Erreur SELECT user :", err);
-          return;
-        }
-        if (result.length > 0) {
-          user.power = result[0].power;
-          console.log(user.power,"user power");
-        }
-      });
 
       if (user.power > 0) {
 
@@ -197,7 +196,73 @@ function setSocketIo(socketIo) {
         });
       }
 
-    });
+    });*/
+
+  //Chatgpt
+socket.on('power', (data) => {
+  con.query('SELECT power, time FROM user WHERE googleId = ?', [user.id], (err, result) => {
+    if (err || result.length === 0) {
+      console.error("Erreur SELECT power/time :", err);
+      return;
+    }
+
+    let currentPower = result[0].power;
+    let lastTime = result[0].time;
+    let now = Date.now();
+    const currentHour = new Date().getHours() + 2;
+    const delayMs = (currentHour == dateRaid ? delayRaid : delay) * 1000;
+    const maxPower = currentHour == dateRaid ? powerRaid : powerBase;
+
+    // Recharge power si délai écoulé
+    if (currentPower <= 0 && now - lastTime > delayMs) {
+      currentPower = maxPower;
+
+      con.query('UPDATE user SET power = ? WHERE googleId = ?', [currentPower, user.id], (err) => {
+        if (err) console.error("Erreur UPDATE power :", err);
+      });
+    }
+
+    // S'il a du power, on déduit et met à jour pixel
+    if (currentPower > 0) {
+      if (!user.admin) currentPower -= 1;
+
+      // Mise à jour du power et nbrColor
+      con.query('SELECT nbrColor FROM user WHERE googleId = ?', [user.id], (err, rep) => {
+        if (err || rep.length === 0) return;
+
+        const newNbrColor = rep[0].nbrColor + 1;
+        con.query('UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?', [currentPower, newNbrColor, user.id], (err) => {
+          if (err) return console.error(err);
+
+          // Si power tombe à 0, update time
+          if (currentPower === 0) {
+            con.query('UPDATE user SET time = ? WHERE googleId = ?', [now, user.id], (err) => {
+              if (err) console.error("Erreur UPDATE time :", err);
+            });
+          }
+
+          // Mettre à jour les cookies client
+          socket.emit('powerCookie', { power: currentPower });
+
+          // Update pixel dans la grille
+          con.query('UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?', [data.color, data.affiche, data.x, data.y], (err) => {
+            if (err) console.error("Erreur UPDATE pixels :", err);
+          });
+
+          io.emit("pixelUpdate", {
+            x: data.x,
+            y: data.y,
+            color: data.color,
+            affiche: data.affiche
+          });
+        });
+      });
+    } else {
+      socket.emit('powerCookie', { power: 0 }); // Facultatif
+    }
+  });
+});
+
     
     if (user.admin){
         socket.on('reload', () => {
@@ -277,7 +342,7 @@ router.get('/', function (req, res, next) {
               throw err;
             }
             if (r.length > 0 && r[0].maintenance && !user.admin) {
-              return res.redirect(`/waiting?pseudo=${user.pseudo}`);
+              return res.redirect(`/waiting?pseudo=${user.pseudo}`);*/
             /*if (r.length > 0){ //}} */}else {
               con.query('UPDATE user SET popup = NULL WHERE googleId = ?', [user.id], (err, rer) => {
                 if (err) {
