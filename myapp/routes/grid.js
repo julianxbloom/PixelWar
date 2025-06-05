@@ -141,20 +141,21 @@ function setSocketIo(socketIo) {
 
       if (user.power > 0) {
 
-        //Updtae le nombre de cases colorié par la personne
-        con.query('SELECT nbrColor FROM user WHERE googleId = ?',[user.id],(err,rep)=> {
-          if (err) throw err;
-          if (rep.length > 0){
-            con.query('UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?',[user.power-1,rep[0].nbrColor+1,user.id] ,(err,m) =>{
-              if (err) throw err;
-            });
-          }
-        });
-
         if (!user.admin) {
           console.log("-1 au power");
           user.power -= 1;
           user.nbrColor += 1;
+
+          //Updtae le nombre de cases colorié par la personne
+          con.query('SELECT nbrColor FROM user WHERE googleId = ?',[user.id],(err,rep)=> {
+            if (err) throw err;
+            if (rep.length > 0){
+              con.query('UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?',[user.power,rep[0].nbrColor+1,user.id] ,(err,m) =>{
+                if (err) throw err;
+              });
+            }
+          });
+          
           //Emit le cookie pour qu'il soit update
           console.log(user.power,"chg power 2")
         }
