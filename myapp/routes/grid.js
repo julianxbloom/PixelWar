@@ -333,7 +333,7 @@ router.get('/', function (req, res, next) {
             }
           });
         } else {
-          const popup = result[0].popup;
+          const popup = result[0].popup;//
           user.admin = result[0].admin;
           user.nbrColor = result[0].nbrColor;
           con.query('SELECT maintenance FROM global WHERE id = 1', (err, r) => {
