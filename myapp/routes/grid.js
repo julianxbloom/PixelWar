@@ -30,7 +30,8 @@ function setSocketIo(socketIo) {
     user.pseudo = cookies.username;
     user.id = cookies.id;
     user.power = cookies.power;
-    user.admin = cookies.admin;
+    user.admin = Boolean(Number(cookies.admin));
+    console.log("connection",user.power);
 
     con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
       if (err) {
@@ -42,7 +43,7 @@ function setSocketIo(socketIo) {
         delayRaid = r.delayRaid;
         powerBase = r.powerBase;
         powerRaid = r.powerRaid;
-        dateRaid = r.delayRaid;
+        dateRaid = r.timeRaid;
         delay = r.delayBase;
       } else {
         delayRaid = 5;
@@ -75,6 +76,9 @@ function setSocketIo(socketIo) {
           if (result[0].power <= 0){
             if (Date.now() - result[0].time > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)){
               user.power = new Date().getHours() + 2 == dateRaid ? powerRaid : powerBase;
+
+              socket.emit('powerCookie', { power: user.power});
+
               sql = 'UPDATE user SET power = ? WHERE googleId = ?';
               con.query(sql, [user.power, user.id], (err, m) => {
                 if (err) {
@@ -100,7 +104,7 @@ function setSocketIo(socketIo) {
     );
 
     socket.on('power', (data) => {
-      console.log(new Date().getHours(),"H");
+      console.log(user.power,"power");
       if (user.power <= 0) {
         const sql = 'SELECT time FROM user WHERE googleId = ?';
         con.query(sql, [user.id], (err, result) => {
@@ -116,6 +120,9 @@ function setSocketIo(socketIo) {
         
         const t = user.time;
         const d = Date.now();
+        console.log(d-t);
+        console.log(new Date().getHours() +2 == dateRaid ? 1000*delayRaid : 100*delay,"delay");
+        console.log(new Date().getHours() +2,"H", dateRaid,delayRaid,delay);
         /*console.log(user.time,d);
         console.log(new Date().getHours(),"H");
         console.log("sous",d-t,(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay),(d-t)-(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay));
@@ -133,18 +140,24 @@ function setSocketIo(socketIo) {
       }
 
       if (user.power > 0) {
-        sql = 'UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?'
-        con.query(sql, [user.power - 1,user.nbrColor+1, user.id], (err, m) => {
-          if (err) {
-            console.error('Erreur lors de la mise à jour du power :', err);
-            return;
-          }
-        });
 
         if (!user.admin) {
+          console.log("-1 au power");
           user.power -= 1;
           user.nbrColor += 1;
-          //res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
+
+          //Updtae le nombre de cases colorié par la personne
+          con.query('SELECT nbrColor FROM user WHERE googleId = ?',[user.id],(err,rep)=> {
+            if (err) throw err;
+            if (rep.length > 0){
+              con.query('UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?',[user.power,rep[0].nbrColor+1,user.id] ,(err,m) =>{
+                if (err) throw err;
+              });
+            }
+          });
+
+          //Emit le cookie pour qu'il soit update
+          console.log(user.power,"chg power 2")
         }
 
         if (user.power == 0) {
@@ -158,10 +171,10 @@ function setSocketIo(socketIo) {
           });
         }
         
-        //res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
-
-        io.emit('pixelUpdate', { x: data.x, y: data.y, color: data.color, affiche: data.affiche });
-
+        //emit cookie pour qu'il soit update
+        socket.emit('powerCookie', { power: user.power});
+        console.log(user.power,"chg power end");
+        io.emit("pixelUpdate",{x:data.x,y:data.y,color:data.color,affiche:data.affiche});
         sql = 'UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?';
         const values = [data.color, data.affiche, data.x, data.y];
         con.query(sql, values, (err, m) => {
@@ -171,6 +184,7 @@ function setSocketIo(socketIo) {
           }
         });
       }
+
     });
     
     if (user.admin){
@@ -297,6 +311,7 @@ router.get('/', function (req, res, next) {
                   return res.render('utils', {admin:admin}); // Passe-la à la vue si besoin
                 }
               });
+              console.log(user.power,"res.get");
                 res.cookie("power",user.power,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
                 res.cookie("admin",user.admin,{path:'/',maxAge:7*24*60*60*1000});//le cookie reste 2min
                 return res.render('grid', {
