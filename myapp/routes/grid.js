@@ -106,7 +106,7 @@ function setSocketIo(socketIo) {
     socket.on('power', (data) => {
       console.log(user.power,"power");
       if (user.power <= 0) {
-        const sql = 'SELECT time, power FROM user WHERE googleId = ?';
+        const sql = 'SELECT time FROM user WHERE googleId = ?';
         con.query(sql, [user.id], (err, result) => {
           if (err) {
             console.error("Erreur SELECT user :", err);
@@ -114,7 +114,7 @@ function setSocketIo(socketIo) {
           }
           if (result.length > 0) {
             user.time = result[0].time;
-            user.power = result[0].power;
+            console.log(user.power,"user power");
             console.log("reimporte");
           }
         });
@@ -139,6 +139,18 @@ function setSocketIo(socketIo) {
           });
         }
       }
+
+      const sql = 'SELECT power FROM user WHERE googleId = ?';
+      con.query(sql, [user.id], (err, result) => {
+        if (err) {
+          console.error("Erreur SELECT user :", err);
+          return;
+        }
+        if (result.length > 0) {
+          user.power = result[0].power;
+          console.log(user.power,"user power");
+        }
+      });
 
       if (user.power > 0) {
 
