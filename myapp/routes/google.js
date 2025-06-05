@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
           return res.json({ success: false })};
         if (result.length == 0) {
           // Crée un nouvel utilisateur
-          con.query('INSERT INTO user (googleId,users, power, time,popup) VALUES (?, ?, ?, ?,?)', [googleId,null, 5, null,null], (err2) => {
+          con.query('INSERT INTO user (googleId,users, power, time,popup) VALUES (?, ?, ?, ?,?)', [googleId,null, 15, null,null], (err2) => {
             if (err2) {
               return res.json({ success: false })};
             res.cookie("id", googleId, { path: '/', maxAge: 7*24*60*60*1000, httpOnly: false });
