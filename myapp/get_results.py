@@ -114,5 +114,19 @@ def resultatsParClasseToCSV():
     return 1
 
 
+def trierCSVIndiv():
+    """Trie le fichier resultatsIndiv.csv par ordre alphabétique du username."""
+    with open('resultats/resultsIndiv.csv', 'r') as csvFile:
+        reader = csv.DictReader(csvFile)
+        rows = sorted(reader, key=lambda row: row['username'])
+    
+    with open('resultats/resultsIndiv.csv', 'w', newline='') as csvFile:
+        fieldnames = ['username', 'pixelsColored', 'class']
+        writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 resultatsParClasseToCSV()
 resultatsIndivToCSV()
+trierCSVIndiv()
