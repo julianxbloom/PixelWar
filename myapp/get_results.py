@@ -78,6 +78,19 @@ def getResultatsParClasse():
 def resultatsIndivToCSV():
     """Ajoute les résultats par utilisateurs dans un fichier csv."""
     resultatsIndiv = getResultatsIndiv()
+    
+    with open('resultats/resultsIndiv.csv', 'w') as csvFile:
+        fieldnames = ['username', 'pixelsColored', 'class']
+        writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
+        
+        writer.writeheader()
+        for ele in resultatsIndiv:
+            writer.writerow(
+                {'username': ele[0],
+                 'pixelsColored': ele[1],
+                 'class': ele[2]
+                })
+    return 1
 
 
 def resultatsParClasseToCSV():
@@ -91,8 +104,11 @@ def resultatsParClasseToCSV():
         writer.writeheader()
         
         for ele in resultatsParClasse:
-            writer.writerow({'classe':ele, 'pixelsColored': resultatsParClasse[ele]})
-    
+            writer.writerow(
+                    {'classe':ele,
+                    'pixelsColored': resultatsParClasse[ele]
+                })
     return 1
 
 resultatsParClasseToCSV()
+resultatsIndivToCSV()
