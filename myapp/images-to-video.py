@@ -2,9 +2,11 @@ import cv2
 import os
 
 # === CONFIGURATION ===
-chemin_images = "C:\\Users\\timotheenobilet\\Downloads\\node-v18.20.3-win-x64\\node-v18.20.3-win-x64\\images"
-nom_sortie = "video_rapide.mp4"
-fps = 10  # 0.1 seconde par image = 10 FPS
+chemin_images = "./Raid"
+
+
+nom_sortie = "video_rapideRaid.mp4"
+fps = 1  # 0.1 seconde par image = 10 FPS
 
 # === RÉCUPÉRATION DES IMAGES DANS L'ORDRE ===
 images = [f for f in sorted(os.listdir(chemin_images)) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]

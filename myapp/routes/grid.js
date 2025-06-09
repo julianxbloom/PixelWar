@@ -274,6 +274,10 @@ socket.on('power', (data) => {
 
 router.get('/', function (req, res, next) {
 
+  /*con.query("UPDATE user SET popup = ?",["Attention : le site fermera définitivement ce soir à 22h."],(err,m)=>{
+    if (err) throw err;
+  })*/
+
   con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
     if (err) {
       console.error("Erreur SELECT rules (GET /):", err);
