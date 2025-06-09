@@ -91,8 +91,6 @@ def resultatsParClasseToCSV():
         writer.writeheader()
         
         for ele in resultatsParClasse:
-            print(ele)
-            print(resultatsParClasse[ele])
             writer.writerow({'classe':ele, 'pixelsColored': resultatsParClasse[ele]})
     
     return 1
