@@ -110,5 +110,6 @@ def resultatsParClasseToCSV():
                 })
     return 1
 
+
 resultatsParClasseToCSV()
 resultatsIndivToCSV()
