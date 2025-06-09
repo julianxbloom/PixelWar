@@ -1,5 +1,6 @@
 import mysql.connector, csv
 
+
 def singleUserDataTreatment(user: tuple):
     """Extrait les données d'un utilisateur."""
     if not user[0] or not user[1]:
