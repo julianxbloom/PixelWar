@@ -1,6 +1,7 @@
-import mysql.connector
+import mysql.connector, csv
 
 def singleUserDataTreatment(user: tuple):
+    """Extrait les données d'un utilisateur."""
     if not user[0]:
         return False
     
@@ -34,7 +35,8 @@ def singleUserDataTreatment(user: tuple):
         return False
 
 
-def getResults():
+def getResultatsIndiv():
+    """Renvoie les résultats statistiques de la Pixel War par utilisateur."""
     with mysql.connector.connect(
         host="yamanote.proxy.rlwy.net",
         port=30831,
@@ -58,9 +60,10 @@ def getResults():
             
         return results
 
-def resultatsParClasse():
-    resultatsIndiv = getResults()
-    
+
+def getResultatsParClasse():
+    """Renvoie les résultats statistiques de la Pixel War par classe."""
+    resultatsIndiv = getResultatsIndiv()
     results = {}
     
     for user in resultatsIndiv:
@@ -68,6 +71,30 @@ def resultatsParClasse():
             results[user[2]] = user[1]
         else:
             results[user[2]] += user[1]
+    
     return results
 
-print(resultatsParClasse())
+
+def resultatsIndivToCSV():
+    """Ajoute les résultats par utilisateurs dans un fichier csv."""
+    resultatsIndiv = getResultatsIndiv()
+
+
+def resultatsParClasseToCSV():
+    """Ajoute les résultats par classe dans un fichier csv."""
+    resultatsParClasse = getResultatsParClasse()
+    
+    with open('resultats/resultsClasse.csv', 'w') as csvFile:
+        fieldnames = ['classe','pixelsColored']
+        writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
+        
+        writer.writeheader()
+        
+        for ele in resultatsParClasse:
+            print(ele)
+            print(resultatsParClasse[ele])
+            writer.writerow({'classe':ele, 'pixelsColored': resultatsParClasse[ele]})
+    
+    return 1
+
+resultatsParClasseToCSV()
