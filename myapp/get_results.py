@@ -2,7 +2,7 @@ import mysql.connector, csv
 
 def singleUserDataTreatment(user: tuple):
     """Extrait les données d'un utilisateur."""
-    if not user[0]:
+    if not user[0] or not user[1]:
         return False
     
     num_classe = user[0][-2:]
@@ -27,9 +27,11 @@ def singleUserDataTreatment(user: tuple):
     elif classe in ['1G', 'TG']:
         classe += num_classe
         username = user[0][:-4]
+        pixelsColored = user[1]
         if username == 'tim':
             classe = 'TG02'
-        return username, user[1], classe
+            pixelsColored -= 500
+        return username, pixelsColored, classe
     
     else:
         return False
