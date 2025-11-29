@@ -1,48 +1,45 @@
 var mysql = require('mysql2');
 
-// Database connection & creation
-var con = mysql.createConnection({
-  host: "yamanote.proxy.rlwy.net",
-  port: "30831",
-  database: "railway",
-  user: "root",
-  password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
+var con = mysql.createPool({
+  host: "localhost",
+  user: "devuser",
+  password: "monpassword",
+  database: "pixelwar"
 });
 
-con.connect(function(err) {
+// DROP TABLE → CREATE TABLE → INSERT → SELECT
+con.query("DROP TABLE IF EXISTS global", function(err) {
   if (err) throw err;
-  var drop_user = `DROP TABLE IF EXISTS global`;
-  con.query(drop_user, function(err, result) {
-    if (err) throw err;
-    console.log("Table user dropped!");
-  });
-  console.log("Connected!");
-  var user_creation = `CREATE TABLE IF NOT EXISTS global(
-    id INT AUTO_INCREMENT,
-    maintenance BOOLEAN DEFAULT FALSE,
-    mtnTittle VARCHAR(100) DEFAULT 'Debut :',
-    mtnText TEXT,
-    PRIMARY KEY(id)
-  )`;
-  con.query(user_creation, function(err, result) {
-    if (err) throw err;
-    console.log("Table user created!");
-  });
+  console.log("Table global dropped!");
 
-  con.query("SELECT * FROM global", function(err, result) {
-    if (err) throw err;
-    console.log(result);
-  });
+  const create_global = `
+    CREATE TABLE IF NOT EXISTS global (
+      id INT AUTO_INCREMENT,
+      maintenance BOOLEAN DEFAULT FALSE,
+      mtnTittle VARCHAR(100) DEFAULT 'Debut :',
+      mtnText TEXT,
+      PRIMARY KEY (id)
+    )
+  `;
 
-  con.query("INSERT INTO global (maintenance, mtnTittle, mtnText) VALUES (TRUE, 'Welcooooome', 'Ce site ouvira ces portes le mercredi 4 Juin à 10h ')", function(err, result) {
+  con.query(create_global, function(err) {
     if (err) throw err;
-    console.log("Default global settings inserted!");
+    console.log("Table global created!");
+
+    const insert_default = `
+      INSERT INTO global (maintenance, mtnTittle, mtnText)
+      VALUES (FALSE, 'Welcooooome', 'Ce site ouvrira ses portes le mercredi 4 Juin à 10h')
+    `;
+
+    con.query(insert_default, function(err) {
+      if (err) throw err;
+      console.log("Default global settings inserted!");
+
+      con.query("SELECT * FROM global", function(err, result) {
+        if (err) throw err;
+        console.log("Contenu de la table global :", result);
+        process.exit(); // fermeture propre
+      });
+    });
   });
 });
-
-function showTable(name){
-  con.query(`SELECT * FROM ${name}`, function(err, result) {
-    if (err) throw err;
-    console.log(result);
-  });
-}

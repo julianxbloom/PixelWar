@@ -2,15 +2,12 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql2');
 
-// Database connection & creation
 var con = mysql.createPool({
-  host: "yamanote.proxy.rlwy.net",
-  port: "30831",
-  database: "railway",
-  user: "root",
-  password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
+  host: "localhost",
+  user: "devuser",
+  password: "monpassword",
+  database: "pixelwar"
 });
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
 

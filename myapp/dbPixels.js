@@ -1,61 +1,73 @@
-var mysql = require('mysql2');
-
+#!/usr/bin/env node
+const mysql = require('mysql2');
 
 const canvaSize = 200;
 
-// Database connection & creation
-var con = mysql.createConnection({
-  host: "yamanote.proxy.rlwy.net",
-  port: "30831",
-  database: "railway",
-  user: "root",
-  password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
+// Pool de connexion
+const pool = mysql.createPool({
+  host: "localhost",
+  user: "devuser",
+  password: "monpassword",
+  database: "pixelwar"
 });
 
-con.connect(function(err) {
-  if (err) throw err;
-  var drop_pixels = `DROP TABLE IF EXISTS pixels`;
-  con.query(drop_pixels, function(err, result) {
-    if (err) throw err;
-    console.log("Table pixels dropped!");
-  });
-  console.log("Connected!"); //Couleur de base blanc à voir si good
-  var user_creation = `CREATE TABLE IF NOT EXISTS pixels(
-    id INT AUTO_INCREMENT,
-    x INT,
-    y INT,
-    color VARCHAR(25) DEFAULT 'rgb(255, 255, 255)',
-    affiche VARCHAR(100) DEFAULT 'blank',
-    PRIMARY KEY(id)
-  )`;
-  con.query(user_creation, function(err, result) {
-    if (err) throw err;
-    console.log("Table pixels created!");
-    createTable();
-    showTable("pixels");
-  });
-
-  con.query("SELECT * FROM pixels", function(err, result) {
-    if (err) throw err;
-    console.log(result);
-  });
-});
-
-function createTable(){
-
-  for (let i = 0; i<canvaSize*canvaSize;i++){
-
-    const x = i%canvaSize;
-    const y = Math.floor(i/canvaSize);
-
-    const sql = `INSERT INTO pixels (x, y) VALUES (?, ?)`;
-    con.query(sql, [x, y]);
+// Connexion au pool
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.error("Erreur de connexion :", err);
+    process.exit(1);
   }
-}
 
-function showTable(name){
-  con.query(`SELECT * FROM ${name}`, function(err, result) {
+  console.log("Connecté à MySQL !");
+
+  // Supprimer la table
+  const dropPixels = `DROP TABLE IF EXISTS pixels`;
+  connection.query(dropPixels, (err) => {
     if (err) throw err;
-    console.log(result);
+    console.log("Table pixels supprimée.");
+
+    // Création de la table
+    const createPixels = `
+      CREATE TABLE IF NOT EXISTS pixels (
+        id INT AUTO_INCREMENT,
+        x INT,
+        y INT,
+        color VARCHAR(25) DEFAULT 'rgb(255, 255, 255)',
+        affiche VARCHAR(100) DEFAULT 'blank',
+        PRIMARY KEY(id)
+      )
+    `;
+    connection.query(createPixels, (err) => {
+      if (err) throw err;
+
+      console.log("Table pixels créée !");
+
+      // Insérer toutes les cases
+      insertPixels(connection);
+    });
+  });
+});
+
+// Insère les 200x200 pixels
+function insertPixels(connection) {
+  const total = canvaSize * canvaSize;
+  console.log(`Insertion de ${total} pixels…`);
+
+  // Pour éviter 40 000 requêtes individuelles, on prépare les valeurs
+  let values = [];
+  for (let i = 0; i < total; i++) {
+    const x = i % canvaSize;
+    const y = Math.floor(i / canvaSize);
+    values.push([x, y]);
+  }
+
+  const sql = "INSERT INTO pixels (x, y) VALUES ?";
+
+  connection.query(sql, [values], (err) => {
+    if (err) throw err;
+
+    console.log("Insertion terminée !");
+    connection.release();
+    process.exit(0);
   });
 }

@@ -5,12 +5,17 @@ const { getCookie } = require('../public/javascripts/cookieUtils');
 let dateRaid, delayRaid, delay, powerBase, powerRaid, gridSize;
 let io;
 
+
 var con = mysql.createPool({
-  host: "yamanote.proxy.rlwy.net",
-  port: "30831",
-  database: "railway",
-  user: "root",
-  password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
+  host: "localhost",
+  user: "devuser",
+  password: "monpassword",
+  database: "pixelwar"
+  //host: "yamanote.proxy.rlwy.net",
+  //port: "30831",
+  //database: "railway",
+  //user: "root",
+  //password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
 });
 
 function setSocketIo(socketIo) {
@@ -28,7 +33,7 @@ function setSocketIo(socketIo) {
 
     let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
     user.pseudo = cookies.username;
-    user.id = cookies.id;
+    user.id = 34543;
     user.power = cookies.power;
     user.admin = Boolean(Number(cookies.admin));
     console.log("connection",user.power);
@@ -308,19 +313,23 @@ router.get('/', function (req, res, next) {
     const username = getCookie("username", req);
     const id = getCookie("id", req);
 
-    if (username != null && id != null) {
+    if (username != null ) {
       user.id = id;
       user.pseudo = username;
 
-      const sql = 'SELECT power,time,popup,admin,ban, nbrColor FROM user WHERE users = ? AND googleId = ?';
-      con.query(sql, [username, id], (err, result) => {
+      const sql = 'SELECT power,time,popup,admin,ban, nbrColor FROM user WHERE users = ? AND googleId = 34543';
+      con.query(sql, [username], (err, result) => {
         if (err) {
           console.error("Erreur SELECT user :", err);
           return res.status(500).send('Erreur serveur');
         }
-        
         if (result.length == 0) {
-          return res.redirect(`/google`);
+      // Le compte n’existe pas -> retour login
+        res.clearCookie("username");
+        return res.redirect('/login');
+        
+        //if (result.length == 0) {
+        //  return res.redirect(`/google`);
         } else if (result[0].ban) {
           con.query('SELECT time,dureeBan FROM ban WHERE users = ?', [user.pseudo], (err, resul) => {
             if (err) {
@@ -416,7 +425,9 @@ router.get('/', function (req, res, next) {
         }
       });
     } else {
-      return res.redirect('/google');
+      return res.render('login', { info: "Attention, le pseudo est définitif" });
+
+      //return res.redirect('/google');
     }
   });
 });

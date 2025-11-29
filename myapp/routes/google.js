@@ -11,14 +11,19 @@ router.use(express.urlencoded({ extended: true }));
 
 
 var con = mysql.createPool({
-  host: "yamanote.proxy.rlwy.net",
-  port: "30831",
-  database: "railway",
-  user: "root",
-  password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
+  host: "localhost",
+  user: "devuser",
+  password: "monpassword",
+  database: "pixelwar"
+  //host: "yamanote.proxy.rlwy.net",
+  //port: "30831",
+  //database: "railway",
+  //user: "root",
+  //password: "yMdXBhOeslFOqRfhbbHUWUlijPQZtLlI"
 });
 
 router.get('/', (req, res) => {
+  
     return res.render('google',{info:""});
 });
 
