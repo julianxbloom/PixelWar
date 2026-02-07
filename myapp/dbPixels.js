@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const canvaSize = 200;
+const canvaSize = 500;
 var mysql = require('mysql2');
 require("dotenv").config();
 
