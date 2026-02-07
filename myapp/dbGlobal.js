@@ -58,3 +58,4 @@ con.query("DROP TABLE IF EXISTS global", function(err) {
     });
   });
 });
+console.log("Everything done properly")

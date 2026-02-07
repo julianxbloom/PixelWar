@@ -46,7 +46,9 @@ router.get('/', (req, res) => {
 
     if (result.length > 0) {
       // OK → connexion directe
+      
       return res.redirect('/');
+
     }
 
     // Le cookie existe mais le compte a disparu → on recrée automatiquement
@@ -78,6 +80,7 @@ router.post('/', (req, res) => {
     if (err) throw err;
 
     if (result.length > 0) {
+      console.log("User found");
       // Pseudo déjà existant → on connecte !
       res.cookie("username", pseudo, { path: '/', maxAge: 7*24*60*60*1000 });
       return res.redirect('/');
@@ -85,7 +88,7 @@ router.post('/', (req, res) => {
 
     // Création du compte
     con.query(
-      "INSERT INTO user (users, googleId, power, time, popup) VALUES (?, NULL, 15, NULL, NULL)",
+      "INSERT INTO user (users, googleId, power, time, popup) VALUES (?, 1, 15, NULL, NULL)",
       [pseudo],
       (err2) => {
         if (err2) throw err2;

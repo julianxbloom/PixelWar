@@ -43,7 +43,7 @@ function setSocketIo(socketIo) {
 
     let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
     user.pseudo = cookies.username;
-    user.id = 34543;
+    user.id = 1;
     user.power = cookies.power;
     user.admin = Boolean(Number(cookies.admin));
     console.log("connection",user.power);
@@ -327,7 +327,7 @@ router.get('/', function (req, res, next) {
       user.id = id;
       user.pseudo = username;
 
-      const sql = 'SELECT power,time,popup,admin,ban, nbrColor FROM user WHERE users = ? AND googleId = 34543';
+      const sql = 'SELECT power,time,popup,admin,ban, nbrColor FROM user WHERE users = ? AND googleId = 1';
       con.query(sql, [username], (err, result) => {
         if (err) {
           console.error("Erreur SELECT user :", err);
