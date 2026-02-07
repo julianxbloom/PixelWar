@@ -1,7 +1,0 @@
-- Beautiful : Bootstrap
-- Tuto : A faire !!!
-- Plus classe mais groupe que peux creer
-- Grid : changer de pseudo (pas obligé)
-
-- Timelapse
-- Webapp (nop)
