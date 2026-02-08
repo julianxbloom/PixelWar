@@ -322,7 +322,7 @@ router.get('/', function (req, res, next) {
       delay = r.delayBase;
       powerBase = r.powerBase;
       powerRaid = r.powerRaid;
-      gridSize = r.gridSize;
+      gridSize = 100;//r.gridSize;
     } else {
       dateRaid = 21;
       delayRaid = 5 * 60;
