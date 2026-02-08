@@ -39,13 +39,13 @@ pool.getConnection((err, connection) => {
     if (err) throw err;
     console.log("Table pixels supprimée.");
 
-    // Création de la table
+    // Création de la table //Maybe remove x and y ?
     const createPixels = `
       CREATE TABLE IF NOT EXISTS pixels (
         id INT AUTO_INCREMENT,
         x INT,
         y INT,
-        color VARCHAR(25) DEFAULT 'rgb(255, 255, 255)',
+        color INT DEFAULT 1,
         affiche VARCHAR(100) DEFAULT 'blank',
         PRIMARY KEY(id)
       )

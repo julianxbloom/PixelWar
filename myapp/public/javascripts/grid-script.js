@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let drag = false;
     let countdown;
 
-    let currentColor = "rgb(255, 255, 255)";
+    let currentColor = 0;
     let Lcolors = [
         "rgb(255, 255, 255)", // #FFFFFF
         "rgb(192, 192, 192)", // #C0C0C0
@@ -97,18 +97,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let bubbleX = 0;
     let bubbleY = 0;
     let dragStartX, dragStartY;
-    const pixels = {};
+    let pixels;
 
     function updateGrid(px){
-        Object.values(px).forEach(({x,y,color,affiche}) => {
+        let x = 0;
+        let y = 0; 
+        //const size = length(px);
+        pixels = new Uint8Array(canvaSize*canvaSize); //Faios * car x * y
+        Object.values(px).forEach(({color}) => {
+            //console.log(color);
+
+            pixels[y*canvaSize+x]=color;
             
-            pixels[canvaSize*y+x] = {
-                
-                color: color, // ou la couleur par défaut
-                x: x*pixelSize,
-                y: y*pixelSize,
-                affiche : affiche //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
-            };
+            //pixels[canvaSize*y+x] = {
+            //    
+            //    color: color, // ou la couleur par défaut
+            //    //x: x*pixelSize,
+            //    //y: y*pixelSize,
+            //    affiche : "None"//affiche //+ `${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`
+            //};
+            x++;
+            if(x>=canvaSize){
+                y++;
+                x=0;
+            }
         });
     }
 
@@ -122,11 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Dessiner un pixel à la position x,y
-    function drawPixel(x, y, color, affiche) {
-        pixels[y*canvaSize+x].color = color;
-        pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
-        date = new Date();
-        pixels[y*canvaSize+x].affiche = affiche;//pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
+    function drawPixel(x, y, color_id){//, affiche) {
+        pixels[y*canvaSize+x]=color_id
+        //pixels[y*canvaSize+x].color = color;
+        //pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
+        //date = new Date();
+        //pixels[y*canvaSize+x].affiche = affiche;//pixels[y*canvaSize+x].name + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()}`;/*C'est les el affiche lorsqu'on hover un pixel.*/
         draw();
     }
     
@@ -152,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-
     window.addEventListener("focus",()=>{
         window.location.reload();
         //socket.emit('requestSync');
@@ -164,6 +176,10 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('requestSync');
     });
 
+    socket.on('bubble_text',(data)=>{
+        bubble.textContent=data.text;
+    })
+
     socket.on('powerCookie', ({ power }) => {
     document.cookie = `power=${power}; path=/; max-age=${7*24*60*60*1000}`; // 2 minutes
     });
@@ -172,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         power.dataset.count = data.power;
         power.textContent = power.dataset.count;
         power.dataset.time = data.time;
-        console.log(power.dataset.count, power.dataset.time);
+        //console.log(power.dataset.count, power.dataset.time);
         
         if (typeof countdown !== "undefined") {
             clearInterval(countdown);
@@ -210,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const color = document.createElement('div');
             color.classList.add('color');
             color.style.background = Lcolors[i]
+            color.id = i;
 
             if (i == 0){
                 Choosecolor = color;
@@ -222,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Choosecolor.style.border = color.style.background=="rgb(0, 0, 0)"? "0.7vh solid white":"0.7vh solid black";
 
                 //Choosecolor.style.border = "0.7vh solid black";
-                currentColor = `${color.style.backgroundColor}`;
+                currentColor = color.id;
             }, {passive: false});
             colorGrid.appendChild(color);
         }
@@ -234,10 +251,17 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.setTransform(zoomLevel, 0, 0, zoomLevel, offsetX, offsetY);
         ctx.clearRect(-offsetX/zoomLevel, -offsetY/zoomLevel, canvas.width/zoomLevel, canvas.height/zoomLevel);
 
-        for (let keys in pixels) {
-            ctx.fillStyle = pixels[keys].color;
-            ctx.fillRect(pixels[keys].x, pixels[keys].y, pixelSize, pixelSize);
-
+        let x = 0;
+        let y = 0;
+        for (const color_id of pixels) {
+            //console.log(color_id)
+            ctx.fillStyle = Lcolors[color_id];
+            ctx.fillRect(x*pixelSize, y*pixelSize, pixelSize, pixelSize);
+            x++;
+            if(x>=canvaSize){
+                x=0;
+                y++;
+            }       
         }
 
         bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX}px`;
@@ -246,11 +270,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function drawBubble(x,y){
         bubble.style.opacity = 1;
-        bubble.textContent = `${pixels[y*canvaSize + x].affiche}`;
+        bubble.textContent = "Incoming";//`${pixels[y*canvaSize + x].affiche}`;
         bubbleX = x*pixelSize*zoomLevel + offsetX + pixelSize/2*zoomLevel;//pixelSize;
         bubbleY = y*pixelSize*zoomLevel + offsetY - bubbleRect.height/2;//pixelSize;
         bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX}px`;
         bubble.style.top = `${bubbleY + offsetBubble[1] + offsetY}px`;
+
+        socket.emit('bubble_display',{
+            x:x,
+            y:y
+        });
     };
 
     // Clic pour dessiner
@@ -286,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('mouseup', (e) => {
-        console.log(hourRaid,delayRaid,delay, new Date().getHours());
+        //console.log(hourRaid,delayRaid,delay, new Date().getHours());
         mooveGridEnd(e);
         bubble.style.opacity = 0;
 

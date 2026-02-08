@@ -12,7 +12,7 @@ function onGoogleSignIn(response) {
     .then(data => {
         if(data.success) {
             // Appliquer l'animation
-            window.location.href = '/login';
+            window.location.href = '/';
         } else {
             alert('Erreur de connexion Google');
         }

@@ -95,6 +95,8 @@ canvas {
     display: block;
     position : absolute;
     cursor: crosshair;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 .bubble { /*Permet de faire la bulle quand hover*/

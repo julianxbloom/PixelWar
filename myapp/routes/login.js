@@ -33,8 +33,8 @@ var con = mysql.createPool(({
 // --------------------------
 router.get('/', (req, res) => {
 
-  //const username = getCookie("username", req);
-  const username = "Tim";
+  const username = getCookie("username", req);
+  //const username = "Tim";
 
   if (!username) {
     return res.render('login', { info: "Choisis ew pseudo." });
@@ -50,16 +50,17 @@ router.get('/', (req, res) => {
       return res.redirect('/');
 
     }
+    return res.redirect('/');
 
     // Le cookie existe mais le compte a disparu → on recrée automatiquement
-    con.query(
-      "INSERT INTO user (users, googleId, power, time, popup) VALUES (?, NULL, 15, NULL, NULL)",
-      [username],
-      (err2) => {
-        if (err2) throw err2;
-        return res.redirect('/');
-      }
-    );
+    //con.query(
+    //  "INSERT INTO user (users, googleId, power, time, popup) VALUES (?, NULL, 15, NULL, NULL)",
+    //  [username],
+    //  (err2) => {
+    //    if (err2) throw err2;
+    //    return res.redirect('/');
+    //  }
+    //);
   });
 });
 
@@ -68,8 +69,9 @@ router.get('/', (req, res) => {
 // --------------------------
 router.post('/', (req, res) => {
 
-  //const pseudo = req.body.pseudo;
-  const pseudo = "Tim";
+  const pseudo = req.body.pseudo;
+  const id = getCookie("id", req);
+  //const pseudo = "Tim";
 
   if (!/^[A-Za-z0-9_-]{1,15}$/.test(pseudo)) {
     return res.render('login', { info: "Seules lettres, chiffres, - et _ sont autorisés." });
@@ -88,8 +90,8 @@ router.post('/', (req, res) => {
 
     // Création du compte
     con.query(
-      "INSERT INTO user (users, googleId, power, time, popup) VALUES (?, 1, 15, NULL, NULL)",
-      [pseudo],
+      "INSERT INTO user (users, googleId, power, time, popup) VALUES (?, ?, 15, NULL, NULL)",
+      [pseudo,id],
       (err2) => {
         if (err2) throw err2;
 

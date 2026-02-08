@@ -43,7 +43,7 @@ function setSocketIo(socketIo) {
 
     let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
     user.pseudo = cookies.username;
-    user.id = 1;
+    user.id = cookies.id;
     user.power = cookies.power;
     user.admin = Boolean(Number(cookies.admin));
     console.log("connection",user.power);
@@ -72,7 +72,7 @@ function setSocketIo(socketIo) {
     //con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
 
     socket.on('requestSync', () => {
-        con.query('SELECT x,y,color,affiche FROM pixels WHERE x < ? AND y < ?', [gridSize, gridSize], (err, results) => {
+        con.query('SELECT color FROM pixels WHERE x < ? AND y < ?', [gridSize, gridSize], (err, results) => {
             if (err) throw err;
             if (!err) {
                 socket.emit('syncPixels', results);
@@ -263,12 +263,12 @@ socket.on('power', (data) => {
           con.query('UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?', [data.color, data.affiche, data.x, data.y], (err) => {
             if (err) console.error("Erreur UPDATE pixels :", err);
           });
-
+          //console.log(data.color);
           io.emit("pixelUpdate", {
             x: data.x,
             y: data.y,
-            color: data.color,
-            affiche: data.affiche
+            color: data.color
+            //affiche: data.affiche
           });
         });
       });
@@ -284,8 +284,24 @@ socket.on('power', (data) => {
             io.emit('reloadServeur');
         });
     }
+    socket.on('bubble_display',(data)=>{
+      let x =data.x;
+      let y = data.y;
+
+      con.query("SELECT affiche FROM pixels WHERE x = ? AND y = ?",[x,y],(err,result)=>{
+        if(err) throw err;
+        else {
+          txt = result[0].affiche;
+          io.emit("bubble_text",{
+            text:txt,
+          });
+        }
+      });
+    });
   });
+  
 }
+
 
 router.get('/', function (req, res, next) {
 
@@ -327,8 +343,8 @@ router.get('/', function (req, res, next) {
       user.id = id;
       user.pseudo = username;
 
-      const sql = 'SELECT power,time,popup,admin,ban, nbrColor FROM user WHERE users = ? AND googleId = 1';
-      con.query(sql, [username], (err, result) => {
+      const sql = 'SELECT power,time,popup,admin,ban, nbrColor FROM user WHERE users = ? AND googleId = ?';
+      con.query(sql, [username,id], (err, result) => {
         if (err) {
           console.error("Erreur SELECT user :", err);
           return res.status(500).send('Erreur serveur');
@@ -435,9 +451,9 @@ router.get('/', function (req, res, next) {
         }
       });
     } else {
-      return res.render('login', { info: "Attention, le pseudo est définitif" });
+      //return res.render('login', { info: "Attention, le pseudo est définitif" });
 
-      //return res.redirect('/google');
+      return res.redirect('/google');
     }
   });
 });

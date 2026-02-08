@@ -26,7 +26,7 @@ var server = http.createServer(app);
  */
 var io = new Server(server, {
   cors: {
-    origin: ['http://127.0.0.1:3000', 'http://localhost:3000', 'https://PixelChallenge.up.railway.app'], // Autoriser ces origines
+    origin: ['http://127.0.0.1:3000', 'http://localhost:3000'], // Autoriser ces origines
     methods: ['GET', 'POST'], // Méthodes HTTP autorisées
     credentials: true // Autoriser les cookies si nécessaire
   }
