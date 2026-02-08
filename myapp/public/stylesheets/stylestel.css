@@ -32,11 +32,12 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+    transform : translateY(0%);
     background-image: url('/images/bgGridTel.png');
     background-size: cover;      /* ajuste l'image sans déformation */
     background-position: center; /* centre l'image */
     background-repeat: no-repeat;
-    transition : transform 3s cubic-bezier(.67,0,.08,.9);
+    transition : transform 1s cubic-bezier(.67,0,.08,.9);
     z-index: 11; /* derrière le reste du contenu */
 }
 .background.slide-up {
