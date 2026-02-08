@@ -36,7 +36,6 @@ window.addEventListener('load', function() {
             bgslide.classList.add('slide-up');
         }, 1000); // 50ms suffisent généralement
     });
-
 });
 
 document.addEventListener('DOMContentLoaded', () => {
