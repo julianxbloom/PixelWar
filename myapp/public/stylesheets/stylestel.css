@@ -41,6 +41,7 @@ body {
     z-index: 11; /* derrière le reste du contenu */
 }
 .background.slide-up {
+    display:None;
     transform: translateY(-100%);
 }
 
