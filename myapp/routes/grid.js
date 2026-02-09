@@ -390,13 +390,13 @@ router.get('/', function (req, res, next) {
                 }
               });
 
-              con.query('SELECT x,y,color,affiche FROM pixels WHERE x < ? AND y < ?', [gridSize, gridSize], (err, results) => {
-                if (err) {
-                  console.error("Erreur SELECT pixels :", err);
-                  return res.status(500).send('Erreur serveur');
-                }
-
-                user.time = result[0].time;
+              //con.query('SELECT x,y,color,affiche FROM pixels WHERE x < ? AND y < ?', [gridSize, gridSize], (err, results) => {
+              //  if (err) {
+              //    console.error("Erreur SELECT pixels :", err);
+              //    return res.status(500).send('Erreur serveur');
+              //  }
+//
+              //  user.time = result[0].time;
 
                 if (result[0].power <= 0) {
                   const t = user.time;
@@ -433,7 +433,7 @@ router.get('/', function (req, res, next) {
                 return res.render('grid', {
                   pseudo: user.pseudo,
                   admin: user.admin,
-                  pixels: results,
+                  //pixels: results,
                   power: user.power,
                   time: Date.now() - user.time,
                   popup: popup,
@@ -445,7 +445,7 @@ router.get('/', function (req, res, next) {
                   delay: delay,
                   delayRaid: delayRaid
                 });
-              });
+              //});
             }
           });
         }

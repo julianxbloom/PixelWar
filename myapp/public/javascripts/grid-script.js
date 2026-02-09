@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    updateGrid(pixelsBdd)
+    //updateGrid(pixelsBdd)
 
     // Resize du canvas pour qu'il remplisse la fenêtre
     function resizeCanvas() {
