@@ -24,7 +24,7 @@ app.set('view engine', 'ejs');
 
 var cors = require('cors');
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000','https://pixelchallenge.up.railway.app'], // Autoriser ces origines
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000','https://pixelchallenge.up.railway.app','https://pixelwar-2-0.onrender.com'], // Autoriser ces origines
   methods: ['GET', 'POST'], // Autoriser uniquement certaines méthodes HTTP
   credentials: true // Autoriser l'envoi de cookies
 }));//pour bibi car pbl
@@ -35,13 +35,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', gridRouter);
+app.use('/grid', gridRouter);
 app.use('/users', usersRouter);
 app.use('/login', loginRouter);
 app.use('/utils', utilsRouter)
 app.use('/google', googleRouter);
 app.use('/waiting', waitingRouter);
-app.use('/dashboard',dashboardRouter);
+app.use('/',dashboardRouter);
 
 
 // catch 404 and forward to error handler

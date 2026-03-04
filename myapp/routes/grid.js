@@ -339,7 +339,7 @@ router.get('/', function (req, res, next) {
     const username = getCookie("username", req);
     const id = getCookie("id", req);
 
-    if (username != null ) {
+    if (username != null && id!=null) {
       user.id = id;
       user.pseudo = username;
 
@@ -352,6 +352,7 @@ router.get('/', function (req, res, next) {
         if (result.length == 0) {
       // Le compte n’existe pas -> retour login
         res.clearCookie("username");
+        res.clearCookie("id");
         return res.redirect('/login');
         
         //if (result.length == 0) {
@@ -365,7 +366,7 @@ router.get('/', function (req, res, next) {
             if (Date.now() - resul[0].time > resul[0].dureeBan || result[0].admin) {
               con.query('UPDATE user SET ban = FALSE WHERE users = ?', [user.pseudo], (err, m) => {
                 if (err) throw err;
-                res.redirect('/');
+                res.redirect('/grid');
               });
             } else {
               return res.redirect(`/waiting?pseudo=${user.pseudo}`);

@@ -35,7 +35,6 @@ var con = mysql.createPool(({
 }))
 
 router.get('/', (req, res) => {
-  
     return res.render('google',{info:""});
 });
 

@@ -34,10 +34,14 @@ var con = mysql.createPool(({
 router.get('/', (req, res) => {
 
   const username = getCookie("username", req);
+  const id = getCookie("id",req);
   //const username = "Tim";
 
-  if (!username) {
-    return res.render('login', { info: "Choisis ew pseudo." });
+  if(!id){
+    return res.redirect('/google');
+  }
+  else if (!username) {
+    return res.render('login', { info: "Choisis un pseudo." });
   }
 
   // Vérifie si pseudo existe
@@ -47,10 +51,14 @@ router.get('/', (req, res) => {
     if (result.length > 0) {
       // OK → connexion directe
       
-      return res.redirect('/');
+      return res.redirect('/grid');
 
     }
-    return res.redirect('/');
+    else {
+      //Utilisateur existe pas
+      res.clearCookie("username");
+      return res.render('/login', { info: "Choisis un pseudo." });
+    }
 
     // Le cookie existe mais le compte a disparu → on recrée automatiquement
     //con.query(
@@ -71,6 +79,13 @@ router.post('/', (req, res) => {
 
   const pseudo = req.body.pseudo;
   const id = getCookie("id", req);
+
+  if(!id){
+
+    res.clearCookie("username",{path: '/'});
+    return res.redirect('/');
+  }
+
   //const pseudo = "Tim";
 
   if (!/^[A-Za-z0-9_-]{1,15}$/.test(pseudo)) {
@@ -78,14 +93,14 @@ router.post('/', (req, res) => {
   }
 
   // Vérifie si pseudo déjà utilisé
-  con.query("SELECT users FROM user WHERE users = ?", [pseudo], (err, result) => {
+  con.query("SELECT users FROM user WHERE users = ? ", [pseudo], (err, result) => {
     if (err) throw err;
 
     if (result.length > 0) {
       console.log("User found");
       // Pseudo déjà existant → on connecte !
       res.cookie("username", pseudo, { path: '/', maxAge: 7*24*60*60*1000 });
-      return res.redirect('/');
+      return res.redirect('/grid');
     }
 
     // Création du compte
@@ -96,7 +111,7 @@ router.post('/', (req, res) => {
         if (err2) throw err2;
 
         res.cookie("username", pseudo, { path: '/', maxAge: 7*24*60*60*1000 });
-        return res.redirect('/');
+        return res.redirect('/grid');
       }
     );
   });

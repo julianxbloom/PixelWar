@@ -29,7 +29,7 @@ router.get('/', function(req, res, next) {
     pseudo = req.query.pseudo;
 
     if (!pseudo || pseudo.trim() === "") {
-      return res.redirect('/'); // Redirige si pseudo est absent ou vide
+      return res.redirect('/grid'); // Redirige si pseudo est absent ou vide
     }
     else {
 
@@ -39,7 +39,7 @@ router.get('/', function(req, res, next) {
       if (err) throw err;
       if (r.length > 0){
         if(r[0].admin){
-          return res.redirect('/');
+          return res.redirect('/grid');
         }
         else{
 
@@ -56,7 +56,7 @@ router.get('/', function(req, res, next) {
                   if (err) throw err;
                   if (result.length > 0) {
                     if(Date.now()-result[0].time > result[0].dureeBan){
-                      return res.redirect('/');
+                      return res.redirect('/grid');
                     }
                     else{
                       const timeRemain = result[0].time>Date.now() ? "Vous êtes banni":`Ban : ${Math.floor((result[0].dureeBan - (Date.now()-result[0].time))/1000)} secondes`;
@@ -64,12 +64,12 @@ router.get('/', function(req, res, next) {
                     }
                   } 
                   else {
-                    return res.redirect('/');
+                    return res.redirect('/grid');
                   }
                 });
               }
               else{
-                return res.redirect('/');
+                return res.redirect('/grid');
               }
             });
 
