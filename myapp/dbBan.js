@@ -23,7 +23,7 @@ var con = mysql.createPool(({
 }))
 
 console.log("Timestamp:", Date.now());
-
+/*
 // --- DROP TABLE → CREATE TABLE → SELECT ---
 con.query("DROP TABLE IF EXISTS ban", function(err) {
   if (err) throw err;
@@ -53,7 +53,7 @@ con.query("DROP TABLE IF EXISTS ban", function(err) {
     });
   });
 });
-
+*/
 
 // ------------------ BAN FUNCTION ------------------
 
@@ -82,4 +82,4 @@ function ban(user, duree, motif) {
 }
 
 // Exemple d'utilisation :
-// ban("MerlinTG04", 60 * 60 * 1000, "Cheh lol ");
+ban("ZIZI", 60 * 60 * 1000, "Cheh lol ");
