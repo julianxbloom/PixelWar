@@ -7,7 +7,7 @@ const images = [
     '/images/Pixel war (5).png'
 ];
 
-let currentIndex = 0;
+let currentIndex = 7;
 
 const imgElem = document.getElementById('tutoImg');
 const nextBtn = document.getElementById('nextBtn');
