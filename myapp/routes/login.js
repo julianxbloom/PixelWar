@@ -77,7 +77,11 @@ router.get('/', (req, res) => {
 // --------------------------
 router.post('/', (req, res) => {
 
-  const pseudo = req.body.pseudo;
+  let name = req.body.pseudo;
+  let team = req.body.CurrentClass;
+
+  const pseudo = name.concat("_",team);
+
   const id = getCookie("id", req);
 
   if(!id){

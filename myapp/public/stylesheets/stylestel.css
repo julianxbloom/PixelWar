@@ -37,9 +37,10 @@ body {
     background-size: cover;      /* ajuste l'image sans déformation */
     background-position: center; /* centre l'image */
     background-repeat: no-repeat;
-    transition : transform 1s cubic-bezier(.67,0,.08,.9);
-    z-index: 11; /* derrière le reste du contenu */
+    transition : transform 0s cubic-bezier(.67,0,.08,.9);
+    z-index: 11; /*     derrière le reste du contenu */
 }
+
 .background.slide-up {
     display:None;
     transform: translateY(-100%);
