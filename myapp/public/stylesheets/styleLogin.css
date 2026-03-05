@@ -71,6 +71,7 @@ body{
     width: 420px;
     background :transparent;
     border:2px solid rgba(255, 255, 255, 0.2);
+    background-color: #33333365;
     color : #fff;
     border-radius : 12px;
     padding : 30px 40px;

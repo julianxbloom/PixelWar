@@ -453,8 +453,12 @@ router.get('/', function (req, res, next) {
       });
     } else {
       //return res.render('login', { info: "Attention, le pseudo est définitif" });
-
-      return res.redirect('/google');
+      if(!id){
+        res.redirect('/google');
+      }
+      else{
+        res.redirect('/login');
+      }
     }
   });
 });

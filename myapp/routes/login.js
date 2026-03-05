@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
     return res.redirect('/google');
   }
   else if (!username) {
-    return res.render('login', { info: "Choisis un pseudo." });
+    return res.render('login', { info: "Choisis un pseudo et une équipe !" });
   }
 
   // Vérifie si pseudo existe
@@ -57,7 +57,7 @@ router.get('/', (req, res) => {
     else {
       //Utilisateur existe pas
       res.clearCookie("username");
-      return res.render('/login', { info: "Choisis un pseudo." });
+      return res.render('/login', { info: "Choisis un pseudo et une équipe !" });
     }
 
     // Le cookie existe mais le compte a disparu → on recrée automatiquement

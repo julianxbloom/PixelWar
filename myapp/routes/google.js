@@ -63,9 +63,15 @@ router.post('/', async (req, res) => {
         } else {
           // Utilisateur déjà existant
           console.log("User found, create cookie",result[0].users);
+          
           res.cookie("id", googleId, { path: '/', maxAge: 7*24*60*60*1000, httpOnly: false });
-          res.cookie("username", result[0].users, { path: '/', maxAge: 7*24*60*60*1000 });
-          return res.json({ success: true });
+          if(result[0].users!=null){
+            res.cookie("username", result[0].users, { path: '/', maxAge: 7*24*60*60*1000 });
+            return res.json({ success: true });
+          }
+          else{
+            return res.json({ success: true });
+          }
         }
       });
     } catch (e) {
