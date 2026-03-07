@@ -57,18 +57,9 @@ router.get('/', (req, res) => {
     else {
       //Utilisateur existe pas
       res.clearCookie("username");
-      return res.render('/login', { info: "Choisis un pseudo et une équipe !" });
+      return res.render('login', { info: "Choisis un pseudo et une équipe !" });
     }
 
-    // Le cookie existe mais le compte a disparu → on recrée automatiquement
-    //con.query(
-    //  "INSERT INTO user (users, googleId, power, time, popup) VALUES (?, NULL, 15, NULL, NULL)",
-    //  [username],
-    //  (err2) => {
-    //    if (err2) throw err2;
-    //    return res.redirect('/');
-    //  }
-    //);
   });
 });
 
@@ -77,10 +68,8 @@ router.get('/', (req, res) => {
 // --------------------------
 router.post('/', (req, res) => {
 
-  let name = req.body.pseudo;
-  let team = req.body.CurrentClass;
-
-  const pseudo = name.concat("_",team);
+  const pseudo = req.body.pseudo;
+  const team = req.body.CurrentClass;
 
   const id = getCookie("id", req);
 
@@ -97,27 +86,38 @@ router.post('/', (req, res) => {
   }
 
   // Vérifie si pseudo déjà utilisé
-  con.query("SELECT users FROM user WHERE users = ? ", [pseudo], (err, result) => {
+  con.query("SELECT googleId,users FROM user WHERE users = ? ", [pseudo], (err, result) => {
     if (err) throw err;
 
     if (result.length > 0) {
       console.log("User found");
-      // Pseudo déjà existant → on connecte !
-      res.cookie("username", pseudo, { path: '/', maxAge: 7*24*60*60*1000 });
-      return res.redirect('/grid');
-    }
-
-    // Création du compte
-    con.query(
-      "INSERT INTO user (users, googleId, power, time, popup) VALUES (?, ?, 15, NULL, NULL)",
-      [pseudo,id],
-      (err2) => {
-        if (err2) throw err2;
-
+      if (result.googleId != id){
+        return res.render('login', { info: "Pseudo déjà pris !" });
+      }
+      else{
+        // Pseudo déjà existant → on connecte !
         res.cookie("username", pseudo, { path: '/', maxAge: 7*24*60*60*1000 });
         return res.redirect('/grid');
       }
-    );
+    }
+
+    con.query("SELECT googleId FROM user WHERE googleId = ?",[id],(err,result)=>{
+      if(err) throw err;
+
+      if (result.length>0){
+        con.query("UPDATE user SET users = ?,team = ? WHERE googleId = ? ",[pseudo,team,id],(err,resultat)=>{
+          if(err) throw err;
+          res.cookie("username", pseudo, { path: '/', maxAge: 7*24*60*60*1000 });
+          return res.redirect('/grid');
+        })
+      }
+
+      else{
+        res.clearCookie('id');
+        return res.redirect('/google');
+      }
+    })
+
   });
 });
 

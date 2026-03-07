@@ -213,7 +213,7 @@ function setSocketIo(socketIo) {
 
     });*/
 
-  //Chatgpt
+  //
 socket.on('power', (data) => {
   con.query('SELECT power, time FROM user WHERE googleId = ?', [user.id], (err, result) => {
     if (err || result.length === 0) {
@@ -242,7 +242,7 @@ socket.on('power', (data) => {
       if (!user.admin) currentPower -= 1;
 
       // Mise à jour du power et nbrColor
-      con.query('SELECT nbrColor FROM user WHERE googleId = ?', [user.id], (err, rep) => {
+      con.query('SELECT nbrColor,team FROM user WHERE googleId = ?', [user.id], (err, rep) => {
         if (err || rep.length === 0) return;
 
         const newNbrColor = rep[0].nbrColor + 1;
@@ -271,6 +271,12 @@ socket.on('power', (data) => {
             //affiche: data.affiche
           });
         });
+
+        //Add 1 pixel to your team
+        con.query('UPDATE team SET nbrPixel = nbrPixel+1 WHERE name = ?',[rep[0].team],(err,r)=>{
+          if(err) throw err;
+        });
+
       });
     } else {
       socket.emit('powerCookie', { power: 0 }); // Facultatif
@@ -322,7 +328,7 @@ router.get('/', function (req, res, next) {
       delay = r.delayBase;
       powerBase = r.powerBase;
       powerRaid = r.powerRaid;
-      gridSize = 100;//r.gridSize;
+      gridSize = r.gridSize;
     } else {
       dateRaid = 21;
       delayRaid = 5 * 60;
@@ -343,17 +349,17 @@ router.get('/', function (req, res, next) {
       user.id = id;
       user.pseudo = username;
 
-      const sql = 'SELECT power,time,popup,admin,ban, nbrColor FROM user WHERE users = ? AND googleId = ?';
+      const sql = 'SELECT team,power,time,popup,admin,ban, nbrColor FROM user WHERE users = ? AND googleId = ?';
       con.query(sql, [username,id], (err, result) => {
         if (err) {
           console.error("Erreur SELECT user :", err);
           return res.status(500).send('Erreur serveur');
         }
         if (result.length == 0) {
-      // Le compte n’existe pas -> retour login
-        res.clearCookie("username");
-        res.clearCookie("id");
-        return res.redirect('/login');
+        // Le compte n’existe pas -> retour login
+          res.clearCookie("username");
+          res.clearCookie("id");
+          return res.redirect('/login');
         
         //if (result.length == 0) {
         //  return res.redirect(`/google`);
@@ -383,7 +389,8 @@ router.get('/', function (req, res, next) {
             }
             if (r.length > 0 && r[0].maintenance && !user.admin) {
               return res.redirect(`/waiting?pseudo=${user.pseudo}`);
-            /*if (r.length > 0){ //}} */}else {
+            }
+            else {
               con.query('UPDATE user SET popup = NULL WHERE googleId = ?', [user.id], (err, rer) => {
                 if (err) {
                   console.error("Erreur UPDATE popup :", err);
@@ -434,7 +441,7 @@ router.get('/', function (req, res, next) {
                 return res.render('grid', {
                   pseudo: user.pseudo,
                   admin: user.admin,
-                  //pixels: results,
+                  team: result[0].team,
                   power: user.power,
                   time: Date.now() - user.time,
                   popup: popup,

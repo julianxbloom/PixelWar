@@ -9,7 +9,8 @@
     // Les données sont injectées par le serveur
     const popup = <%- JSON.stringify(popup) %>;
     const pseudo = <%- JSON.stringify(pseudo) %>;
-    const canvaSize = 100;//<%- JSON.stringify(gridSize) %>;
+    const team = <%- JSON.stringify(team) %>;
+    const canvaSize = <%- JSON.stringify(gridSize) %>;
     const powerRaid = <%- JSON.stringify(powerRaid) %>;
     const powerBase = <%- JSON.stringify(powerBase) %>;
     const hourRaid = <%- JSON.stringify(hourRaid) %>;
@@ -33,14 +34,14 @@
         <canvas id="pixelCanvas"></canvas>
         <div class="bubble" id="bubble"></div>
 
-
-        <h2 id="affichePseudo"> <%= pseudo %></h2>
+        <h2 id="affichePseudo"> <%= pseudo %>_<%= team %></h2>
         <div class="containerBottom">
             
             <div class="color-grid" id="color-grid"></div>
             
             <div class="animation" id="animation">
                 <div class=containerPower data-count = <%= power %> data-time = <%= time%> id ="containerPower"></div>
+                <button id="BtnHome" class=BtnHome onclick="window.location.href='/'">Home</button>
             </div>
         </div>  
         

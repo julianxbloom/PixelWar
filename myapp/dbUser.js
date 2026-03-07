@@ -32,6 +32,7 @@ con.query("DROP TABLE IF EXISTS `user`", function(err) {
       id INT AUTO_INCREMENT,
       googleId VARCHAR(100) NOT NULL,
       users VARCHAR(100) DEFAULT 'nobody',
+      team VARCHAR(100) DEFAULT 'F1',
       power INT DEFAULT 5,
       time VARCHAR(100) DEFAULT 'none',
       popup TEXT,

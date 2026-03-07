@@ -10,10 +10,11 @@ const images = [
 let currentIndex = 7;
 
 const imgElem = document.getElementById('tutoImg');
-const nextBtn = document.getElementById('nextBtn');
+//const nextBtn = document.getElementById('nextBtn');
 const wrap = document.getElementById('wrapper');
 const tutoWrapper = document.getElementById('tutoWrapper');
 
+/*
 nextBtn.addEventListener('click', () => {
     currentIndex++;
     if (currentIndex >= images.length) {
@@ -24,4 +25,4 @@ nextBtn.addEventListener('click', () => {
     // Change l'image du tuto
     imgElem.src = images[currentIndex];
     }
-});
+});*/
