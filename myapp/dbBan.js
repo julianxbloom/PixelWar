@@ -82,4 +82,4 @@ function ban(user, duree, motif) {
 }
 
 // Exemple d'utilisation :
-ban("ZIZI", 60 * 60 * 1000, "Cheh lol ");
+ban("Tim", 60 * 60 * 1000, "Cheh lol ");
