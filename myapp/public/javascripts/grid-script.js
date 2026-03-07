@@ -24,6 +24,11 @@ function getCookie(name) {
     return value ? value.split("=")[1] : 0;  // Si le cookie existe, retourne la valeur sinon retourne none
 }
 
+//-----Button
+document.getElementById("BtnHome").addEventListener("click", function(){
+    window.location.href = "/";
+});
+
 //-----------------------------------Animation-----------------------------------
 const bgslide = document.getElementById('bgGoogle');
 window.addEventListener('load', function() {
@@ -287,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });*/
 
     document.addEventListener('mousedown', (e) =>{
-        if (e.target.closest('#color-grid')) return;
+        if (e.target.closest('#containerBottom')) return;
         if (e.target.closest('a')) {
             // C'est un clic sur un lien ⇒ laisser passer
             return;
@@ -344,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /*Pour les tels*/
     document.addEventListener('touchstart', (e) => {
 
-        if (e.target.closest('#color-grid')) return;
+        if (e.target.closest('#containerBottom')) return;
 
         
         e.preventDefault();
