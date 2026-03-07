@@ -1,12 +1,3 @@
-const images = [
-    '/images/Pixel war.png',
-    '/images/Pixel war (1).png',
-    '/images/Pixel war (2).png',
-    '/images/Pixel war (3).png',
-    '/images/Pixel war (4).png',
-    '/images/Pixel war (5).png'
-];
-
 let currentIndex = 7;
 
 const imgElem = document.getElementById('tutoImg');

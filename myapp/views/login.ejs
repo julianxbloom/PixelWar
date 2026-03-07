@@ -14,19 +14,12 @@
         <h1>Login</h1>
         <form method="post" action = "/login">
             <div class="inputBox">
-                <input type="text" placeholder="Username" id="pseudo" name = "pseudo" class="inputField" maxlength="15" required  >
+                <input type="text" placeholder="Pseudo" id="pseudo" name = "pseudo" class="inputField" maxlength="15" required  >
             </div>
-            <select name="CurrentClass" id="CurrentClass" class = "selectClass" required>
-                <option value=""></option>
-                <option value ="F1">F1</option>
-                <option value ="JASA">JASA</option>
-                <option value ="Licorne">Licorne</option>
-                <option value ="Vipere">Vipere</option>
-                <option value ="Tigre">Tigre</option>
-                <option value ="France">France</option>
-                <option value ="Prof">Prof</option>
-                <option value ="Autres">Autres</option>
-            </select>
+            <div class="inputBox">
+                <input type="text" placeholder="Team" id="team" name = "team" class="inputField" maxlength="15" required  >
+            </div>
+
             <div class="inputBox">
                 <button type = "submit" name = "button" id ="loginButton" class = "inputSubmit">Créer</button>
             </div>

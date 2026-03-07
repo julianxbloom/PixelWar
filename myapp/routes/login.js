@@ -69,7 +69,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
 
   const pseudo = req.body.pseudo;
-  const team = req.body.CurrentClass;
+  const team = req.body.team;
 
   const id = getCookie("id", req);
 
@@ -82,7 +82,7 @@ router.post('/', (req, res) => {
   //const pseudo = "Tim";
 
   if (!/^[A-Za-z0-9_-]{1,15}$/.test(pseudo)) {
-    return res.render('login', { info: "Seules lettres, chiffres, - et _ sont autorisés." });
+    return res.render('login', { info: "Seules lettres, chiffres, - et _ sont autorisés pour le pseudo." });
   }
 
   // Vérifie si pseudo déjà utilisé
@@ -105,11 +105,17 @@ router.post('/', (req, res) => {
       if(err) throw err;
 
       if (result.length>0){
-        con.query("UPDATE user SET users = ?,team = ? WHERE googleId = ? ",[pseudo,team,id],(err,resultat)=>{
-          if(err) throw err;
-          res.cookie("username", pseudo, { path: '/', maxAge: 7*24*60*60*1000 });
-          return res.redirect('/grid');
-        })
+
+        con.query("INSERT INTO team (name) SELECT ? WHERE NOT EXISTS (SELECT name FROM team WHERE name = ?)",[team,team],(err,resul)=>{
+          if (err) throw err;
+
+          con.query("UPDATE user SET users = ?,team = ? WHERE googleId = ? ",[pseudo,team,id],(err,resultat)=>{
+            if(err) throw err;
+            res.cookie("username", pseudo, { path: '/', maxAge: 7*24*60*60*1000 });
+            return res.redirect('/grid');
+          });
+
+        });
       }
 
       else{

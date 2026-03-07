@@ -8,8 +8,7 @@
     <script>
     // Les données sont injectées par le serveur
     const popup = <%- JSON.stringify(popup) %>;
-    const pseudo = <%- JSON.stringify(pseudo) %>;
-    const team = <%- JSON.stringify(team) %>;
+    const pseudo = <%- JSON.stringify(pseudo) %>+'_'+<%- JSON.stringify(team) %>;
     const canvaSize = <%- JSON.stringify(gridSize) %>;
     const powerRaid = <%- JSON.stringify(powerRaid) %>;
     const powerBase = <%- JSON.stringify(powerBase) %>;

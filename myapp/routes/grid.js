@@ -224,7 +224,7 @@ socket.on('power', (data) => {
     let currentPower = result[0].power;
     let lastTime = result[0].time;
     let now = Date.now();
-    const currentHour = new Date().getHours() + 2;
+    const currentHour = new Date().getHours() ;
     const delayMs = (currentHour == dateRaid ? delayRaid : delay) * 1000;
     const maxPower = currentHour == dateRaid ? powerRaid : powerBase;
 
@@ -340,8 +340,7 @@ router.get('/', function (req, res, next) {
     
     let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
     let d = new Date();
-    let raid = d.getHours() + 2 == dateRaid ? "en cours" : d.getHours() +2< dateRaid ? "auj à 21h" : "demain à 21h";
-
+    let raid = d.getHours() == dateRaid ? "en cours" : d.getHours() < dateRaid ? "auj à 21h" : "demain à 21h";
     const username = getCookie("username", req);
     const id = getCookie("id", req);
 
@@ -382,6 +381,7 @@ router.get('/', function (req, res, next) {
           const popup = result[0].popup;//
           user.admin = result[0].admin;
           user.nbrColor = result[0].nbrColor;
+          user.time = result[0].time;
           con.query('SELECT maintenance FROM global WHERE id = 1', (err, r) => {
             if (err) {
               console.error("Erreur SELECT maintenance :", err);
@@ -409,9 +409,9 @@ router.get('/', function (req, res, next) {
                 if (result[0].power <= 0) {
                   const t = user.time;
                   const d = Date.now();
-                  console.log("reload",t,d,(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay),(d-t)-(new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay))
-                  if (d - t > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)) {
-                    user.power = new Date().getHours() +2 == dateRaid ?powerRaid : powerBase;
+                  console.log("reload",new Date().getHours(),(new Date().getHours() == dateRaid ? 1000 * delayRaid : 1000*delay),(d-t)-(new Date().getHours() == dateRaid ? 1000 * delayRaid : 1000*delay))
+                  if (d - t > (new Date().getHours() == dateRaid ? 1000 * delayRaid : 1000*delay)) {
+                    user.power = new Date().getHours() == dateRaid ?powerRaid : powerBase;
                     const sql = 'UPDATE user SET power = ? WHERE googleId = ?';
                     con.query(sql, [user.power, user.id], (err, m) => {
                       if (err) {

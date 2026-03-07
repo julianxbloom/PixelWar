@@ -134,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
         draw(); // Redessine au bon endroit après resize
     }
 
@@ -251,6 +252,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Redessiner tout
     function draw() {
+
+        if(!pixels){return ;}
 
         ctx.setTransform(zoomLevel, 0, 0, zoomLevel, offsetX, offsetY);
         ctx.clearRect(-offsetX/zoomLevel, -offsetY/zoomLevel, canvas.width/zoomLevel, canvas.height/zoomLevel);
