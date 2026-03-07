@@ -7,6 +7,10 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="stylesheets/styleDashboard.css">
 
+    <script>
+      const team_values = <%- JSON.stringify(team_values) %>;
+    </script>
+
 </head>
 <body>
 
@@ -28,19 +32,16 @@
     Team :<br>
   </h2>
   <h3 style="text-align:center;">
-    F1 : 10000 pixels<br>
-    Licorne : 530 pixels <br>
+    <%- team_values %><br>
   </h3>
 
     <h2>
       Don : 
     </h2>
   <h3 style = "text-align:center;">
-    3,47 euros<br>
-    Goal : 5 = 30 pixels toutes les 20 minutes<br>
-
     <br>
     Si vous voulez que la page web soit la cette année et les années prochaines, soutenez la ! <br>
+    Même 50 centimes sa fais plaisir !!!<br><br>
     
     IBAN : FR76 1027 8062 1200 0201 6760 470<br>
 
