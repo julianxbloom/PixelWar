@@ -65,6 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
 
+    // Offscreen canvas buffer // Hidden canva
+    const offscreen = document.createElement("canvas");
+    offscreen.width = canvaSize;  // 500 ou 1000
+    offscreen.height = canvaSize;
+    const offCtx = offscreen.getContext("2d");
+
     let pixelSize = 10;
     let startTime = Date.now();
 
@@ -112,6 +118,10 @@ document.addEventListener('DOMContentLoaded', () => {
             //console.log(color);
 
             pixels[y*canvaSize+x]=color;
+
+            //Draw the pixel
+            offCtx.fillStyle = Lcolors[color];
+            offCtx.fillRect(x, y, 1, 1);
             
             //pixels[canvaSize*y+x] = {
             //    
@@ -141,6 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Dessiner un pixel à la position x,y
     function drawPixel(x, y, color_id){//, affiche) {
         pixels[y*canvaSize+x]=color_id
+
+        //Draw 1 pixel
+        offCtx.fillStyle = Lcolors[color_id];
+        offCtx.fillRect(x, y, 1, 1);
         //pixels[y*canvaSize+x].color = color;
         //pixels[y*canvaSize+x].name = pseudo;/*self.seudo*/
         //date = new Date();
@@ -253,23 +267,42 @@ document.addEventListener('DOMContentLoaded', () => {
     // Redessiner tout
     function draw() {
 
-        if(!pixels){return ;}
+        if(!pixels) return;
 
-        ctx.setTransform(zoomLevel, 0, 0, zoomLevel, offsetX, offsetY);
-        ctx.clearRect(-offsetX/zoomLevel, -offsetY/zoomLevel, canvas.width/zoomLevel, canvas.height/zoomLevel);
+            ctx.setTransform(1,0,0,1,0,0);
+            ctx.clearRect(0,0,canvas.width,canvas.height);
 
-        let x = 0;
-        let y = 0;
-        for (const color_id of pixels) {
-            //console.log(color_id)
-            ctx.fillStyle = Lcolors[color_id];
-            ctx.fillRect(x*pixelSize, y*pixelSize, pixelSize, pixelSize);
-            x++;
-            if(x>=canvaSize){
-                x=0;
-                y++;
-            }       
-        }
+            ctx.imageSmoothingEnabled = false;
+
+            ctx.setTransform(zoomLevel,0,0,zoomLevel,offsetX,offsetY);
+
+            ctx.drawImage(
+                offscreen,
+                0,
+                0,
+                offscreen.width,
+                offscreen.height,
+                0,
+                0,
+                offscreen.width*pixelSize,
+                offscreen.height*pixelSize
+            );
+
+        //ctx.setTransform(zoomLevel, 0, 0, zoomLevel, offsetX, offsetY);
+        //ctx.clearRect(-offsetX/zoomLevel, -offsetY/zoomLevel, canvas.width/zoomLevel, canvas.height/zoomLevel);
+//
+        //let x = 0;
+        //let y = 0;
+        //for (const color_id of pixels) {
+        //    //console.log(color_id)
+        //    ctx.fillStyle = Lcolors[color_id];
+        //    ctx.fillRect(x*pixelSize, y*pixelSize, pixelSize, pixelSize);
+        //    x++;
+        //    if(x>=canvaSize){
+        //        x=0;
+        //        y++;
+        //    }       
+        //}
 
         bubble.style.left = `${bubbleX + offsetBubble[0] + offsetX}px`;
         bubble.style.top = `${bubbleY + offsetBubble[1] + offsetY}px`;
