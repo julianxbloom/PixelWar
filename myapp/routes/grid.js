@@ -72,12 +72,17 @@ function setSocketIo(socketIo) {
     //con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
 
     socket.on('requestSync', () => {
-        con.query('SELECT color FROM pixels WHERE x < ? AND y < ?', [gridSize, gridSize], (err, results) => {
-            if (err) throw err;
-            if (!err) {
-                socket.emit('syncPixels', results);
+      for(let j = 0; j < gridSize; j += 10){
+        con.query('SELECT color FROM pixels WHERE y >= ? AND y < ?', [j,j+10], (err, results) => {
+          if (err) throw err;
+          else {
+              console.log(gridSize);
+                socket.emit('syncPixels', {pixels:results,
+                  y:j}
+                );
             }
-        });
+          });
+      }
     });
 
     /*socket.on('requestPower', (data) => {

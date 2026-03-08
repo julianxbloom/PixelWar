@@ -107,14 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let bubbleX = 0;
     let bubbleY = 0;
     let dragStartX, dragStartY;
-    let pixels;
+    let pixels = new Uint8Array(canvaSize*canvaSize); //Faios * car x * y
 
-    function updateGrid(px){
+    function updateGrid(px,d){
         let x = 0;
-        let y = 0; 
+        let y = d;
         //const size = length(px);
-        pixels = new Uint8Array(canvaSize*canvaSize); //Faios * car x * y
-        Object.values(px).forEach(({color}) => {
+        px.forEach(({color}) => {
             //console.log(color);
 
             pixels[y*canvaSize+x]=color;
@@ -136,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 x=0;
             }
         });
+        draw();
     }
 
     //updateGrid(pixelsBdd)
@@ -217,9 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    socket.on('syncPixels', (px) => {
-        updateGrid(px);
-        draw();
+    socket.on('syncPixels', (data) => {
+        updateGrid(data.pixels,data.y);
     });
     
     document.addEventListener('wheel', (e) =>{
