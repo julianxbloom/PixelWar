@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const canvaSize = 1000;
+const canvaSize = 750;
 var mysql = require('mysql2');
 require("dotenv").config();
 
@@ -66,21 +66,25 @@ function insertPixels(connection) {
   const total = canvaSize * canvaSize;
   console.log(`Insertion de ${total} pixels…`);
 
-  // Pour éviter 40 000 requêtes individuelles, on prépare les valeurs
-  let values = [];
-  for (let i = 0; i < total; i++) {
-    const x = i % canvaSize;
-    const y = Math.floor(i / canvaSize);
-    values.push([x, y]);
+  const batchSize = 100;
+
+  for(let j = 0; j < total; j += batchSize){
+
+    // Pour éviter 40 000 requêtes individuelles, on prépare les valeurs
+    let values = [];
+    for (let i = j; i < j+batchSize; i++) {
+      const x = i % canvaSize;
+      const y = Math.floor(i / canvaSize);
+      values.push([x, y]);
+    }
+
+    const sql = "INSERT INTO pixels (x, y) VALUES ?";
+
+    connection.query(sql, [values], (err) => {
+      if (err) throw err;
+
+      console.log("Insertion de",j," a ",j+batchSize);
+      connection.release();
+    });
   }
-
-  const sql = "INSERT INTO pixels (x, y) VALUES ?";
-
-  connection.query(sql, [values], (err) => {
-    if (err) throw err;
-
-    console.log("Insertion terminée !");
-    connection.release();
-    process.exit(0);
-  });
 }
