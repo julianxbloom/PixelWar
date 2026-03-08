@@ -225,12 +225,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('wheel', (e) =>{
         //alert('DeltaY:', e.deltaY);
         e.preventDefault();
-        if (e.deltaY>0 && zoomLevel > 0.2){
+        if (e.deltaY>0 && zoomLevel > 0.05){
             offsetX = e.clientX - (e.clientX - offsetX) * 0.9;
             offsetY = e.clientY - (e.clientY - offsetY) * 0.9;
             zoomLevel *= 0.9;
         }
-        else if(e.deltaY<0 && zoomLevel < 8){
+        else if(e.deltaY<0 && zoomLevel < 20){
             offsetX = e.clientX - (e.clientX - offsetX) * 1.1;
             offsetY = e.clientY - (e.clientY - offsetY) * 1.1;
             zoomLevel *= 1.1;
