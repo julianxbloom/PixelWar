@@ -249,10 +249,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (i == 0){
                 Choosecolor = color;
                 Choosecolor.style.border = "0.7vh solid black";
+                Choosecolor.style.borderTopLeftRadius = "12px";
+            }
+            else {
+                color.style.border = "0.7vh solid transparent";
+                if(i==8){
+                    color.style.borderBottomLeftRadius = "12px";
+                }
             }
             color.addEventListener('click', (e) => {
                 // Set the border style
-                Choosecolor.style.border = "0vh solid black";
+                Choosecolor.style.border = "0.7vh solid transparent";
                 Choosecolor = color;
                 Choosecolor.style.border = color.style.background=="rgb(0, 0, 0)"? "0.7vh solid white":"0.7vh solid black";
 

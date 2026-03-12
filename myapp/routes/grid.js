@@ -73,10 +73,9 @@ function setSocketIo(socketIo) {
 
     socket.on('requestSync', () => {
       for(let j = 0; j < gridSize; j += 10){
-        con.query('SELECT color FROM pixels WHERE y >= ? AND y < ?', [j,j+10], (err, results) => {
+        con.query('SELECT color FROM pixels WHERE y >= ? AND y < ? AND x<?', [j,j+10,gridSize], (err, results) => {
           if (err) throw err;
           else {
-              console.log(gridSize);
                 socket.emit('syncPixels', {pixels:results,
                   y:j}
                 );

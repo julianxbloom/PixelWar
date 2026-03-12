@@ -129,7 +129,7 @@ canvas {
 .containerBottom{
     position: absolute;
     z-index: 2;
-    bottom:150px;
+    bottom:70px;
     right: 50vw;
     transform: translate(50%, 50%);
     border-radius: 25px;
@@ -151,9 +151,10 @@ canvas {
 .color {
     z-index : 3;
     width: 50px;
-    background-color: #ffffff;
+    background-color: #000000;
     cursor: pointer;
     pointer-events: auto;
+    box-sizing: border-box;
 }
 .containerPower{
     content: "5";
@@ -227,7 +228,7 @@ a {
 
 #affichePseudo {
     position: absolute;
-    bottom: 210px;
+    bottom: 140px;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
