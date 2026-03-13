@@ -29,7 +29,7 @@ var con = mysql.createPool(({
   // --- C'EST CETTE PARTIE QUI MANQUE ---
   ssl: {
     minVersion: 'TLSv1.2',
-    rejectUnauthorized: true
+    rejectUnauthorized: false
   }
 
 }))
