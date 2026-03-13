@@ -17,13 +17,13 @@ var con = mysql.createPool(({
   // --- C'EST CETTE PARTIE QUI MANQUE ---
   ssl: {
     minVersion: 'TLSv1.2',
-    rejectUnauthorized: true
+    rejectUnauthorized: false
   }
 
 }))
 
 console.log("Timestamp:", Date.now());
-/*
+
 // --- DROP TABLE → CREATE TABLE → SELECT ---
 con.query("DROP TABLE IF EXISTS ban", function(err) {
   if (err) throw err;
@@ -53,7 +53,7 @@ con.query("DROP TABLE IF EXISTS ban", function(err) {
     });
   });
 });
-*/
+
 
 // ------------------ BAN FUNCTION ------------------
 
@@ -82,4 +82,4 @@ function ban(user, duree, motif) {
 }
 
 // Exemple d'utilisation :
-ban("Tim", 60 * 60 * 1000, "Cheh lol ");
+//ban("Tim", 60 * 60 * 1000, "Cheh lol ");
