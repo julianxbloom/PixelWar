@@ -3,7 +3,7 @@ var mysql = require('mysql2');
 require("dotenv").config();
 
 
-const name_team = ['F1','JASA','COUPERIN','pingouin'];
+const name_team = ['f1','jasa','couperin','inter','pingouin'];
 
 //var con = mysql.createPool({
 //  host: "localhost",

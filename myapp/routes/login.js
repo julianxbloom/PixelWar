@@ -69,7 +69,14 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
 
   const pseudo = req.body.pseudo;
-  const team = req.body.team;
+  let team_up = req.body.team
+  let team = team_up;
+  try {
+    team = team_up.toLowerCase();
+  }
+  catch(error){
+    team = team_up;
+  }
 
   const id = getCookie("id", req);
 
