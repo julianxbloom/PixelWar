@@ -26,7 +26,7 @@ var server = http.createServer(app);
  */
 var io = new Server(server, {
   cors: {
-    origin: ['http://127.0.0.1:3000', 'http://localhost:3000','https://pixelwar-2-0.onrender.com','https://pixelwar-production-a531.up.railway.app'], // Autoriser ces origines
+    origin: ['http://127.0.0.1:8080', 'http://localhost:8080','https://pixelwar-2-0.onrender.com','https://pixelwar-production-a531.up.railway.app'], // Autoriser ces origines
     methods: ['GET', 'POST'], // Méthodes HTTP autorisées
     credentials: true // Autoriser les cookies si nécessaire
   }

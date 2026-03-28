@@ -26,7 +26,7 @@ async function takeScreenshot() {
     },
     {
       name: 'username',
-      value: 'timTG01',
+      value: 'TwilightSparkle',
       domain: 'pixelchallenge.up.railway.app',
       path: '/',
     }

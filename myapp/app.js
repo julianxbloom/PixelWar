@@ -24,7 +24,7 @@ app.set('view engine', 'ejs');
 
 var cors = require('cors');
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:3000','https://pixelchallenge.up.railway.app','https://pixelwar-2-0.onrender.com'], // Autoriser ces origines
+  origin: ['http://localhost:8080', 'http://127.0.0.1:8080','https://pixelchallenge.up.railway.app','https://pixelwar-2-0.onrender.com'], // Autoriser ces origines
   methods: ['GET', 'POST'], // Autoriser uniquement certaines méthodes HTTP
   credentials: true // Autoriser l'envoi de cookies
 }));//pour bibi car pbl

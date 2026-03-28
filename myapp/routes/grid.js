@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { getCookie } = require('../public/javascripts/cookieUtils'); 
-let dateRaid, delayRaid, delay, powerBase, powerRaid, gridSize;
+let dateRaid, delayRaid, delay, powerBase, powerRaid, gridSize, pixels_grid_infos;
 let io;
 
 var mysql = require('mysql2');
@@ -47,41 +47,12 @@ function setSocketIo(socketIo) {
     user.power = cookies.power;
     user.admin = Boolean(Number(cookies.admin));
     console.log("connection",user.power);
-
-    con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
-      if (err) {
-        console.error("Erreur SELECT rules :", err);
-        throw err;
-      }
-      if (ruleRe.length > 0) {
-        let r = ruleRe[0];
-        delayRaid = r.delayRaid;
-        powerBase = r.powerBase;
-        powerRaid = r.powerRaid;
-        dateRaid = r.timeRaid;
-        delay = r.delayBase;
-      } else {
-        delayRaid = 5;
-        powerBase = 5;
-        powerRaid = 3;
-        dateRaid = 21;
-        delay = 20;
-      }//
-    });
-
     //con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
 
     socket.on('requestSync', () => {
-      for(let j = 0; j < gridSize; j += 10){
-        con.query('SELECT color FROM pixels WHERE y >= ? AND y < ? AND x<?', [j,j+10,gridSize], (err, results) => {
-          if (err) throw err;
-          else {
-                socket.emit('syncPixels', {pixels:results,
-                  y:j}
-                );
-            }
-          });
-      }
+
+      socket.emit('syncPixels', {pixels:pixels_grid_infos});
+
     });
 
     /*socket.on('requestPower', (data) => {
@@ -268,6 +239,9 @@ socket.on('power', (data) => {
             if (err) console.error("Erreur UPDATE pixels :", err);
           });
           //console.log(data.color);
+
+          pixels_grid_infos[data.y*gridSize+data.x].color = data.color; //Update the grid on serveur not on BDD
+
           io.emit("pixelUpdate", {
             x: data.x,
             y: data.y,
@@ -312,35 +286,35 @@ socket.on('power', (data) => {
   
 }
 
-
 router.get('/', function (req, res, next) {
 
   /*con.query("UPDATE user SET popup = ?",["Attention : le site fermera définitivement ce soir à 22h."],(err,m)=>{
     if (err) throw err;
   })*/
 
-  con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
-    if (err) {
-      console.error("Erreur SELECT rules (GET /):", err);
-      throw err;
-    }
-
-    if (ruleRe.length > 0) {
-      let r = ruleRe[0];
-      dateRaid = r.timeRaid;
-      delayRaid = r.delayRaid;
-      delay = r.delayBase;
-      powerBase = r.powerBase;
-      powerRaid = r.powerRaid;
-      gridSize = r.gridSize;
-    } else {
-      dateRaid = 21;
-      delayRaid = 5 * 60;
-      delay = 20 * 60;
-      powerBase = 5;
-      powerRaid = 3;
-      gridSize = 50;
-    }
+    //Test :
+  //con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
+  //  if (err) {
+  //    console.error("Erreur SELECT rules (GET /):", err);
+  //    throw err;
+  //  }
+//
+  //  if (ruleRe.length > 0) {
+  //    let r = ruleRe[0];
+  //    dateRaid = r.timeRaid;
+  //    delayRaid = r.delayRaid;
+  //    delay = r.delayBase;
+  //    powerBase = r.powerBase;
+  //    powerRaid = r.powerRaid;
+  //    gridSize = r.gridSize;
+  //  } else {
+  //    dateRaid = 21;
+  //    delayRaid = 5 * 60;
+  //    delay = 20 * 60;
+  //    powerBase = 30;
+  //    powerRaid = 20;
+  //    gridSize = 500;
+  //  }
     
     let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
     let d = new Date();
@@ -472,7 +446,50 @@ router.get('/', function (req, res, next) {
         res.redirect('/login');
       }
     }
-  });
+  //});
 });
+
+function loadRules(){
+  con.query("SELECT timeRaid,powerBase,powerRaid,delayBase,delayRaid,gridSize FROM rules", (err, ruleRe) => {
+    if (err) {
+      console.error("Erreur SELECT rules :", err);
+      throw err;
+    }
+    if (ruleRe.length > 0) {
+      let r = ruleRe[0];
+      delayRaid = r.delayRaid;
+      powerBase = r.powerBase;
+      powerRaid = r.powerRaid;
+      dateRaid = r.timeRaid;
+      delay = r.delayBase;
+      gridSize = r.gridSize;
+    } else {
+      delayRaid = 5*60;
+      powerBase = 30;
+      powerRaid = 20;
+      dateRaid = 21;
+      delay = 20*60;
+      gridSize = 500;
+    }//
+    loadPixels();
+  });
+}
+
+function loadPixels(){
+
+  con.query('SELECT color FROM pixels WHERE y < ? AND x<?', [gridSize,gridSize], (err, results) => {
+    if (err) throw err;
+    else {
+      pixels_grid_infos = results;
+      console.log(pixels_grid_infos);
+      console.log("Should be pixels. GridSize :",gridSize);
+      }
+
+    });
+
+}
+
+
+loadRules();
 
 module.exports = { router, setSocketIo };

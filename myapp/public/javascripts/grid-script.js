@@ -109,9 +109,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let dragStartX, dragStartY;
     let pixels = new Uint8Array(canvaSize*canvaSize); //Faios * car x * y
 
-    function updateGrid(px,d){
+    function updateGrid(px){
         let x = 0;
-        let y = d;
+        let y = 0;
         //const size = length(px);
         px.forEach(({color}) => {
             //console.log(color);
