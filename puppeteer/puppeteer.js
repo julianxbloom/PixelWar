@@ -10,7 +10,7 @@ if (!fs.existsSync(imageDir)) {
 
 async function takeScreenshot() {
   const browser = await puppeteer.launch({
-    //executablePath: '/usr/bin/chromium',
+    executablePath: '/usr/bin/chromium',
     headless: 'new',
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
@@ -56,9 +56,6 @@ async function takeScreenshot() {
   console.log(`✅ Screenshot offscreen enregistré : ${filePath}`);
 
   //await page.waitForSelector('#pixelCanvas', { timeout: 10000 });
-  
-  await browser.close();
-}
+};
 
-// Démarrage immédiat + répétition toutes les 10 minutes
 takeScreenshot();
