@@ -190,7 +190,7 @@ function setSocketIo(socketIo) {
 
   //
 socket.on('power', (data) => {
-  con.query('SELECT power, time FROM user WHERE googleId = ?', [user.id], (err, result) => {
+  con.query('SELECT power, time, nbrColor,team FROM user WHERE googleId = ?', [user.id], (err, result) => {
     if (err || result.length === 0) {
       console.error("Erreur SELECT power/time :", err);
       return;
@@ -207,9 +207,9 @@ socket.on('power', (data) => {
     if (currentPower <= 0 && now - lastTime > delayMs) {
       currentPower = maxPower;
 
-      con.query('UPDATE user SET power = ? WHERE googleId = ?', [currentPower, user.id], (err) => {
-        if (err) console.error("Erreur UPDATE power :", err);
-      });
+      //con.query('UPDATE user SET power = ? WHERE googleId = ?', [currentPower, user.id], (err) => {
+      //  if (err) console.error("Erreur UPDATE power :", err);
+      //});
     }
 
     // S'il a du power, on déduit et met à jour pixel
@@ -217,10 +217,10 @@ socket.on('power', (data) => {
       if (!user.admin) currentPower -= 1;
 
       // Mise à jour du power et nbrColor
-      con.query('SELECT nbrColor,team FROM user WHERE googleId = ?', [user.id], (err, rep) => {
-        if (err || rep.length === 0) return;
+      //con.query('SELECT nbrColor,team FROM user WHERE googleId = ?', [user.id], (err, rep) => {
+      //  if (err || rep.length === 0) return;
 
-        const newNbrColor = rep[0].nbrColor + 1;
+        const newNbrColor = result[0].nbrColor + 1;
         con.query('UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?', [currentPower, newNbrColor, user.id], (err) => {
           if (err) return console.error(err);
 
@@ -251,11 +251,11 @@ socket.on('power', (data) => {
         });
 
         //Add 1 pixel to your team
-        con.query('UPDATE team SET nbrPixel = nbrPixel+1 WHERE name = ?',[rep[0].team],(err,r)=>{
+        con.query('UPDATE team SET nbrPixel = nbrPixel+1 WHERE name = ?',[result[0].team],(err,r)=>{
           if(err) throw err;
         });
 
-      });
+      //});
     } else {
       socket.emit('powerCookie', { power: 0 }); // Facultatif
     }
