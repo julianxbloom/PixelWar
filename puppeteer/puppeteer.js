@@ -10,7 +10,7 @@ if (!fs.existsSync(imageDir)) {
 
 async function takeScreenshot() {
   const browser = await puppeteer.launch({
-    executablePath: '/usr/bin/chromium',
+    //executablePath: '/usr/bin/chromium',
     headless: 'new',
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
@@ -37,15 +37,14 @@ async function takeScreenshot() {
 
   const filePath2 = path.join(imageDir, `pixelchallengeGrid-${Date.now()}.png`);
 
-  await page.screenshot({ path: filePath2 }); // capture l'écran entier visible
-
+  //await page.screenshot({ path: filePath2 }); // capture l'écran entier visible
 
   
-  await page.waitForFunction(() => window.offscreenCanvas !== undefined, { timeout: 10000 });
+  await page.waitForFunction(() => window.OffscreenCanvas !== undefined, { timeout: 10000 });
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   const dataUrl = await page.evaluate(() => {
-      return window.offscreenCanvas.toDataURL("image/png");
+      return window.OffscreenCanvas.toDataURL("image/png");
   });
 
   const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "");
