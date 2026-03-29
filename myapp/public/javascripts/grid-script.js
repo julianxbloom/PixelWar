@@ -71,6 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
     offscreen.height = canvaSize;
     const offCtx = offscreen.getContext("2d");
 
+    window.OffscreenCanvas = offscreen; //Pour y acceder depuis puppeteer
+
     let pixelSize = 10;
     let startTime = Date.now();
 
