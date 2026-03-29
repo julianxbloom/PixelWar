@@ -21,36 +21,43 @@ async function takeScreenshot() {
     {
       name: 'id',
       value: '113937883500129231761',
-      domain: 'pixelchallenge.up.railway.app',
+      domain: 'pixelwar.up.railway.app',
       path: '/',
     },
     {
       name: 'username',
       value: 'TwilightSparkle',
-      domain: 'pixelchallenge.up.railway.app',
+      domain: 'pixelwar.up.railway.app',
       path: '/',
     }
   ];
 
   await page.setCookie(...cookies);
-  await page.goto('https://pixelchallenge.up.railway.app/', { waitUntil: 'networkidle2' });
+  await page.goto('https://pixelwar.up.railway.app/grid', { waitUntil: 'networkidle2' });
 
-  /*const filePath = path.join(imageDir, `pixelchallengeGrid-${Date.now()}.png`);
+  const filePath2 = path.join(imageDir, `pixelchallengeGrid-${Date.now()}.png`);
 
-  await page.screenshot({ path: filePath }); // capture l'écran entier visible
+  await page.screenshot({ path: filePath2 }); // capture l'écran entier visible
 
-  console.log(`✅ Screenshot enregistré : ${filePath}`);*/
 
-  await page.waitForSelector('canvas', { timeout: 10000 });
+  
+  await page.waitForFunction(() => window.offscreenCanvas !== undefined, { timeout: 10000 });
+  await new Promise(resolve => setTimeout(resolve, 1000));
 
-  const dataUrl = await page.$eval('canvas', canvas => canvas.toDataURL('image/png'));
-  const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
-  const buffer = Buffer.from(base64Data, 'base64');
+  const dataUrl = await page.evaluate(() => {
+      return window.offscreenCanvas.toDataURL("image/png");
+  });
+
+  const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "");
+  const buffer = Buffer.from(base64Data, "base64");
 
   const filePath = path.join(imageDir, `pixelchallengeGrid-${Date.now()}.png`);
   fs.writeFileSync(filePath, buffer);
 
-  console.log(`✅ Screenshot enregistré : ${filePath}`);
+  console.log(`✅ Screenshot offscreen enregistré : ${filePath}`);
+
+  //await page.waitForSelector('#pixelCanvas', { timeout: 10000 });
+  
   await browser.close();
 }
 
