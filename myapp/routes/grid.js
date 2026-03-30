@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const { getCookie } = require('../public/javascripts/cookieUtils'); 
 let dateRaid, delayRaid, delay, powerBase, powerRaid, gridSize, pixels_grid_infos;
+
 let io;
 
 var mysql = require('mysql2');
