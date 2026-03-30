@@ -107,27 +107,53 @@ document.addEventListener('DOMContentLoaded', () => {
         // Palette complémentaire (contraste max avec les tiennes)
         "rgb(255, 200, 200)", // rose pâle
         "rgb(255, 150, 150)",
-
         "rgb(255, 220, 180)", // pêche
         "rgb(255, 200, 120)",
-
         "rgb(255, 255, 180)", // jaune pâle
         "rgb(200, 200, 100)",
-
         "rgb(200, 255, 200)", // vert pastel
         "rgb(150, 220, 150)",
-
         "rgb(200, 255, 255)", // cyan pastel
         "rgb(150, 220, 220)",
-
         "rgb(200, 200, 255)", // bleu pastel
         "rgb(150, 150, 220)",
-
         "rgb(230, 200, 255)", // violet clair
         "rgb(200, 150, 255)",
-
         "rgb(180, 140, 100)", // marron clair
-        "rgb(120, 90, 60)"    // marron foncé
+        "rgb(120, 90, 60)",    // marron foncé
+
+                // 🌸 Roses
+        "rgb(180, 80, 80)",     // rose foncé
+        "rgb(200, 60, 60)",
+
+        // 🍑 Pêche / orange doux
+        "rgb(200, 140, 90)",
+        "rgb(180, 120, 60)",
+
+        // 🟡 Jaune (plus profond)
+        "rgb(140, 140, 40)",
+
+        // 🟢 Vert
+        "rgb(80, 180, 80)",
+        "rgb(40, 140, 40)",
+
+        // 🧊 Cyan
+        "rgb(80, 180, 180)",
+        "rgb(40, 140, 140)",
+
+        // 🔵 Bleu
+        "rgb(80, 80, 180)",
+        "rgb(40, 40, 140)",
+
+        // 🟣 Violet
+        "rgb(110, 50, 180)",
+
+        // 🟤 Marron
+        "rgb(220, 220, 220)", // #C0C0C0
+        "rgb(80, 80, 80)", // #808080
+        "rgb(40, 40, 40)",       // #000000
+        "rgb(90, 60, 40)"
+        
     ];
 
     // Variables pour zoom et déplacement
@@ -308,13 +334,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (colorGrid.children[0].id == 0){
             add = 16;
         }
-        else{
+        else if(colorGrid.children[0].id == 16){
+            add = 32;
+        }
+        else {
             add = 0;
         }
 
         for (let i = 0; i < 8 * 2; i++) {
 
-            let id = colorGrid.children[i].id
+            //let id = colorGrid.children[i].id;
 
             colorGrid.children[i].style.background = Lcolors[i+add];
             colorGrid.children[i].id =add+i;

@@ -18,7 +18,7 @@ var con = mysql.createPool(({
     rejectUnauthorized: false
   }
 
-}))
+}));
 
 router.get('/', (req, res) => {
     let text = "";
