@@ -200,9 +200,10 @@ socket.on('power', (data) => {
     let currentPower = result[0].power;
     let lastTime = result[0].time;
     let now = Date.now();
-    const currentHour = new Date().getHours()+1 ;
+    const currentHour = new Date().getHours()+2 ;
     const delayMs = (currentHour == dateRaid ? delayRaid : delay) * 1000;
     const maxPower = currentHour == dateRaid ? powerRaid : powerBase;
+
 
     // Recharge power si délai écoulé
     if (currentPower <= 0 && now - lastTime > delayMs) {
