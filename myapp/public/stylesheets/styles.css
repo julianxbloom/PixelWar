@@ -192,6 +192,24 @@ canvas {
     align-items: center;
 }
 
+.BtnSwitchColor {
+    display: flex;
+    content: "Switch color";
+    display: flex;
+    position: relative;
+    height: 50px;
+    width: 50px;
+    left: 0px;
+    margin: 0% auto;
+    border-radius: 90px;
+    background-color: #ff8400e7;
+    border: 4px solid #000000;
+    z-index: 4;
+    top: 0px;
+    justify-content: center;
+    align-items: center;
+}
+
 .color-grid .color{
     touch-action : manipulation;
     user-select: auto !important;

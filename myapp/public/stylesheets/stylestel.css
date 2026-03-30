@@ -168,6 +168,24 @@ h1 {
     align-items: center;
 }
 
+.BtnSwitchColor {
+    display: flex;
+    content: "SwitchColor";
+    display: flex;
+    position: relative;
+    height: 40px;
+    width: 40px;
+    left: 0px;
+    margin: 0% auto;
+    border-radius: 90px;
+    background-color: #ff8400e7;
+    border: 4px solid #000000;
+    z-index: 4;
+    top: 0px;
+    justify-content: center;
+    align-items: center;
+}
+
 .color-grid {
     margin : 0 auto;
     overflow: hidden;

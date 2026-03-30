@@ -57,8 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (power.dataset.count <= 0){
         startCountdown((new Date().getHours() == hourRaid? delayRaid:delay)-Math.round(power.dataset.time/1000));
     }
-    
 
+    //-----Button
+    document.getElementById("BtnSwitchColor").addEventListener("click", function(){
+        switch_color();
+    });
+    
     //socket : 
     const socket = io();
 
@@ -98,9 +102,33 @@ document.addEventListener('DOMContentLoaded', () => {
         "rgb(0, 0, 255)",     // #0000FF
         "rgb(0, 0, 128)",     // #000080
         "rgb(255, 0, 255)",   // #FF00FF
-        "rgb(128, 0, 128)"    // #800080
-    ];
+        "rgb(128, 0, 128)",    // #800080
 
+        // Palette complémentaire (contraste max avec les tiennes)
+        "rgb(255, 200, 200)", // rose pâle
+        "rgb(255, 150, 150)",
+
+        "rgb(255, 220, 180)", // pêche
+        "rgb(255, 200, 120)",
+
+        "rgb(255, 255, 180)", // jaune pâle
+        "rgb(200, 200, 100)",
+
+        "rgb(200, 255, 200)", // vert pastel
+        "rgb(150, 220, 150)",
+
+        "rgb(200, 255, 255)", // cyan pastel
+        "rgb(150, 220, 220)",
+
+        "rgb(200, 200, 255)", // bleu pastel
+        "rgb(150, 150, 220)",
+
+        "rgb(230, 200, 255)", // violet clair
+        "rgb(200, 150, 255)",
+
+        "rgb(180, 140, 100)", // marron clair
+        "rgb(120, 90, 60)"    // marron foncé
+    ];
 
     // Variables pour zoom et déplacement
     let offsetX = window.innerWidth/2 - canvaSize/2*pixelSize*zoomLevel ;
@@ -269,6 +297,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentColor = color.id;
             }, {passive: false});
             colorGrid.appendChild(color);
+        }
+
+    }
+
+    function switch_color(){
+        
+        let add = 0;
+
+        if (colorGrid.children[0].id == 0){
+            add = 16;
+        }
+        else{
+            add = 0;
+        }
+
+        for (let i = 0; i < 8 * 2; i++) {
+
+            let id = colorGrid.children[i].id
+
+            colorGrid.children[i].style.background = Lcolors[i+add];
+            colorGrid.children[i].id =add+i;
+            //console.log("New id :",colorGrid.children[i].id);
         }
     }
 
@@ -542,6 +592,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Créer la grille au chargement de la page
     createcolorGrid();
     resizeCanvas();
+    //switch_color();
+    //switch_color();
 });
 
 
