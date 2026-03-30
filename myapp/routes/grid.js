@@ -320,7 +320,7 @@ router.get('/', function (req, res, next) {
     
     let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
     let d = new Date();
-    let hour = d.getHours()+1;
+    let hour = d.getHours()+2;
     let raid = hour == dateRaid ? "en cours" : hour < dateRaid ? "auj à 21h" : "demain à 21h";
     const username = getCookie("username", req);
     const id = getCookie("id", req);
