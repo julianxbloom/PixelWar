@@ -28,6 +28,7 @@ router.get('/', (req, res) => {
         for (team of result){
             text+= team.name + " : " + team.nbrPixel;
             text+="<br>";
+            console.log("team :",team.name,team.nbrPixel);
         }
 
         return res.render('dashboard',{

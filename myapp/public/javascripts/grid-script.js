@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btn = document.getElementById('BtnReload');
     if (admin){
-        console.log("Btn doit apparaitre !");
+        //console.log("Btn doit apparaitre !");
         btn.style.display = "flex";
         btn.addEventListener('touchstart', function() {
             socket.emit("reload");

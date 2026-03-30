@@ -482,8 +482,8 @@ function loadPixels(){
     if (err) throw err;
     else {
       pixels_grid_infos = results;
-      console.log(pixels_grid_infos);
-      console.log("Should be pixels. GridSize :",gridSize);
+      //console.log(pixels_grid_infos);
+      //console.log("Should be pixels. GridSize :",gridSize);
       }
 
     });
