@@ -253,7 +253,14 @@ socket.on('power', (data) => {
         });
 
         //Add 1 pixel to your team
-        con.query('UPDATE team SET nbrPixel = nbrPixel+1 WHERE name = ?',[result[0].team],(err,r)=>{
+          let team = result[0].team
+          try {
+            team = team.toLowerCase();
+          }
+          catch(error){
+            team = team;
+          }
+        con.query('UPDATE team SET nbrPixel = nbrPixel+1 WHERE name = ?',[team],(err,r)=>{
           if(err) throw err;
         });
 

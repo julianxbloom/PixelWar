@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let pixelSize = 10;
     let startTime = Date.now();
 
-    let zoomLevel = 0.8; // Niveau de zoom initial (1 = taille normale)
+    let zoomLevel = 0.3; // Niveau de zoom initial (1 = taille normale)
 
     let drag = false;
     let countdown;
