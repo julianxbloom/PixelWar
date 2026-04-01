@@ -512,10 +512,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const x = Math.floor((e.changedTouches[0].clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
         const y = Math.floor((e.changedTouches[0].clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
-        if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
+        if (Date.now() - startTime< 200 && e.touches.length == 1 ){//tes si : click rapide ou + de 200ms
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x]){//} && currentColor != pixels[y*canvaSize+x].color){
   
-
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
                 if (!admin){
