@@ -285,7 +285,7 @@ socket.on('power', (data) => {
         if(err) throw err;
         else {
           txt = result[0].affiche;
-          io.emit("bubble_text",{
+          socket.emit("bubble_text",{
             text:txt,
           });
         }
