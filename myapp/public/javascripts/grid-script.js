@@ -256,7 +256,11 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     socket.on('powerCookie', ({ power }) => {
-    document.cookie = `power=${power}; path=/; max-age=${7*24*60*60*1000}`; // 2 minutes
+        document.cookie = `power=${power}; path=/; max-age=${7*24*60*60*1000}`; // 2 minutes
+
+        power.dataset.count = power;
+
+        power.textContent = power.dataset.count;
     });
 
     socket.on('powerUpdate', (data) => {
