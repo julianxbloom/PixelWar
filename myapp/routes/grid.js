@@ -223,15 +223,15 @@ socket.on('power', (data) => {
       //  if (err || rep.length === 0) return;
 
         const newNbrColor = result[0].nbrColor + 1;
-        con.query('UPDATE user SET power = ?, nbrColor = ? WHERE googleId = ?', [currentPower, newNbrColor, user.id], (err) => {
+        con.query('UPDATE user SET power = ?, nbrColor = ?,time = ? WHERE googleId = ?', [currentPower, newNbrColor, now, user.id], (err) => {
           if (err) return console.error(err);
 
           // Si power tombe à 0, update time
-          if (currentPower === 0) {
-            con.query('UPDATE user SET time = ? WHERE googleId = ?', [now, user.id], (err) => {
-              if (err) console.error("Erreur UPDATE time :", err);
-            });
-          }
+          //if (currentPower === 0) {
+          //  con.query('UPDATE user SET time = ? WHERE googleId = ?', [now, user.id], (err) => {
+          //    if (err) console.error("Erreur UPDATE time :", err);
+          //  });
+          //}
 
           // Mettre à jour les cookies client
           socket.emit('powerCookie', { power: currentPower });
