@@ -511,8 +511,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const rect = canvas.getBoundingClientRect();
         const x = Math.floor((e.changedTouches[0].clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
         const y = Math.floor((e.changedTouches[0].clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
-
-        if (Date.now() - startTime< 200 && e.touches.length == 1 ){//tes si : click rapide ou + de 200ms
+        
+        if (Date.now() - startTime< 200 ){//tes si : click rapide ou + de 200ms
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x]){//} && currentColor != pixels[y*canvaSize+x].color){
   
                 date = new Date();
