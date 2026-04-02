@@ -196,7 +196,7 @@ socket.on('power', (data) => {
     return;
   }
 
-  if(pixels_grid_infos[data.y*gridSize+data.x].color === data.color){
+  if(pixels_grid_infos[index] === undefined || pixels_grid_infos[data.y*gridSize+data.x].color === data.color){
     return;
   }
 
