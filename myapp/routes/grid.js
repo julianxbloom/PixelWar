@@ -191,6 +191,11 @@ function setSocketIo(socketIo) {
 
   //
 socket.on('power', (data) => {
+
+  if(pixels_grid_infos[data.y*gridSize+data.x].color === data.color){
+    return;
+  }
+
   con.query('SELECT power, time, nbrColor,team FROM user WHERE googleId = ?', [user.id], (err, result) => {
     if (err || result.length === 0) {
       console.error("Erreur SELECT power/time :", err);
