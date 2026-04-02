@@ -255,12 +255,19 @@ document.addEventListener('DOMContentLoaded', () => {
         bubble.textContent=data.text;
     })
 
-    socket.on('powerCookie', ({ power }) => {
-        document.cookie = `power=${power}; path=/; max-age=${7*24*60*60*1000}`; // 2 minutes
+    socket.on('powerCookie', ({ new_power }) => {
+        document.cookie = `power=${new_power}; path=/; max-age=${7*24*60*60*1000}`; // 2 minutes
 
-        power.dataset.count = power;
-
+        power.dataset.count = new_power;
         power.textContent = power.dataset.count;
+
+        //if (!admin){
+        //    power.dataset.count -= 1;
+        //}
+        //power.textContent = power.dataset.count;
+        if (power.dataset.count < 1){
+            startCountdown(new Date().getHours() == hourRaid ? delayRaid : delay);
+        }
     });
 
     socket.on('powerUpdate', (data) => {
@@ -462,13 +469,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
-                if (!admin){
-                    power.dataset.count -= 1;
-                }
-                power.textContent = power.dataset.count;
-                if (power.dataset.count < 1){
-                    startCountdown(new Date().getHours() == hourRaid ? delayRaid : delay);
-                }
+                //if (!admin){
+                //    power.dataset.count -= 1;
+                //}
+                //power.textContent = power.dataset.count;
+                //if (power.dataset.count < 1){
+                //    startCountdown(new Date().getHours() == hourRaid ? delayRaid : delay);
+                //}
             }
         }
     });
@@ -521,13 +528,13 @@ document.addEventListener('DOMContentLoaded', () => {
   
                 date = new Date();
                 socket.emit('power',{x:x,y:y,color:currentColor,affiche:pseudo + ` ${date.getDate()}/${date.getMonth()+1} à ${date.getHours()}:${date.getMinutes()<10 ? "0" : ""}${date.getMinutes()}`});
-                if (!admin){
-                    power.dataset.count -= 1;
-                }
-                power.textContent = power.dataset.count;
-                if (power.dataset.count < 1){
-                    startCountdown(new Date().getHours() == hourRaid ? delayRaid : delay);
-                }
+                //if (!admin){
+                //    power.dataset.count -= 1;
+                //}
+                //power.textContent = power.dataset.count;
+                //if (power.dataset.count < 1){
+                //    startCountdown(new Date().getHours() == hourRaid ? delayRaid : delay);
+                //}
             }
         }
         mooveGridEnd(e.changedTouches[0]);

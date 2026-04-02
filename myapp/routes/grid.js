@@ -68,7 +68,7 @@ function setSocketIo(socketIo) {
             if (Date.now() - result[0].time > (new Date().getHours() +2 == dateRaid ? 1000 * delayRaid : 1000*delay)){
               user.power = new Date().getHours() + 2 == dateRaid ? powerRaid : powerBase;
 
-              socket.emit('powerCookie', { power: user.power});
+              socket.emit('powerCookie', { new_power: user.power});
 
               sql = 'UPDATE user SET power = ? WHERE googleId = ?';
               con.query(sql, [user.power, user.id], (err, m) => {
@@ -174,7 +174,7 @@ function setSocketIo(socketIo) {
         }
         
         //emit cookie pour qu'il soit update
-        socket.emit('powerCookie', { power: user.power});
+        socket.emit('powerCookie', { new_power: user.power});
         console.log(user.power,"chg power end");
         io.emit("pixelUpdate",{x:data.x,y:data.y,color:data.color,affiche:data.affiche});
         sql = 'UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?';
@@ -234,15 +234,15 @@ socket.on('power', (data) => {
           //}
 
           // Mettre à jour les cookies client
-          socket.emit('powerCookie', { power: currentPower });
-
+          
           // Update pixel dans la grille
           con.query('UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?', [data.color, data.affiche, data.x, data.y], (err) => {
             if (err) console.error("Erreur UPDATE pixels :", err);
           });
           //console.log(data.color);
-
+          
           pixels_grid_infos[data.y*gridSize+data.x].color = data.color; //Update the grid on serveur not on BDD
+          socket.emit('powerCookie', { new_power: currentPower });
 
           io.emit("pixelUpdate", {
             x: data.x,
@@ -266,7 +266,7 @@ socket.on('power', (data) => {
 
       //});
     } else {
-      socket.emit('powerCookie', { power: 0 }); // Facultatif
+      socket.emit('powerCookie', { new_power: 0 }); // Facultatif
     }
   });
 });
