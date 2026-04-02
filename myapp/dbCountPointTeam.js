@@ -46,14 +46,13 @@ con.query(`
 con.query(`TRUNCATE TABLE team`, (err) => {
   if (err) throw err;
   console.log("Table team vidée !");
-});
-
-con.query(`
-  INSERT INTO team (name, nbrPixel)
-  SELECT LOWER(team), SUM(nbrColor)
-  FROM user
-  GROUP BY LOWER(team)
-`, (err, result) => {
-  if (err) throw err;
-  console.log("Teams insérées !");
+  con.query(`
+    INSERT INTO team (name, nbrPixel)
+    SELECT LOWER(team), SUM(nbrColor)
+    FROM user
+    GROUP BY LOWER(team)
+  `, (err, result) => {
+    if (err) throw err;
+    console.log("Teams insérées !");
+  });
 });

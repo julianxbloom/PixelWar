@@ -192,6 +192,10 @@ function setSocketIo(socketIo) {
   //
 socket.on('power', (data) => {
 
+  if (data.y>500 || data.x >500){
+    return;
+  }
+
   if(pixels_grid_infos[data.y*gridSize+data.x].color === data.color){
     return;
   }
