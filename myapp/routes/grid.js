@@ -232,7 +232,7 @@ socket.on('power', (data) => {
       //  if (err || rep.length === 0) return;
 
         //const newNbrColor = result[0].nbrColor + 1;
-        con.query('UPDATE user SET power = power-1, nbrColor = nbrColor+1,time = ? WHERE googleId = ? AND power>0', [newNbrColor, now, user.id], (err,cons) => {
+        con.query('UPDATE user SET power = power-1, nbrColor = nbrColor+1,time = ? WHERE googleId = ? AND power>0', [now, user.id], (err,cons) => {
           if (err) return console.error(err);
 
           if (cons.affectedRows === 0){
@@ -255,7 +255,7 @@ socket.on('power', (data) => {
           //console.log(data.color);
           
           pixels_grid_infos[data.y*gridSize+data.x].color = data.color; //Update the grid on serveur not on BDD
-          socket.emit('powerCookie', { new_power: currentPower });
+          socket.emit('powerCookie', { new_power: currentPower-1 });
 
           io.emit("pixelUpdate", {
             x: data.x,
@@ -391,9 +391,9 @@ router.get('/', function (req, res, next) {
               console.error("Erreur SELECT maintenance :", err);
               throw err;
             }
-            if (r.length > 0 && r[0].maintenance && !user.admin) {
-              return res.redirect(`/waiting?pseudo=${user.pseudo}`);
-            }
+            //if (r.length > 0 && r[0].maintenance && !user.admin) {
+            //  return res.redirect(`/waiting?pseudo=${user.pseudo}`);
+            //}
             else {
               con.query('UPDATE user SET popup = NULL WHERE googleId = ?', [user.id], (err, rer) => {
                 if (err) {
