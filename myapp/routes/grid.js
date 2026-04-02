@@ -218,22 +218,26 @@ socket.on('power', (data) => {
     if (currentPower <= 0 && now - lastTime > delayMs) {
       currentPower = maxPower;
 
-      //con.query('UPDATE user SET power = ? WHERE googleId = ?', [currentPower, user.id], (err) => {
-      //  if (err) console.error("Erreur UPDATE power :", err);
-      //});
+      con.query('UPDATE user SET power = ? WHERE googleId = ? AND power <=0', [currentPower, user.id], (err) => {
+        if (err) console.error("Erreur UPDATE power :", err);
+      });
     }
 
     // S'il a du power, on déduit et met à jour pixel
     if (currentPower > 0) {
-      if (!user.admin) currentPower -= 1;
+      //if (user.admin) currentPower -= 1;
 
       // Mise à jour du power et nbrColor
       //con.query('SELECT nbrColor,team FROM user WHERE googleId = ?', [user.id], (err, rep) => {
       //  if (err || rep.length === 0) return;
 
-        const newNbrColor = result[0].nbrColor + 1;
-        con.query('UPDATE user SET power = ?, nbrColor = ?,time = ? WHERE googleId = ?', [currentPower, newNbrColor, now, user.id], (err) => {
+        //const newNbrColor = result[0].nbrColor + 1;
+        con.query('UPDATE user SET power = power-1, nbrColor = nbrColor+1,time = ? WHERE googleId = ? AND power>0', [newNbrColor, now, user.id], (err,cons) => {
           if (err) return console.error(err);
+
+          if (cons.affectedRows === 0){
+            return "Lag = tente de tricher";
+          }
 
           // Si power tombe à 0, update time
           //if (currentPower === 0) {
@@ -333,6 +337,9 @@ router.get('/', function (req, res, next) {
   //    powerRaid = 20;
   //    gridSize = 500;
   //  }
+
+  console.log(Date.now());
+  console.log("From what time",Date.now()-1775166281269);
     
     let user = { pseudo: null, id: null, power: null, time: null, admin: false, nbrColor : 0 };
     let d = new Date();

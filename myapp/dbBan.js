@@ -82,4 +82,4 @@ function ban(user, duree, motif) {
 }
 
 // Exemple d'utilisation :
-ban("Ed", 60 * 60 *24*5*1000, "Suspicions de triche. Contacte moi via instagramme pour savoir ce qu'il s'est passé : pixelwarfblo");
+ban("mezanine", 60 * 60 *24*5*1000, "Suspicions de triche. Contacte moi via instagramme pour savoir ce qu'il s'est passé : pixelwarfblo");
