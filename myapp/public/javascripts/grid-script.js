@@ -46,6 +46,7 @@ window.addEventListener('load', function() {
 document.addEventListener('DOMContentLoaded', () => {
 
     const colorGrid = document.getElementById('color-grid');
+    const btnCanDraw = document.getElementById('CanDraw');
     //const pseudo = document.getElementById('pseudo').dataset.message;
     const bubble = document.getElementById('bubble');
     const bubbleRect = bubble.getBoundingClientRect();
@@ -62,21 +63,27 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("BtnSwitchColor").addEventListener("click", function(){
         switch_color();
     });
-    
+
+    document.getElementById("CanDraw").addEventListener("click", function(){
+        console.log("Click");
+        SwicthCanDraw();
+    });
+
     //socket : 
     const socket = io();
 
     const canvas = document.getElementById('pixelCanvas');
     const ctx = canvas.getContext('2d');
-
+    
     // Offscreen canvas buffer // Hidden canva
     const offscreen = document.createElement("canvas");
     offscreen.width = canvaSize;  // 500 ou 1000
     offscreen.height = canvaSize;
     const offCtx = offscreen.getContext("2d");
-
+    
     window.OffscreenCanvas = offscreen; //Pour y acceder depuis puppeteer
-
+    
+    let CanDraw = true;
     let pixelSize = 10;
     let startTime = Date.now();
 
@@ -338,6 +345,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+    function SwicthCanDraw(){
+        
+        if(CanDraw){
+            CanDraw = false;
+            btnCanDraw.textContent = "Mode deplacement";
+            console.log("Candraw = false");
+        }
+
+        else{
+            CanDraw = true;
+            btnCanDraw.textContent = "Mode dessin";
+        }
+    }
+
     function switch_color(){
         
         let add = 0;
@@ -463,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const x = Math.floor((e.clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
         const y = Math.floor((e.clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
 
-        if (Date.now() - startTime< 200){//tes si : click rapide ou + de 200ms
+        if (Date.now() - startTime< 200 && CanDraw){//tes si : click rapide ou + de 200ms
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x]){
                 
 
@@ -523,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const x = Math.floor((e.changedTouches[0].clientX - rect.left - offsetX) / (zoomLevel * pixelSize));
         const y = Math.floor((e.changedTouches[0].clientY - rect.top - offsetY) / (zoomLevel * pixelSize));
         
-        if (Date.now() - startTime< 200 ){//tes si : click rapide ou + de 200ms
+        if (Date.now() - startTime< 200 && CanDraw){//tes si : click rapide ou + de 200ms
             if (y>=0 && x >=0 && y<=canvaSize && x <= canvaSize && power.dataset.count > 0 && currentColor != pixels[y*canvaSize+x]){//} && currentColor != pixels[y*canvaSize+x].color){
   
                 date = new Date();
