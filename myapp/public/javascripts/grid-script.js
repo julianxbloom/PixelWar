@@ -349,13 +349,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if(CanDraw){
             CanDraw = false;
-            btnCanDraw.textContent = "Mode deplacement";
+            btnCanDraw.textContent = "Move mode";
             console.log("Candraw = false");
         }
 
         else{
             CanDraw = true;
-            btnCanDraw.textContent = "Mode dessin";
+            btnCanDraw.textContent = "Draw mode";
         }
     }
 
