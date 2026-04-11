@@ -17,11 +17,9 @@ var con = mysql.createPool(({
   }
 }))
 
-con.query("SELECT COUNT(users), team FROM user WHERE nbrColor>30 GROUP BY team", function(err,result) {
+con.query("UPDATE user SET popup = 'Fin de la Pixelwar dimanche à 22h !'", function(err,result) {
     if(err) throw err;
 
     console.log(result);
-
-
 
 })
