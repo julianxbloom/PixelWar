@@ -249,9 +249,9 @@ socket.on('power', (data) => {
           // Mettre à jour les cookies client
           
           // Update pixel dans la grille
-          con.query('UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?', [data.color, data.affiche, data.x, data.y], (err) => {
-            if (err) console.error("Erreur UPDATE pixels :", err);
-          });
+          //con.query('UPDATE pixels SET color = ?, affiche = ? WHERE x = ? AND y = ?', [data.color, data.affiche, data.x, data.y], (err) => {
+          //  if (err) console.error("Erreur UPDATE pixels :", err);
+          //});
           //console.log(data.color);
           
           pixels_grid_infos[data.y*gridSize+data.x].color = data.color; //Update the grid on serveur not on BDD
